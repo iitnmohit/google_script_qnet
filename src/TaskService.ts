@@ -52,15 +52,19 @@ export class TaskService {
             checkBoxRange.uncheck();
         }
     }
-    private deleteTaskById(taskId: string): void {
-        Tasks.Tasks.remove(this.getTaskList().id, taskId);
-    }
-    private getTaskById(taskId: string): GoogleAppsScript.Tasks.Schema.Task {
-        return Tasks.Tasks.get(this.getTaskList().id, taskId);
-    }
-
+   
     public deleteAllTasks(): void {
         Tasks.Tasklists.remove(this.getTaskList().id);
+        let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
+        if (null == sheet) {
+            return;
+        }
+        let nameListSchema = new NameListSheetSchema(sheet);
+
+        if (nameListSchema.taskColIndex < 1) {
+            return;
+        }
+        sheet.getRange(2, nameListSchema.taskColIndex, sheet.getMaxRows() - 1, 1).clearNote()
     }
 
     public clearAllCheckbox(): void {
@@ -111,6 +115,13 @@ export class TaskService {
             checkBoxRange.uncheck();
         }
         return;
+    }
+
+    private deleteTaskById(taskId: string): void {
+        Tasks.Tasks.remove(this.getTaskList().id, taskId);
+    }
+    private getTaskById(taskId: string): GoogleAppsScript.Tasks.Schema.Task {
+        return Tasks.Tasks.get(this.getTaskList().id, taskId);
     }
 
     private addNewTask(nameListSchema: NameListSheetSchema, sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number): GoogleAppsScript.Tasks.Schema.Task {
