@@ -2,14 +2,14 @@ export class MenuService {
     public addBusinessMenu(spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
         spreadSheet.addMenu(
             'Business', [{
-                name: 'Clear Task CheckBox',
+                name: 'Clear Task CheckBoxes',
                 functionName: 'taskClearAllCheckBox'
             }, {
                 name: 'Delete All Tasks',
-                functionName: 'deleteAllTasks'
+                functionName: 'taskDeleteAll'
             }, {
                 name: 'Add Tasks',
-                functionName: 'addTasks'
+                functionName: 'taskAddAll'
             }
         ]
         );

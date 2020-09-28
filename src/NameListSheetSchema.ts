@@ -20,7 +20,7 @@ export class NameListSheetSchema {
     public static readonly COL_TASK = "TASK";
 
 
-
+    public slNoColIndex: number = -1;
     public nameColIndex: number = -1;
     public addLogColIndex: number = -1;
     public updateColIndex: number = -1;
@@ -40,6 +40,8 @@ export class NameListSheetSchema {
                 this.updateColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_TASK) {
                 this.taskColIndex = i + 1;
+            }   else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_Sl_No) {
+                this.slNoColIndex = i + 1;
             }
         }
     }
