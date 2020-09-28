@@ -1,0 +1,22 @@
+{
+  "name": "google_script_qnet",
+  "version": "1.0.0",
+  "description": "[Git Guide For TS](https://github.com/google/clasp/blob/master/docs/typescript.md)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iitnmohit/google_script_qnet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iitnmohit/google_script_qnet/issues"
+  },
+  "homepage": "https://github.com/iitnmohit/google_script_qnet#readme",
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.16"
+  }
+}
