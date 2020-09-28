@@ -72,4 +72,8 @@ export class CallLogService {
         }
         sheet.getRange(rowIndex, colIndex).setValue(new Date());
     }
+
+    public static formatLog(log: string): string {
+        return log;
+    }
 }

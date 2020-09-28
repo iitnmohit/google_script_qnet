@@ -1,3 +1,4 @@
+import { CallLogService } from "./CallLogService";
 import { NameListSheetSchema } from "./NameListSheetSchema";
 
 export class TaskService {
@@ -5,24 +6,7 @@ export class TaskService {
 
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
-    public deleteAllTasks(): void {
-        Tasks.Tasklists.remove(this.getTaskList().id);
-    }
-
-    public clearAllCheckbox(): void {
-        let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
-        if (null == sheet) {
-            return;
-        }
-        let nameListSchema = new NameListSheetSchema(sheet);
-
-        if (nameListSchema.taskColIndex < 1) {
-            return;
-        }
-        sheet.getRange(2, nameListSchema.taskColIndex, sheet.getMaxRows() - 1, 1).uncheck()
-    }
-
-    public addAllTask(): void {
+    public updateSelectedLog(): void {
         let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
         if (null == sheet) {
             return;
@@ -46,14 +30,90 @@ export class TaskService {
                 break;
             }
 
-            this.addNewTask(nameListSchema, sheet, row);
+            // break if no task id
+            let taskId = checkBoxRange.getNote().trim();
+            if (taskId.length < 1) {
+                continue;
+            }
+
+            // get task
+            var _task = this.getTaskById(taskId);
+            if (_task == null) {
+                continue;
+            }
+
+            //update task
+            var callLog = CallLogService.formatLog(_task.notes);
+            nameCell.setNote(callLog);
+            this.deleteTaskById(_task.id);
 
             //at last uncheck
+            checkBoxRange.clearNote();
             checkBoxRange.uncheck();
         }
     }
+    private deleteTaskById(taskId: string): void {
+        Tasks.Tasks.remove(this.getTaskList().id, taskId);
+    }
+    private getTaskById(taskId: string): GoogleAppsScript.Tasks.Schema.Task {
+        return Tasks.Tasks.get(this.getTaskList().id, taskId);
+    }
 
-    private addNewTask(nameListSchema: NameListSheetSchema, sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number): void {
+    public deleteAllTasks(): void {
+        Tasks.Tasklists.remove(this.getTaskList().id);
+    }
+
+    public clearAllCheckbox(): void {
+        let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
+        if (null == sheet) {
+            return;
+        }
+        let nameListSchema = new NameListSheetSchema(sheet);
+
+        if (nameListSchema.taskColIndex < 1) {
+            return;
+        }
+        sheet.getRange(2, nameListSchema.taskColIndex, sheet.getMaxRows() - 1, 1).uncheck()
+    }
+
+    public addAllTask(count?: number): void {
+        let numOfTaskAdded: number = 0;
+        let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
+        if (null == sheet) {
+            return;
+        }
+        let nameListSchema = new NameListSheetSchema(sheet);
+
+        if (nameListSchema.taskColIndex < 1) {
+            return;
+        }
+
+        for (let row = 2; row <= sheet.getLastRow(); row++) {
+            if(count != null && count == numOfTaskAdded){
+                break;
+            }
+
+            let checkBoxRange = sheet.getRange(row, nameListSchema.taskColIndex);
+            //skip if not checked
+            if (!checkBoxRange.isChecked()) {
+                continue;
+            }
+
+            // break if no name
+            let nameCell = sheet.getRange(row, nameListSchema.nameColIndex);
+            if (nameCell.isBlank()) {
+                break;
+            }
+
+            let taskAdded = this.addNewTask(nameListSchema, sheet, row);
+            checkBoxRange.setNote(taskAdded.id);
+            //at last uncheck
+            checkBoxRange.uncheck();
+        }
+        return;
+    }
+
+    private addNewTask(nameListSchema: NameListSheetSchema, sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number): GoogleAppsScript.Tasks.Schema.Task {
         let nameCell = sheet.getRange(row, nameListSchema.nameColIndex);
         let taskTitle = nameCell.getDisplayValue().trim();
         if (nameListSchema.slNoColIndex > 0) {
@@ -66,7 +126,7 @@ export class TaskService {
             .setNotes(nameCell.getNote())
             .build();
 
-        Tasks.Tasks.insert(newTask, this.getTaskList().id);
+        return Tasks.Tasks.insert(newTask, this.getTaskList().id);
     }
 
     private getTaskList(): GoogleAppsScript.Tasks.Schema.TaskList {
