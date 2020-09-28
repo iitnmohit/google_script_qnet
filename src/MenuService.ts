@@ -3,7 +3,7 @@ export class MenuService {
         spreadSheet.addMenu(
             'Business', [{
                 name: 'Clear Task CheckBox',
-                functionName: 'clearTaskCheckBox'
+                functionName: 'taskClearAllCheckBox'
             }, {
                 name: 'Delete All Tasks',
                 functionName: 'deleteAllTasks'

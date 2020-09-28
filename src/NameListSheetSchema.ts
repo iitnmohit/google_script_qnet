@@ -20,12 +20,14 @@ export class NameListSheetSchema {
     public static readonly COL_TASK = "TASK";
 
 
-    public updateOnColIndex: number = -1;
+
     public nameColIndex: number = -1;
     public addLogColIndex: number = -1;
     public updateColIndex: number = -1;
+    public updateOnColIndex: number = -1;
+    public taskColIndex: number = -1;
 
-    constructor(sheet: GoogleAppsScript.Spreadsheet.Sheet) {
+    constructor(private sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         var firstRowRangeValues = sheet.getRange(1, 1, 1, sheet.getMaxColumns()).getValues();
         for (var i = 0; i < sheet.getMaxColumns(); i++) {
             if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED_ON) {
@@ -36,6 +38,8 @@ export class NameListSheetSchema {
                 this.addLogColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED) {
                 this.updateColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_TASK) {
+                this.taskColIndex = i + 1;
             }
         }
     }
