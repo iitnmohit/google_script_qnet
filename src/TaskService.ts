@@ -45,6 +45,8 @@ export class TaskService {
             //update task
             var callLog = CallLogService.formatLog(_task.notes);
             nameCell.setNote(callLog);
+
+            //delete task
             this.deleteTaskById(_task.id);
 
             //at last uncheck
@@ -111,6 +113,8 @@ export class TaskService {
 
             let taskAdded = this.addNewTask(nameListSchema, sheet, row);
             checkBoxRange.setNote(taskAdded.id);
+
+            numOfTaskAdded++;
             //at last uncheck
             checkBoxRange.uncheck();
         }
