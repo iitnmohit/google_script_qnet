@@ -2,8 +2,8 @@ export class MenuService {
     public addBusinessMenu(spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
         spreadSheet.addMenu(
             'Business', [{
-                name: 'Add Tasks',
-                functionName: 'taskAddAll'
+                name: 'Add Top 50 Tasks',
+                functionName: 'taskAddTop50'
             }, {
                 name: 'Add Top 10 Tasks',
                 functionName: 'taskAddTopTen'

@@ -14,9 +14,9 @@ function taskDeleteAll(): void {
 }
 
 
-function taskAddAll(): void {
+function taskAddTop50(): void {
   let taskService = new TaskService();
-  taskService.addAllTask();
+  taskService.addAllTask(50);
   return;
 }
 
