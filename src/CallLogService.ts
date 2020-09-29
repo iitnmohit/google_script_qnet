@@ -118,8 +118,7 @@ export class CallLogService {
 
 
         for (let i = 0; i < lines.length; i++) {
-            let eachLine = lines[i].replace("•", "").trim();
-            eachLine = eachLine.replace("-", "").trim();
+            let eachLine = lines[i].replace("•", "").replace("-", "").trim();
 
             if (eachLine.length == 0) {
                 continue;
@@ -130,7 +129,7 @@ export class CallLogService {
                 continue
             }
 
-            formatedLog = formatedLog + "\n" + " - " + eachLine;
+            formatedLog = formatedLog + "\n" + " • " + eachLine;
         }
         return formatedLog.trim();
     }
@@ -142,7 +141,7 @@ export class CallLogService {
 
     private static formatDate(date: string): string {
         let timestamp = Date.parse(date);
-        if (isNaN(timestamp) == false) {
+        if (!isNaN(timestamp)) {
             let dateObj = new Date(timestamp);
             return CallLogService.dateString(dateObj);
         } else {
