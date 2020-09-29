@@ -52,7 +52,13 @@ export class TaskService {
             }
 
             //update task
-            var callLog = CallLogService.formatLog(_task.notes);
+            var todayDate: string = "today";
+            if (_task.completed != null) {
+                todayDate = _task.completed;
+            } else if (_task.updated != null) {
+                todayDate = _task.updated;
+            }
+            var callLog = CallLogService.formatUpdateLog(_task.notes, todayDate);
             nameCell.setNote(callLog);
 
             //delete task
