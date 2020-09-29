@@ -6,7 +6,7 @@ export class TaskService {
 
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
-    public updateSelectedLog(count?:number): void {
+    public updateSelectedLog(count?: number): void {
         let numOfTaskUpdated: number = 0;
         let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
         if (null == sheet) {
@@ -18,11 +18,15 @@ export class TaskService {
             return;
         }
 
-        for (let row = 2; row <= sheet.getLastRow(); row++) {
-            if (count != null && count == numOfTaskUpdated) {
-                break;
+        let taskCol = sheet.getRange(2, nameListSchema.taskColIndex, sheet.getLastRow() - 1, 1);
+        let taskColVal = taskCol.getValues();
+
+        for (var i = 0; i < taskColVal.length; i++) {
+            if (taskColVal[i][0] === false) {
+                continue;
             }
 
+            let row = i + 2;
             let checkBoxRange = sheet.getRange(row, nameListSchema.taskColIndex);
             //skip if not checked
             if (!checkBoxRange.isChecked()) {
@@ -59,6 +63,9 @@ export class TaskService {
             checkBoxRange.uncheck();
 
             numOfTaskUpdated++;
+            if (count != null && count == numOfTaskUpdated) {
+                break;
+            }
         }
     }
 
@@ -101,10 +108,14 @@ export class TaskService {
             return;
         }
 
-        for (let row = 2; row <= sheet.getLastRow(); row++) {
-            if (count != null && count == numOfTaskAdded) {
-                break;
+        let taskCol = sheet.getRange(2, nameListSchema.taskColIndex, sheet.getLastRow() - 1, 1);
+        let taskColVal = taskCol.getValues();
+
+        for (var i = 0; i < taskColVal.length; i++) {
+            if (taskColVal[i][0] === false) {
+                continue;
             }
+            let row = i + 2;
 
             let checkBoxRange = sheet.getRange(row, nameListSchema.taskColIndex);
             //skip if not checked
@@ -123,10 +134,14 @@ export class TaskService {
             checkBoxRange.setNote(taskAdded.id);
 
             numOfTaskAdded++;
+
             //at last uncheck
             checkBoxRange.uncheck();
+
+            if (count != null && count == numOfTaskAdded) {
+                break;
+            }
         }
-        return;
     }
 
     private deleteTaskById(taskId: string): void {
