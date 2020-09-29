@@ -1,37 +1,17 @@
 export class MenuService {
     public addBusinessMenu(spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
-        spreadSheet.addMenu(
-            'Business', [{
-                name: 'Add Top 50 Tasks',
-                functionName: 'taskAddTop50'
-            }, {
-                name: 'Add Top 10 Tasks',
-                functionName: 'taskAddTopTen'
-            }, {
-                name: 'Add 1 Task',
-                functionName: 'taskAddOne'
-            }, {
-                name: 'Update Log From 10 Tasks',
-                functionName: 'taskUpdateSelectedLog'
-            }, {
-                name: 'Update Log From 1 Tasks',
-                functionName: 'taskUpdateOneLog'
-            }, {
-                name: 'Clear Task CheckBoxes',
-                functionName: 'taskClearAllCheckBox'
-            }, {
-                name: 'Delete All Tasks',
-                functionName: 'taskDeleteAll'
-            }
-        ]
-        );
-
-        // SpreadsheetApp.getUi()
-        //     .createMenu('Business')
-        //     .addItem('Clear Task CheckBox', 'clearTaskCheckBox')
-        //     .addItem('Delete All Tasks', 'deleteAllTasks')
-        //     .addItem('Add Tasks', 'addTasks')
-        //     .addSeparator()
-        //     .addToUi();
+        SpreadsheetApp.getUi()
+            .createMenu('Business')
+            .addItem('Add Top 50 Tasks', 'taskAddTop50')
+            .addItem('Add Top 10 Tasks', 'taskAddTopTen')
+            .addItem('Add 1 Task', 'taskAddOne')
+            .addItem('Update Log From 10 Tasks', 'taskUpdateSelectedLog')
+            .addItem('Update Log From 1 Tasks', 'taskUpdateOneLog')
+            .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')
+            .addItem('Delete All Tasks', 'taskDeleteAll')
+            .addSeparator()
+            //.addItem('Update Logs To Doc', 'updateLogToDoc')
+            //.addSeparator()
+            .addToUi();
     }
 }
