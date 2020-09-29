@@ -60,10 +60,13 @@ export class TaskService {
             }
             var callLog = CallLogService.formatUpdateLog(_task.notes, todayDate);
             nameCell.setNote(callLog);
-            if(nameListSchema.updateOnColIndex > 0){
+            if (nameListSchema.updateOnColIndex > 0) {
                 sheet.getRange(row, nameListSchema.updateOnColIndex).setValue(new Date());
             }
-            
+            if (nameListSchema.updateColIndex > 0) {
+                sheet.getRange(row, nameListSchema.updateColIndex).check();
+            }
+
             //delete task
             this.deleteTaskById(_task.id);
 
