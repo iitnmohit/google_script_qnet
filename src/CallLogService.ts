@@ -104,7 +104,7 @@ export class CallLogService {
                 continue;
             }
 
-            formatedLog = formatedLog + "\n" + " - " + eachLine;
+            formatedLog = formatedLog + "\n" + " • " + eachLine;
         }
         return formatedLog.trim();
     }
@@ -137,31 +137,28 @@ export class CallLogService {
 
     private static formatTodayDate(): string {
         let dateObj = new Date();
-
-        let month = CallLogService.getMonthName(dateObj.getMonth());
-        let day = String(dateObj.getDate());
-        let year = String(dateObj.getFullYear());
-
-        if (day.length < 2) day = '0' + day;
-
-        return `${day}/${month}/${year}`;
+        return CallLogService.dateString(dateObj);
     }
 
     private static formatDate(date: string): string {
         let timestamp = Date.parse(date);
         if (isNaN(timestamp) == false) {
             let dateObj = new Date(timestamp);
-
-            let month = CallLogService.getMonthName(dateObj.getMonth());
-            let day = String(dateObj.getDate());
-            let year = String(dateObj.getFullYear());
-
-            if (day.length < 2) day = '0' + day;
-
-            return `${day}/${month}/${year}`;
+            return CallLogService.dateString(dateObj);
         } else {
             return date;
         }
+    }
+
+    private static dateString(dateObj: Date) {
+        let month = CallLogService.getMonthName(dateObj.getMonth());
+        let day = String(dateObj.getDate());
+        let year = String(dateObj.getFullYear());
+
+        if (day.length < 2)
+            day = '0' + day;
+
+        return `${day}/${month}/${year}`;
     }
 
     private static isValidDate(date: string): boolean {
