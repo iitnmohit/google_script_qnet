@@ -5,7 +5,7 @@ function onOpen(event: GoogleAppsScript.Events.SheetsOnOpen) {
   appLoad.onOpen(event);
 }
 
-function onEdit(event:GoogleAppsScript.Events.SheetsOnEdit) {
+function onEdit(event: GoogleAppsScript.Events.SheetsOnEdit) {
   let appLoad = new AppService();
   appLoad.onEdit(event);
 }

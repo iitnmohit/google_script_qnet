@@ -4,13 +4,19 @@ export class MenuService {
             'Business', [{
                 name: 'Add Tasks',
                 functionName: 'taskAddAll'
-            },{
+            }, {
                 name: 'Add Top 10 Tasks',
                 functionName: 'taskAddTopTen'
             }, {
+                name: 'Add 1 Task',
+                functionName: 'taskAddOne'
+            }, {
                 name: 'Update Log From Selected Tasks',
                 functionName: 'taskUpdateSelectedLog'
-            },{
+            }, {
+                name: 'Update Log From 1 Tasks',
+                functionName: 'taskUpdateOneLog'
+            }, {
                 name: 'Clear Task CheckBoxes',
                 functionName: 'taskClearAllCheckBox'
             }, {

@@ -6,7 +6,8 @@ export class TaskService {
 
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
-    public updateSelectedLog(): void {
+    public updateSelectedLog(count?:number): void {
+        let numOfTaskUpdated: number = 0;
         let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
         if (null == sheet) {
             return;
@@ -18,6 +19,10 @@ export class TaskService {
         }
 
         for (let row = 2; row <= sheet.getLastRow(); row++) {
+            if (count != null && count == numOfTaskUpdated) {
+                break;
+            }
+
             let checkBoxRange = sheet.getRange(row, nameListSchema.taskColIndex);
             //skip if not checked
             if (!checkBoxRange.isChecked()) {
@@ -52,9 +57,11 @@ export class TaskService {
             //at last uncheck
             checkBoxRange.clearNote();
             checkBoxRange.uncheck();
+
+            numOfTaskUpdated++;
         }
     }
-   
+
     public deleteAllTasks(): void {
         Tasks.Tasklists.remove(this.getTaskList().id);
         let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
@@ -95,7 +102,7 @@ export class TaskService {
         }
 
         for (let row = 2; row <= sheet.getLastRow(); row++) {
-            if(count != null && count == numOfTaskAdded){
+            if (count != null && count == numOfTaskAdded) {
                 break;
             }
 
@@ -111,6 +118,7 @@ export class TaskService {
                 break;
             }
 
+            //add one task
             let taskAdded = this.addNewTask(nameListSchema, sheet, row);
             checkBoxRange.setNote(taskAdded.id);
 
@@ -138,7 +146,7 @@ export class TaskService {
         }
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)
-            .setNotes(nameCell.getNote())
+            .setNotes(CallLogService.formatLog(nameCell.getNote()))
             .build();
 
         return Tasks.Tasks.insert(newTask, this.getTaskList().id);

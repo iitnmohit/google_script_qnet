@@ -1,6 +1,7 @@
 import { NameListSheetSchema } from "./NameListSheetSchema";
 
 export class CallLogService {
+    private static readonly monthArray: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     public addLog(range: GoogleAppsScript.Spreadsheet.Range): void {
         let sheet = range.getSheet();
@@ -74,6 +75,61 @@ export class CallLogService {
     }
 
     public static formatLog(log: string): string {
-        return log;
+        if (!(log != null && log.trim().length > 0)) {
+            return "";
+        }
+        let formatedLog: string = "";
+        let lines: string[] = log.split("\n");
+
+
+        for (let i = 0; i < lines.length; i++) {
+            let eachLine = lines[i].replace("•", "").trim();
+            eachLine = eachLine.replace("-", "").trim();
+
+            if (eachLine.length == 0) {
+                continue;
+            }
+
+            if (CallLogService.isValidDate(eachLine)) {
+                formatedLog = formatedLog + "\n\n" + CallLogService.formatDate(eachLine);
+                continue
+            }
+
+            formatedLog = formatedLog + "\n" + " - " + eachLine;
+        }
+        return formatedLog.trim();
     }
+
+    private static formatDate(date: string): string {
+        let timestamp = Date.parse(date);
+        if (isNaN(timestamp) == false) {
+            let dateObj = new Date(timestamp);
+
+            let month = CallLogService.getMonthName(dateObj.getMonth());
+            let day = String(dateObj.getDate());
+            let year = String(dateObj.getFullYear());
+
+            if (day.length < 2) day = '0' + day;
+
+            return `${day}/${month}/${year}`;
+        } else {
+            return date;
+        }
+    }
+
+    private static isValidDate(date: string): boolean {
+        let d = Date.parse(date);
+        return !isNaN(d);
+    }
+
+    private static getMonthName(number: number): string {
+        if (null == number) {
+            return "";
+        }
+        if (number < 0 || number > 11) {
+            return "";
+        }
+        return CallLogService.monthArray[number];
+    }
+
 }

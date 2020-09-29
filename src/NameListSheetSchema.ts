@@ -40,7 +40,7 @@ export class NameListSheetSchema {
                 this.updateColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_TASK) {
                 this.taskColIndex = i + 1;
-            }   else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_Sl_No) {
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_Sl_No) {
                 this.slNoColIndex = i + 1;
             }
         }
