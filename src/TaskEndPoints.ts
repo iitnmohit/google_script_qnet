@@ -34,7 +34,7 @@ function taskAddOne(): void {
 
 function taskUpdateSelectedLog(): void {
   let taskService = new TaskService();
-  taskService.updateSelectedLog();
+  taskService.updateSelectedLog(10);
   return;
 }
 

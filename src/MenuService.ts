@@ -11,7 +11,7 @@ export class MenuService {
                 name: 'Add 1 Task',
                 functionName: 'taskAddOne'
             }, {
-                name: 'Update Log From Selected Tasks',
+                name: 'Update Log From 10 Tasks',
                 functionName: 'taskUpdateSelectedLog'
             }, {
                 name: 'Update Log From 1 Tasks',
