@@ -32,7 +32,7 @@ export class CallLogService {
         if (newLogs.length == 0) {
             return;
         }
-        newLogs = Util.formatLog(newLogs);
+        newLogs = Util.formatUpdateLog(newLogs);
 
         let nameCell = sheet.getRange(rowIndex, nameListSchema.nameColIndex);
         //read old logs
