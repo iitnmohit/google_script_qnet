@@ -1,6 +1,7 @@
 import { CallLogService } from "./CallLogService";
-import { NameListSheetSchema } from "./NameListSheetSchema";
-
+import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
+import { Util } from "./Util";
+// to do
 export class DocService {
     private static readonly docId: string = "19OQQFLwN4eYqsPr59bu0hx6n4MV82STntQHfbufhcWE";
 
@@ -9,7 +10,7 @@ export class DocService {
         if (null == sheet) {
             return;
         }
-        let nameListSchema = new NameListSheetSchema(sheet);
+        let nameListSchema = NameListSheetSchema.getValidSchema(sheet);
 
         if (nameListSchema.nameColIndex < 1 || nameListSchema.slNoColIndex < 1) {
             return;
@@ -48,9 +49,7 @@ export class DocService {
             if (slValue.length > 0) {
                 logTitle = logTitle + " (" + slValue + ")";
             }
-            noteValue = CallLogService.formatLog(noteValue)
-
-            
+            noteValue = Util.formatUpdateLog(noteValue)
         }
 
     }

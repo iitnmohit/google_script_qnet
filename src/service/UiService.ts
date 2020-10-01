@@ -1,4 +1,4 @@
-export class MenuService {
+export class UiService {
     public addBusinessMenu(spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
         SpreadsheetApp.getUi()
             .createMenu('Business')
@@ -10,8 +10,13 @@ export class MenuService {
             .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
+            .addItem('Set Up Sheet','setUpSheet')
             //.addItem('Update Logs To Doc', 'updateLogToDoc')
             //.addSeparator()
             .addToUi();
+    }
+
+    public showErrorMessage(prompt: string):void{
+        SpreadsheetApp.getUi().alert(prompt);
     }
 }

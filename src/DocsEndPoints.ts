@@ -1,6 +1,7 @@
-import { DocService } from "./DocService";
+import { runSafely } from "./Code";
+import { DocService } from "./service/DocService";
 
+// to do
 function updateLogToDoc(): void {
-    let docService = new DocService();
-    docService.updateAllLogs();
-  }
+  runSafely(new DocService().updateAllLogs);
+}
