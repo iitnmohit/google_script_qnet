@@ -3,5 +3,7 @@ import { DocService } from "./service/DocService";
 
 // to do
 function updateLogToDoc(): void {
-  runSafely(new DocService().updateAllLogs);
+  runSafely((): void => {
+    new DocService().updateAllLogs();
+  });
 }

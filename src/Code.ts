@@ -1,13 +1,5 @@
 import { UiService } from "./service/UiService";
 
-export function runSafelyWithParam<T>(t: T, callback: (t: T) => void): void {
-    try {
-        callback(t);
-    } catch (error: unknown) {
-        handleError(error);
-    }
-}
-
 export function runSafely(callback: () => void): void {
     try {
         callback();
@@ -20,7 +12,7 @@ function handleError(error: unknown) {
     let uiService = new UiService();
     if (typeof error === "string") {
         uiService.showErrorMessage(error);
-        Logger.log("Error");
+        Logger.log(error);
     }
     if (error instanceof Error) {
         uiService.showErrorMessage(error.message);

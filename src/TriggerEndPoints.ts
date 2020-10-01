@@ -1,12 +1,16 @@
-import { runSafelyWithParam } from './Code';
+import { runSafely } from './Code';
 import { TriggerService } from './service/TriggerService'
 
 function onOpen(event: GoogleAppsScript.Events.SheetsOnOpen): void {
-  runSafelyWithParam(event, new TriggerService().onOpen);
+  runSafely((): void => {
+    new TriggerService().onOpen(event);
+  });
 }
 
 function onEdit(event: GoogleAppsScript.Events.SheetsOnEdit) {
-  runSafelyWithParam(event, new TriggerService().onEdit);
+  runSafely((): void => {
+    new TriggerService().onEdit(event);
+  });
 }
 function onInstall(event: any) {
   onOpen(event);

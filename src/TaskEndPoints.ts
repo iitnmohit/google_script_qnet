@@ -1,31 +1,45 @@
-import { runSafely, runSafelyWithParam } from "./Code";
+import { runSafely } from "./Code";
 import { TaskService } from "./service/TaskService";
 
 
 function taskClearAllCheckBox(): void {
-  runSafely(new TaskService().clearAllCheckbox);
+  runSafely((): void => {
+    new TaskService().clearAllCheckbox();
+  });
 }
 
 function taskDeleteAll(): void {
-  runSafely(new TaskService().deleteAllTasks);
+  runSafely((): void => {
+    new TaskService().deleteAllTasks();
+  });
 }
 
 function taskAddTop50(): void {
-  runSafelyWithParam(50, new TaskService().addAllTask);
+  runSafely((): void => {
+    new TaskService().addAllTask(50);
+  });
 }
 
 function taskAddTopTen(): void {
-  runSafelyWithParam(10, new TaskService().addAllTask);
+  runSafely((): void => {
+    new TaskService().addAllTask(10);
+  });
 }
 
 function taskAddOne(): void {
-  runSafelyWithParam(1, new TaskService().addAllTask);
+  runSafely((): void => {
+    new TaskService().addAllTask(1);
+  });
 }
 
 function taskUpdateSelectedLog(): void {
-  runSafelyWithParam(10, new TaskService().updateSelectedLog);
+  runSafely((): void => {
+    new TaskService().updateSelectedLog(10);
+  });
 }
 
 function taskUpdateOneLog(): void {
-  runSafelyWithParam(1, new TaskService().updateSelectedLog);
+  runSafely((): void => {
+    new TaskService().updateSelectedLog(1);
+  });
 }
