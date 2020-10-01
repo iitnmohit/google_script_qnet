@@ -10,7 +10,7 @@ export class UiService {
             .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
-            // .addItem('Set Up Sheet','setUpSheet')
+            .addItem('Set Up Sheet','setUpSheet')
             //.addItem('Update Logs To Doc', 'updateLogToDoc')
             //.addSeparator()
             .addToUi();
@@ -18,5 +18,5 @@ export class UiService {
 
     public showErrorMessage(prompt: string):void{
         SpreadsheetApp.getUi().alert(prompt);
-    }
+    } 
 }

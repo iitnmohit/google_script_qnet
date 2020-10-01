@@ -16,7 +16,7 @@ export class TaskService {
 
     public updateSelectedLog(count: number = TaskSchema.MAX_TASK_UPDATE): void {
         if (count < 0 || count > TaskSchema.MAX_TASK_UPDATE) {
-            throw TaskSchema.MSG_INVALID_UPDATE_COUNT;
+            throw new Error(TaskSchema.MSG_INVALID_UPDATE_COUNT);
         }
 
         let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
@@ -78,7 +78,7 @@ export class TaskService {
                 this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).clearNote()
             } catch (error) {
                 Logger.log(error);
-                throw TaskSchema.MSG_ERROR_DELETE_TASK_LIST
+                throw new Error(TaskSchema.MSG_ERROR_DELETE_TASK_LIST);
             }
         }
     }
@@ -90,7 +90,7 @@ export class TaskService {
 
     public addAllTask(count: number = TaskSchema.MAX_TASK_CREATE): void {
         if (count < 0 || count > TaskSchema.MAX_TASK_CREATE) {
-            throw TaskSchema.MSG_INVALID_CREATE_COUNT;
+            throw new Error(TaskSchema.MSG_INVALID_CREATE_COUNT);
         }
 
         let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
@@ -140,7 +140,7 @@ export class TaskService {
             if (error instanceof Error) {
                 Logger.log("Error" + error.message + error.stack);
             }
-            throw TaskSchema.MSG_ERROR_DELETE_TASK;
+            throw new Error(TaskSchema.MSG_ERROR_DELETE_TASK);
         }
     }
 
@@ -167,12 +167,12 @@ export class TaskService {
         // break if no name
         let nameCell = this.nameListSheet.getRange(row, nameListSchema.nameColIndex);
         if (nameCell.isBlank()) {
-            throw `No name present at row ${row}`;
+            throw new Error(`No name present at row ${row}`);
         }
 
         let nameCellValue = nameCell.getValue();
         if (typeof nameCellValue !== "string") {
-            throw NameListSheetSchema.MSG_INVALID_NAME_CELL_FORMAT;
+            throw new Error(NameListSheetSchema.MSG_INVALID_NAME_CELL_FORMAT);
         }
 
         let taskTitle: string = nameCellValue.trim()
@@ -187,7 +187,7 @@ export class TaskService {
             return Tasks.Tasks.insert(newTask, this.getTaskList().id);
         } catch (error) {
             Logger.log(error);
-            throw TaskSchema.MSG_ERROR_CREATE_TASK;
+            throw new Error(TaskSchema.MSG_ERROR_CREATE_TASK);
         }
     }
 
@@ -208,7 +208,7 @@ export class TaskService {
             }
         } catch (error) {
             Logger.log(error);
-            throw TaskSchema.MSG_ERROR_READ_TASK_LIST
+            throw new Error(TaskSchema.MSG_ERROR_READ_TASK_LIST);
         }
 
         if (this.myTaskList == null && create) {
@@ -219,7 +219,7 @@ export class TaskService {
                 this.myTaskList = Tasks.Tasklists.insert(newTaskList);
             } catch (error) {
                 Logger.log(error);
-                throw TaskSchema.MSG_ERROR_CREATE_TASK_LIST
+                throw new Error(TaskSchema.MSG_ERROR_CREATE_TASK_LIST);
             }
         }
         return this.myTaskList;

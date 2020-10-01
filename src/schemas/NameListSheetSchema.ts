@@ -53,23 +53,23 @@ export class NameListSheetSchema {
 
     public static getCompormisedSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): NameListSheetSchema {
         if (null == sheet) {
-            throw NameListSheetSchema.MSG_ERROR_SHEET_NOT_FOUND;
+            throw new Error(NameListSheetSchema.MSG_ERROR_SHEET_NOT_FOUND);
         }
         return new NameListSheetSchema(sheet);
     }
 
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): NameListSheetSchema {
         if (null == sheet) {
-            throw NameListSheetSchema.MSG_ERROR_SHEET_NOT_FOUND;
+            throw new Error(NameListSheetSchema.MSG_ERROR_SHEET_NOT_FOUND);
         }
         if (sheet.getName() !== NameListSheetSchema.SHEET_NAME) {
-            throw NameListSheetSchema.MSG_INVALID_SHEET_NAME;
+            throw new Error(NameListSheetSchema.MSG_INVALID_SHEET_NAME);
         }
         let newSchema = new NameListSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw NameListSheetSchema.MSG_ERROR_INVALID_SHEET;
+        throw new Error(NameListSheetSchema.MSG_ERROR_INVALID_SHEET);
     }
 
     private isSchemaValid(): boolean {

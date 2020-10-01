@@ -4,17 +4,22 @@ import { SetUpService } from "./service/SetUpService";
 function setUpSheet(): void {
     var setUpService = new SetUpService();
     
-    //delete existing sheeets
-    setUpService.deleteAllSheets();
+    
 
     //create Overview Sheet
+    setUpService.createOverViewSheets();
 
     //create NameList Sheet
     setUpService.createNameListSheets();
 
     //create List of value sheet
+    setUpService.createLovSheets();
 
     //create city sheet
+    setUpService.createCitySheets();
+
+    //delete existing sheeets
+    setUpService.deleteNonQnetSheets();
 
 
 
