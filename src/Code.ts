@@ -9,13 +9,12 @@ export function runSafely(callback: () => void): void {
 }
 
 function handleError(error: unknown) {
-    let uiService = new UiService();
     if (typeof error === "string") {
-        uiService.showErrorMessage(error);
+        UiService.showErrorMessage(error);
         Logger.log(error);
     }
     if (error instanceof Error) {
-        uiService.showErrorMessage(error.message);
+        UiService.showErrorMessage(error.message);
         Logger.log("Error" + error.message + error.stack);
     }
 }

@@ -9,5 +9,5 @@ export class TaskSchema {
     public static readonly MSG_ERROR_DELETE_TASK_LIST = "Server error while deleting task list, Try after sometime.";
     public static readonly MSG_ERROR_CREATE_TASK = "Server error while creating task, Try after sometime.";
     public static readonly MSG_ERROR_DELETE_TASK = "Server error while deleting task, Try after sometime.";
-   
+    public static readonly MSG_DELETE_ALERT = "Confirm to delete all task, This action cannot be undone.";
 }

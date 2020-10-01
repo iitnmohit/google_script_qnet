@@ -16,24 +16,28 @@ export class SetUpService {
 
 
     public createOverViewSheets() {
-        this.overviewSheet = this.spreadsheet.insertSheet(OverViewSheetSchema.SHEET_NAME);
+        this.overviewSheet = this.createOrClearSheet(OverViewSheetSchema.SHEET_NAME);
     }
 
+
+
     public createNameListSheets() {
-        this.nameListSheet = this.spreadsheet.insertSheet(NameListSheetSchema.SHEET_NAME);
+        this.nameListSheet = this.createOrClearSheet(NameListSheetSchema.SHEET_NAME);
     }
 
     public createLovSheets() {
-        this.nameListSheet = this.spreadsheet.insertSheet(LovSheetSchema.SHEET_NAME);
+        this.lovSheet = this.createOrClearSheet(LovSheetSchema.SHEET_NAME);
     }
 
     public createCitySheets() {
-        this.nameListSheet = this.spreadsheet.insertSheet(CitySheetSchema.SHEET_NAME);
+        this.citySheet = this.createOrClearSheet(NameListSheetSchema.SHEET_NAME);
     }
 
     public deleteNonQnetSheets(): void {
         let sheets = this.spreadsheet.getSheets();
-        if (sheets != null && sheets.length > 0) {
+        let totalNumOfSheets = sheets.length;
+        let numOfSheetDeleted = 0;
+        if (sheets != null && totalNumOfSheets > 0) {
             for (let sheet of sheets) {
                 let sheetName = sheet.getName();
                 if (sheetName === OverViewSheetSchema.SHEET_NAME
@@ -42,8 +46,27 @@ export class SetUpService {
                     || sheetName === CitySheetSchema.SHEET_NAME) {
                     continue;
                 }
-                this.spreadsheet.deleteSheet(sheet);
+                if (totalNumOfSheets - numOfSheetDeleted != 1) {
+                    this.spreadsheet.deleteSheet(sheet);
+                    numOfSheetDeleted++;
+                } else {
+                    sheet.setName("Sheet 1");
+                    sheet.clear();
+                }
             }
         }
+    }
+
+    private createOrClearSheet(sheetName: string): GoogleAppsScript.Spreadsheet.Sheet {
+        if (sheetName == null || sheetName.trim().length < 1) {
+            throw new Error("Sheet name not present");
+        }
+        let sheet = this.spreadsheet.getSheetByName(sheetName);
+        if (sheet == null) {
+            sheet = this.spreadsheet.insertSheet(sheetName);
+        } else {
+            sheet.clear();
+        }
+        return sheet
     }
 }

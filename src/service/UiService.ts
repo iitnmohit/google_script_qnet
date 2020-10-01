@@ -1,4 +1,6 @@
 export class UiService {
+    private static readonly confirmMessage:string = "Confirm to proceed";
+
     public addBusinessMenu(spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
         SpreadsheetApp.getUi()
             .createMenu('Business')
@@ -10,13 +12,22 @@ export class UiService {
             .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
-            .addItem('Set Up Sheet','setUpSheet')
+            // .addItem('Set Up Sheet','setUpSheet')
             //.addItem('Update Logs To Doc', 'updateLogToDoc')
             //.addSeparator()
             .addToUi();
     }
 
-    public showErrorMessage(prompt: string):void{
-        SpreadsheetApp.getUi().alert(prompt);
+    public static showErrorMessage(message: string):void{
+        SpreadsheetApp.getUi().alert(message);
     } 
+
+    public static doesUserReConfirmedAction(message:string = UiService.confirmMessage):boolean{
+        let ui = SpreadsheetApp.getUi();
+        let buttonClicked = ui.alert("Heads up!",message,ui.ButtonSet.YES_NO);
+        if(buttonClicked === ui.Button.YES){
+            return true;
+        }
+        return false;
+    }
 }

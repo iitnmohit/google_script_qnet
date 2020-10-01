@@ -1,12 +1,11 @@
 import { SetUpService } from "./service/SetUpService";
+import { UiService } from "./service/UiService";
 
 //to do
 function setUpSheet(): void {
     var setUpService = new SetUpService();
-    
-    
 
-    //create Overview Sheet
+    // create Overview Sheet
     setUpService.createOverViewSheets();
 
     //create NameList Sheet
@@ -18,7 +17,7 @@ function setUpSheet(): void {
     //create city sheet
     setUpService.createCitySheets();
 
-    //delete existing sheeets
+    // delete other sheeets    
     setUpService.deleteNonQnetSheets();
 
 
