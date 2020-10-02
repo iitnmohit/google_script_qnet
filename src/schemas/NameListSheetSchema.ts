@@ -1,10 +1,22 @@
-export class NameListSheetSchema {
+import { ThemeUtil } from "../util/ThemeUtil";
+import { BaseSheetSchema } from "./BaseSheetSchema";
+
+export class NameListSheetSchema extends BaseSheetSchema {
+    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
+    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
+    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
+    public ROW_HEIGHT: number = BaseSheetSchema.DEFAULT_ROW_HEIGHT;
     public static readonly MSG_ERROR_SHEET_NOT_FOUND = "Name List sheet not found.";
     public static readonly MSG_ERROR_INVALID_SHEET = "Name List sheet is not valid.";
     public static readonly MSG_INVALID_NAME_CELL_FORMAT = "Name is not valid.";
     public static readonly MSG_INVALID_SHEET_NAME = "Name list sheet name is not valid.";
+
+    public DEFAULT_ROW_COUNT: number = 1000;
+    public DEFAULT_COL_COUNT: number = 19;
+
     public static readonly SHEET_INDEX = 2;
     public static readonly SHEET_NAME = "NAME LIST";
+
     public static readonly COL_Sl_No = "Sl No";
     public static readonly COL_NAME = "NAME";
     public static readonly COL_ADD_LOG = "ADD LOG";
@@ -32,7 +44,15 @@ export class NameListSheetSchema {
     public readonly updateOnColIndex: number = -1;
     public readonly taskColIndex: number = -1;
 
+    public getSheetName(): string {
+        return NameListSheetSchema.SHEET_NAME;
+    }
+
     private constructor(private sheet: GoogleAppsScript.Spreadsheet.Sheet) {
+        super();
+        if (sheet == null) {
+            return;
+        }
         let firstRowRangeValues = sheet.getRange(1, 1, 1, sheet.getMaxColumns()).getValues();
         for (let i = 0; i < sheet.getMaxColumns(); i++) {
             if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED_ON) {
@@ -51,9 +71,9 @@ export class NameListSheetSchema {
         }
     }
 
-    public static getCompormisedSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): NameListSheetSchema {
+    public static getCompormisedSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet = null): NameListSheetSchema {
         if (null == sheet) {
-            throw new Error(NameListSheetSchema.MSG_ERROR_SHEET_NOT_FOUND);
+            return new NameListSheetSchema(null);
         }
         return new NameListSheetSchema(sheet);
     }

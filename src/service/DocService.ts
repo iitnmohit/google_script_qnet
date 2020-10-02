@@ -1,6 +1,6 @@
 import { CallLogService } from "./CallLogService";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { Util } from "./Util";
+import { Util } from "../util/Util";
 // to do
 export class DocService {
     private static readonly docId: string = "19OQQFLwN4eYqsPr59bu0hx6n4MV82STntQHfbufhcWE";

@@ -1,6 +1,6 @@
-export class Util{
+export class Util {
     private static readonly monthArray: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
+
     public static formatUpdateLog(log: string, todayDate?: string): string {
         if (!(log != null && log.trim().length > 0)) {
             return "";
@@ -50,7 +50,7 @@ export class Util{
 
     public static formatTodayDate(): string {
         let timestamp = Utilities.formatDate(new Date(), "GMT+5:30", "dd-MMM-yyyy");
-        let date =  new Date(timestamp);
+        let date = new Date(timestamp);
         return Util.dateString(date);
     }
 
@@ -58,7 +58,7 @@ export class Util{
         let month = Util.getMonthName(dateObj.getMonth());
         let day = String(dateObj.getDate());
         let year = String(dateObj.getFullYear());
-        
+
         if (day.length < 2)
             day = '0' + day;
 

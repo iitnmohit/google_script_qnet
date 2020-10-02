@@ -1,0 +1,9 @@
+{
+    "editor.rulers": [
+        80
+    ],
+    "javascript.format.semicolons": "insert",
+    "typescript.format.insertSpaceAfterConstructor": true,
+    "typescript.format.semicolons": "insert",
+    "typescript.tsdk": ""
+}

@@ -1,5 +1,5 @@
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { Util } from "./Util";
+import { Util } from "../util/Util";
 
 export class CallLogService {
 

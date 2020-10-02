@@ -3,7 +3,7 @@ import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { TaskSchema } from "../schemas/TaskSchema";
 import { TaskBuilder } from "../model/TaskBuilder";
 import { TaskListBuilder } from "../model/TaskListBuilder";
-import { Util } from "./Util";
+import { Util } from "../util/Util";
 
 export class TaskService {
     private readonly nameListSheet: GoogleAppsScript.Spreadsheet.Sheet;
