@@ -19,8 +19,6 @@ export class SetUpService {
         this.overviewSheet = this.createOrClearSheet(OverViewSheetSchema.SHEET_NAME);
     }
 
-
-
     public createNameListSheets() {
         this.nameListSheet = this.createOrClearSheet(NameListSheetSchema.SHEET_NAME);
     }

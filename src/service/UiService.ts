@@ -1,14 +1,11 @@
 export class UiService {
-    private static readonly confirmMessage:string = "Confirm to proceed";
+    private static readonly confirmMessage: string = "Confirm to proceed";
 
     public addBusinessMenu(spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
         SpreadsheetApp.getUi()
-            .createMenu('Business')
-            .addItem('Add Top 50 Tasks', 'taskAddTop50')
-            .addItem('Add Top 10 Tasks', 'taskAddTopTen')
-            .addItem('Add 1 Task', 'taskAddOne')
-            .addItem('Update Log From 10 Tasks', 'taskUpdateSelectedLog')
-            .addItem('Update Log From 1 Tasks', 'taskUpdateOneLog')
+            .createMenu('QNET')
+            .addSubMenu(this.getCreateMenu())
+            .addSubMenu(this.getUpdateMenu())
             .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
@@ -18,16 +15,31 @@ export class UiService {
             .addToUi();
     }
 
-    public static showErrorMessage(message: string):void{
+    public static showErrorMessage(message: string): void {
         SpreadsheetApp.getUi().alert(message);
-    } 
+    }
 
-    public static doesUserReConfirmedAction(message:string = UiService.confirmMessage):boolean{
+    public static doesUserReConfirmedAction(message: string = UiService.confirmMessage): boolean {
         let ui = SpreadsheetApp.getUi();
-        let buttonClicked = ui.alert("Heads up!",message,ui.ButtonSet.YES_NO);
-        if(buttonClicked === ui.Button.YES){
+        let buttonClicked = ui.alert("Heads up!", message, ui.ButtonSet.YES_NO);
+        if (buttonClicked === ui.Button.YES) {
             return true;
         }
         return false;
+    }
+
+    private getCreateMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Create")
+            .addItem('1 Task', 'taskAddOne')
+            .addItem('10 Tasks', 'taskAddTopTen')
+            .addItem('50 Tasks', 'taskAddTop50');
+    }
+
+    private getUpdateMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Update")
+            .addItem('1 Tasks', 'taskUpdateOneLog')
+            .addItem('10 Tasks', 'taskUpdateSelectedLog');
     }
 }
