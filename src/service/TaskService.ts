@@ -53,7 +53,7 @@ export class TaskService {
             }
             let callLog = Util.formatUpdateLog(_task.notes, todayDate);
             this.nameListSheet.getRange(row, nameListSchema.nameColIndex).setNote(callLog);
-            this.nameListSheet.getRange(row, nameListSchema.updateOnColIndex).setValue(new Date());
+            this.nameListSheet.getRange(row, nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
             this.nameListSheet.getRange(row, nameListSchema.updateColIndex).check();
 
             //delete task

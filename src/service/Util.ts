@@ -49,8 +49,9 @@ export class Util{
     }
 
     public static formatTodayDate(): string {
-        let dateObj = new Date();
-        return Util.dateString(dateObj);
+        let timestamp = Utilities.formatDate(new Date(), "GMT+5:30", "dd-MMM-yyyy");
+        let date =  new Date(timestamp);
+        return Util.dateString(date);
     }
 
     private static dateString(dateObj: Date) {

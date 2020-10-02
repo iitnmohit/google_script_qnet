@@ -15,7 +15,7 @@ export class CallLogService {
         let rowIndex = range.getRow();
         if (range.isChecked()) {
             this.appendLog(nameListSchema, sheet, rowIndex);
-            sheet.getRange(rowIndex, nameListSchema.updateOnColIndex).setValue(new Date());
+            sheet.getRange(rowIndex, nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
         } else {
             this.clearContent(sheet, rowIndex, nameListSchema.addLogColIndex);
             this.clearContent(sheet, rowIndex, nameListSchema.updateOnColIndex);
