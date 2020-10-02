@@ -1,4 +1,3 @@
-import { CallLogService } from "./CallLogService";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
 // to do
@@ -21,7 +20,7 @@ export class DocService {
             return;
         }
         let docBody = logDocument.getBody();
-        
+
         //clear the content
         docBody.clear();
 
@@ -49,7 +48,7 @@ export class DocService {
             if (slValue.length > 0) {
                 logTitle = logTitle + " (" + slValue + ")";
             }
-            noteValue = Util.formatUpdateLog(noteValue)
+            noteValue = Util.formatUpdateLog(noteValue);
         }
 
     }

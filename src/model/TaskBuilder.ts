@@ -15,7 +15,7 @@ export class TaskBuilder {
     private title?: string;
     private updated?: string;
 
-    private constructor() {
+    private constructor () {
     }
 
     public build(): GoogleAppsScript.Tasks.Schema.Task {

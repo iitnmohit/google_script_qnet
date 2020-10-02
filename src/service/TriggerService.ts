@@ -1,6 +1,6 @@
-import { UiService } from './UiService'
-import { CallLogService } from './CallLogService'
 import { NameListSheetSchema } from '../schemas/NameListSheetSchema';
+import { CallLogService } from './CallLogService';
+import { UiService } from './UiService';
 
 export class TriggerService {
     public onOpen(event: GoogleAppsScript.Events.SheetsOnOpen): void {
@@ -11,6 +11,5 @@ export class TriggerService {
         if (event.range.getSheet().getName() === NameListSheetSchema.SHEET_NAME) {
             new CallLogService().addLog(event.range);
         }
-
     }
 }

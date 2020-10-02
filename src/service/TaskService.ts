@@ -1,15 +1,14 @@
-import { CallLogService } from "./CallLogService";
-import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { TaskSchema } from "../schemas/TaskSchema";
 import { TaskBuilder } from "../model/TaskBuilder";
 import { TaskListBuilder } from "../model/TaskListBuilder";
+import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
+import { TaskSchema } from "../schemas/TaskSchema";
 import { Util } from "../util/Util";
 
 export class TaskService {
     private readonly nameListSheet: GoogleAppsScript.Spreadsheet.Sheet;
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
-    public constructor() {
+    public constructor () {
         this.nameListSheet = SpreadsheetApp.getActiveSpreadsheet()
             .getSheetByName(NameListSheetSchema.SHEET_NAME);
     }
@@ -75,7 +74,7 @@ export class TaskService {
         if (null != this.getTaskList(false)) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
-                this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).clearNote()
+                this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).clearNote();
             } catch (error) {
                 Logger.log(error);
                 throw new Error(TaskSchema.MSG_ERROR_DELETE_TASK_LIST);
@@ -85,7 +84,7 @@ export class TaskService {
 
     public clearAllCheckbox(): void {
         let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
-        this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).uncheck()
+        this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).uncheck();
     }
 
     public addAllTask(count: number = TaskSchema.MAX_TASK_CREATE): void {

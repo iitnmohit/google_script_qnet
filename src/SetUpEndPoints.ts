@@ -1,7 +1,6 @@
-import { Cities } from "./constants/Cities";
 import { SetUpService } from "./service/SetUpService";
 import { UiService } from "./service/UiService";
- 
+
 //to do
 function setUpSheet(): void {
     if (!UiService.doesUserReConfirmedAction()) {

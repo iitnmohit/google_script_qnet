@@ -14,9 +14,7 @@ export class SetUpService {
 
     constructor () {
         this.spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-        let theme = ThemeUtil.getCurrentSpreadsheetTheme(this.spreadsheet.resetSpreadsheetTheme());
-        this.spreadsheet.setSpreadsheetTheme(theme);
-
+        this.setSpreadsheetTheme(this.spreadsheet);
     }
 
     public deleteNonQnetSheets(): void {
@@ -75,8 +73,13 @@ export class SetUpService {
         return sheet;
     }
 
+    private setSpreadsheetTheme(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
+        let theme = ThemeUtil.getCurrentSpreadsheetTheme(spreadsheet.resetSpreadsheetTheme());
+        spreadsheet.setSpreadsheetTheme(theme);
+    }
+
     private setRowsHeight(sheet: GoogleAppsScript.Spreadsheet.Sheet,
-        height: number = BaseSheetSchema.DEFAULT_ROW_HEIGHT): GoogleAppsScript.Spreadsheet.Sheet {
+        height: number = ThemeUtil.getCurrentTheme().rowHeight): GoogleAppsScript.Spreadsheet.Sheet {
         if (null == sheet) {
             throw new Error("Sheet not present");
         }

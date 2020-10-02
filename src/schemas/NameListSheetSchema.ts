@@ -2,40 +2,39 @@ import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
 export class NameListSheetSchema extends BaseSheetSchema {
+    public static readonly MSG_ERROR_SHEET_NOT_FOUND: string = "Name List sheet not found.";
+    public static readonly MSG_ERROR_INVALID_SHEET: string = "Name List sheet is not valid.";
+    public static readonly MSG_INVALID_NAME_CELL_FORMAT: string = "Name is not valid.";
+    public static readonly MSG_INVALID_SHEET_NAME: string = "Name list sheet name is not valid.";
+
+    public static readonly SHEET_NAME: string = "NAME LIST";
+    public static readonly SHEET_INDEX: number = 2;
+
+    public static readonly COL_SL_NO: string = "Sl No";
+    public static readonly COL_NAME: string = "NAME";
+    public static readonly COL_ADD_LOG: string = "ADD LOG";
+    public static readonly COL_UPDATED: string = "UPDATED";
+    public static readonly COL_LIST: string = "LIST";
+    public static readonly COL_LOCATION: string = "LOCATION";
+    public static readonly COL_ZONE: string = "ZONE";
+    public static readonly COL_CONNECT_UP: string = "CONNECT UP";
+    public static readonly COL_INFO: string = "INFO";
+    public static readonly COL_EDIFY: string = "EDIFY";
+    public static readonly COL_INVITE: string = "INVITE";
+    public static readonly COL_PLAN: string = "PLAN";
+    public static readonly COL_PLAN_DATE: string = "PLAN DATE";
+    public static readonly COL_CLOSING: string = "CLOSING";
+    public static readonly COL_CAST: string = "CAST";
+    public static readonly COL_UPDATED_ON: string = "UPDATED ON";
+    public static readonly COL_LINK: string = "LINK";
+    public static readonly COL_TASK: string = "TASK";
+
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
-    public ROW_HEIGHT: number = BaseSheetSchema.DEFAULT_ROW_HEIGHT;
-    public static readonly MSG_ERROR_SHEET_NOT_FOUND = "Name List sheet not found.";
-    public static readonly MSG_ERROR_INVALID_SHEET = "Name List sheet is not valid.";
-    public static readonly MSG_INVALID_NAME_CELL_FORMAT = "Name is not valid.";
-    public static readonly MSG_INVALID_SHEET_NAME = "Name list sheet name is not valid.";
 
     public DEFAULT_ROW_COUNT: number = 1000;
     public DEFAULT_COL_COUNT: number = 19;
-
-    public static readonly SHEET_INDEX = 2;
-    public static readonly SHEET_NAME = "NAME LIST";
-
-    public static readonly COL_Sl_No = "Sl No";
-    public static readonly COL_NAME = "NAME";
-    public static readonly COL_ADD_LOG = "ADD LOG";
-    public static readonly COL_UPDATED = "UPDATED";
-    public static readonly COL_LIST = "LIST";
-    public static readonly COL_LOCATION = "LOCATION";
-    public static readonly COL_ZONE = "ZONE";
-    public static readonly COL_CONNECT_UP = "CONNECT UP";
-    public static readonly COL_INFO = "INFO";
-    public static readonly COL_EDIFY = "EDIFY";
-    public static readonly COL_INVITE = "INVITE";
-    public static readonly COL_PLAN = "PLAN";
-    public static readonly COL_PLAN_DATE = "PLAN DATE";
-    public static readonly COL_CLOSING = "CLOSING";
-    public static readonly COL_CAST = "CAST";
-    public static readonly COL_UPDATED_ON = "UPDATED ON";
-    public static readonly COL_LINK = "LINK";
-    public static readonly COL_TASK = "TASK";
-
 
     public readonly slNoColIndex: number = -1;
     public readonly nameColIndex: number = -1;
@@ -44,11 +43,7 @@ export class NameListSheetSchema extends BaseSheetSchema {
     public readonly updateOnColIndex: number = -1;
     public readonly taskColIndex: number = -1;
 
-    public getSheetName(): string {
-        return NameListSheetSchema.SHEET_NAME;
-    }
-
-    private constructor(private sheet: GoogleAppsScript.Spreadsheet.Sheet) {
+    private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
         if (sheet == null) {
             return;
@@ -65,16 +60,13 @@ export class NameListSheetSchema extends BaseSheetSchema {
                 this.updateColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_TASK) {
                 this.taskColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_Sl_No) {
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SL_NO) {
                 this.slNoColIndex = i + 1;
             }
         }
     }
 
     public static getCompormisedSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet = null): NameListSheetSchema {
-        if (null == sheet) {
-            return new NameListSheetSchema(null);
-        }
         return new NameListSheetSchema(sheet);
     }
 
@@ -90,6 +82,10 @@ export class NameListSheetSchema extends BaseSheetSchema {
             return newSchema;
         }
         throw new Error(NameListSheetSchema.MSG_ERROR_INVALID_SHEET);
+    }
+
+    public getSheetName(): string {
+        return NameListSheetSchema.SHEET_NAME;
     }
 
     private isSchemaValid(): boolean {
