@@ -10,14 +10,18 @@ import { Util } from "../util/Util";
 
 export class SetUpService {
     private readonly spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
-    private overviewSheet: GoogleAppsScript.Spreadsheet.Sheet;
-    private nameListSheet: GoogleAppsScript.Spreadsheet.Sheet;
-    private lovSheet: GoogleAppsScript.Spreadsheet.Sheet;
-    private citySheet: GoogleAppsScript.Spreadsheet.Sheet;
 
     constructor () {
         this.spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
         this.setSpreadsheetTheme(this.spreadsheet);
+    }
+
+    public createAllSheets(): GoogleAppsScript.Spreadsheet.Spreadsheet {
+        this.createOverViewSheets()
+            .createNameListSheets()
+            .createLovSheets()
+            .createCitySheets();
+        return this.spreadsheet;
     }
 
     public deleteNonQnetSheets(): void {
@@ -44,49 +48,47 @@ export class SetUpService {
         }
     }
 
-    public createOverViewSheets() {
-        this.overviewSheet = this.setUpSheet(OverViewSheetSchema.getCompormisedSchema());
-        let schema = OverViewSheetSchema.getValidSchema(this.overviewSheet);
-        this.endSetUpSheet(this.overviewSheet, schema);
+    private createOverViewSheets(): SetUpService {
+        var overviewSheet = this.startSetUpOfSheet(OverViewSheetSchema.getCompormisedSchema());
+        let schema = OverViewSheetSchema.getValidSchema(overviewSheet);
+        return this.endSetUpOfSheet(overviewSheet, schema);
     }
 
-    public createNameListSheets() {
-        this.nameListSheet = this.setUpSheet(NameListSheetSchema.getCompormisedSchema());
-        let schema = NameListSheetSchema.getValidSchema(this.nameListSheet);
-        this.fillNumbers(schema.slNoColIndex, this.nameListSheet);
-        this.fillCheckBox(schema.taskColIndex, this.nameListSheet);
-        this.endSetUpSheet(this.nameListSheet, schema);
+    private createNameListSheets(): SetUpService {
+        var nameListSheet = this.startSetUpOfSheet(NameListSheetSchema.getCompormisedSchema());
+        let schema = NameListSheetSchema.getValidSchema(nameListSheet);
+        return this.fillNumbers(schema.slNoColIndex, nameListSheet)
+            .fillCheckBox(schema.taskColIndex, nameListSheet)
+            .endSetUpOfSheet(nameListSheet, schema)
 
-        // after end setup
-        this.fillCheckBox(schema.selectColIndex, this.nameListSheet);
-        this.fillCheckBox(schema.updateColIndex, this.nameListSheet);
+            // after end setup
+            .fillCheckBox(schema.selectColIndex, nameListSheet, true)
+            .fillCheckBox(schema.updateColIndex, nameListSheet, true);
     }
 
-    public createLovSheets() {
-        this.lovSheet = this.setUpSheet(LovSheetSchema.getCompormisedSchema());
-        let schema = LovSheetSchema.getValidSchema(this.lovSheet);
-        this.fillColValue(Lov.list, schema.listColIndex, this.lovSheet);
-        this.fillColValue(Lov.connect_up, schema.connectUpColIndex, this.lovSheet);
-        this.fillColValue(Lov.info, schema.infoColIndex, this.lovSheet);
-        this.fillColValue(Lov.edify, schema.edifyColIndex, this.lovSheet);
-        this.fillColValue(Lov.invite, schema.inviteColIndex, this.lovSheet);
-        this.fillColValue(Lov.plan, schema.planColIndex, this.lovSheet);
-        this.fillColValue(Lov.closing, schema.closingColIndex, this.lovSheet);
-        this.fillColValue(Lov.zone, schema.zoneColIndex, this.lovSheet);
-        this.fillColValue(Lov.cast, schema.castColIndex, this.lovSheet);
-
-        this.endSetUpSheet(this.lovSheet, schema);
+    private createLovSheets(): SetUpService {
+        var lovSheet = this.startSetUpOfSheet(LovSheetSchema.getCompormisedSchema());
+        let schema = LovSheetSchema.getValidSchema(lovSheet);
+        return this.fillColValue(Lov.list, schema.listColIndex, lovSheet)
+            .fillColValue(Lov.connect_up, schema.connectUpColIndex, lovSheet)
+            .fillColValue(Lov.info, schema.infoColIndex, lovSheet)
+            .fillColValue(Lov.edify, schema.edifyColIndex, lovSheet)
+            .fillColValue(Lov.invite, schema.inviteColIndex, lovSheet)
+            .fillColValue(Lov.plan, schema.planColIndex, lovSheet)
+            .fillColValue(Lov.closing, schema.closingColIndex, lovSheet)
+            .fillColValue(Lov.zone, schema.zoneColIndex, lovSheet)
+            .fillColValue(Lov.cast, schema.castColIndex, lovSheet)
+            .endSetUpOfSheet(lovSheet, schema);
     }
 
-    public createCitySheets() {
-        this.citySheet = this.setUpSheet(CitySheetSchema.getCompormisedSchema());
-        let schema = CitySheetSchema.getValidSchema(this.citySheet);
-        this.fillColValue(Cities.list, schema.locationColIndex, this.citySheet);
-
-        this.endSetUpSheet(this.citySheet, schema);
+    private createCitySheets(): SetUpService {
+        var citySheet = this.startSetUpOfSheet(CitySheetSchema.getCompormisedSchema());
+        let schema = CitySheetSchema.getValidSchema(citySheet);
+        return this.fillColValue(Cities.list, schema.locationColIndex, citySheet)
+            .endSetUpOfSheet(citySheet, schema);
     }
 
-    private fillNumbers(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
+    private fillNumbers(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): SetUpService {
         try {
             let sourceRange = sheet.getRange(2, colIndex, 2, 1);
             sourceRange.setValues([[1], [2]]);
@@ -95,35 +97,34 @@ export class SetUpService {
             destRange.setHorizontalAlignment("left");
         } catch (error) {
             Logger.log(error);
-            return false;
         }
-        return true;
+        return this;
     }
 
-    private fillCheckBox(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
+    private fillCheckBox(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet, applyAuthWidthCol: boolean = false): SetUpService {
         try {
             sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1).insertCheckboxes();
-            sheet.setColumnWidth(colIndex, ThemeUtil.getCurrentTheme().checkBoxColWidth);
+            if (applyAuthWidthCol) {
+                sheet.setColumnWidth(colIndex, ThemeUtil.getCurrentTheme().checkBoxColWidth);
+            }
         } catch (error) {
             Logger.log(error);
-            return false;
         }
-        return true;
+        return this;
     }
 
-    private fillColValue<T>(list: Array<T>, colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
+    private fillColValue<T>(list: Array<T>, colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): SetUpService {
         if (list != null && list.length > 0) {
             try {
                 sheet.getRange(2, colIndex, list.length, 1).setValues(Util.arrayOfArray(list));
             } catch (error) {
                 Logger.log(error);
-                return false;
             }
-            return true;
         }
+        return this;
     }
 
-    private endSetUpSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet, schema: BaseSheetSchema): void {
+    private endSetUpOfSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet, schema: BaseSheetSchema): SetUpService {
         try {
             let numOfCols = sheet.getMaxColumns();
             sheet.autoResizeColumns(1, numOfCols);
@@ -143,20 +144,21 @@ export class SetUpService {
         } catch (error) {
             Logger.log(error);
         }
+        return this;
     }
 
-    private setUpSheet(schema: BaseSheetSchema): GoogleAppsScript.Spreadsheet.Sheet {
+    private startSetUpOfSheet(schema: BaseSheetSchema): GoogleAppsScript.Spreadsheet.Sheet {
         let sheet = this.createOrClearSheet(schema.getSheetName());
         // set rows and column
-        this.ensureRowsCount(sheet, schema.DEFAULT_ROW_COUNT);
-        this.ensureColsCount(sheet, schema.DEFAULT_COL_COUNT);
+        this.ensureRowsCount(sheet, schema.DEFAULT_ROW_COUNT)
+            .ensureColsCount(sheet, schema.DEFAULT_COL_COUNT)
 
-        //set row height and tab color
-        this.setRowsHeight(sheet, schema.ROW_HEIGHT);
-        sheet.setTabColor(schema.HEADDER_ROW_COLOR);
+            //set row height and tab color
+            .setRowsHeight(sheet, schema.ROW_HEIGHT)
+            .setTabColor(schema.HEADDER_ROW_COLOR)
 
-        // apply sheet border and banding color
-        sheet.getRange(1, 1, schema.DEFAULT_ROW_COUNT, schema.DEFAULT_COL_COUNT)
+            // apply sheet border and banding color
+            .getRange(1, 1, schema.DEFAULT_ROW_COUNT, schema.DEFAULT_COL_COUNT)
             .setBorder(true, true, true, true, true, true, ThemeUtil.getCurrentTheme().borderColor, null)
             .applyRowBanding(ThemeUtil.getCurrentTheme().defaultBandingTheme, true, false)
             .setHeaderRowColor(schema.HEADDER_ROW_COLOR)
@@ -179,7 +181,7 @@ export class SetUpService {
         }
 
         //freeze
-        sheet.setFrozenRows(1);
+        sheet.setFrozenRows(schema.FREEZE_ROW);
         sheet.setFrozenColumns(schema.FREEZE_COLUMN);
 
         sheet.setActiveSelection("A1");
@@ -191,18 +193,18 @@ export class SetUpService {
         spreadsheet.setSpreadsheetTheme(theme);
     }
 
-    private setRowsHeight(sheet: GoogleAppsScript.Spreadsheet.Sheet,
-        height: number = ThemeUtil.getCurrentTheme().rowHeight): GoogleAppsScript.Spreadsheet.Sheet {
-        if (null == sheet) {
-            throw new Error("Sheet not present");
-        }
+    private setRowsHeight(sheet: GoogleAppsScript.Spreadsheet.Sheet, height: number): GoogleAppsScript.Spreadsheet.Sheet {
         if (null == height || height < BaseSheetSchema.MINIUM_ROW_HEIGHT) {
-            throw new Error("Invalid Row Height");
+            return sheet;
         }
-        return sheet.setRowHeights(1, sheet.getMaxRows(), height);
+        try {
+            return sheet.setRowHeights(1, sheet.getMaxRows(), height);
+        } catch (error) {
+        }
+        return sheet;
     }
 
-    private ensureRowsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfRows: number = 1000): void {
+    private ensureRowsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfRows: number = 1000): SetUpService {
         if (null == requiredNumOfRows || requiredNumOfRows < 1) {
             throw new Error("Invalid Num of row value : " + requiredNumOfRows);
         }
@@ -218,9 +220,10 @@ export class SetUpService {
             let numOfRowsToAdd = requiredNumOfRows - existingRow;
             sheet.insertRows(1, numOfRowsToAdd);
         }
+        return this;
     }
 
-    private ensureColsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfCols: number = 26): void {
+    private ensureColsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfCols: number = 26): SetUpService {
         if (null == requiredNumOfCols || requiredNumOfCols < 1) {
             throw new Error("Invalid Num of col value : " + requiredNumOfCols);
         }
@@ -236,6 +239,7 @@ export class SetUpService {
             let numOfColsToAdd = requiredNumOfCols - existingCol;
             sheet.insertColumns(1, numOfColsToAdd);
         }
+        return this;
     }
 
     private createOrClearSheet(sheetName: string): GoogleAppsScript.Spreadsheet.Sheet {

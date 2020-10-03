@@ -1,34 +1,12 @@
 import { SetUpService } from "./service/SetUpService";
 import { UiService } from "./service/UiService";
 
-//to do
 function setUpSheet(): void {
-    
-    if (!UiService.doesUserReConfirmedAction()) {
+    if (!UiService.doesUserReConfirmedAction(
+        "This will delete all the data and cannot be undone.\nAre you sure to proceed?")) {
         return;
     }
     var setUpService = new SetUpService();
-
-    Logger.log("create overview");
-    // create Overview Sheet
-    setUpService.createOverViewSheets();
-
-    Logger.log("create namelist");
-    //create NameList Sheet
-    setUpService.createNameListSheets();
-
-    Logger.log("create lov");
-    //create List of value sheet
-    setUpService.createLovSheets();
-
-    Logger.log("create city");
-    //create city sheet
-    setUpService.createCitySheets();
-
-    Logger.log("delete other");
-    // delete other sheeets    
+    var spreadsheet = setUpService.createAllSheets();
     setUpService.deleteNonQnetSheets();
-    Logger.log("finish");
-
-
 }

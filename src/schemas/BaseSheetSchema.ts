@@ -16,13 +16,14 @@ export abstract class BaseSheetSchema {
     public abstract SECOND_ROW_COLOR: string;
 
     public ROW_HEIGHT: number = ThemeUtil.getCurrentTheme().rowHeight;
+    public FREEZE_ROW: number = 1;
     public FREEZE_COLUMN: number = 0;
 
     public abstract getSheetName(): string;
 
     public abstract getHeadderValues(): Array<string>;
 
-    public abstract getMinColWidth(index:number):number;
+    public abstract getMinColWidth(index: number): number;
 
-    public abstract getMaxColWidth(index:number):number|null;
+    public abstract getMaxColWidth(index: number): number | null;
 }
