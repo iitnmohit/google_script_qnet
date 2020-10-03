@@ -1,9 +1,12 @@
+import { Cities } from "../constants/Cities";
+import { Lov } from "../constants/Lov";
 import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { OverViewSheetSchema } from "../schemas/OverViewSheetSchema";
 import { ThemeUtil } from "../util/ThemeUtil";
+import { Util } from "../util/Util";
 
 export class SetUpService {
     private readonly spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
@@ -43,32 +46,98 @@ export class SetUpService {
 
     public createOverViewSheets() {
         this.overviewSheet = this.setUpSheet(OverViewSheetSchema.getCompormisedSchema());
+
+        this.endSetUpSheet(this.overviewSheet);
     }
 
     public createNameListSheets() {
         this.nameListSheet = this.setUpSheet(NameListSheetSchema.getCompormisedSchema());
+
+        this.endSetUpSheet(this.nameListSheet);
     }
 
     public createLovSheets() {
         this.lovSheet = this.setUpSheet(LovSheetSchema.getCompormisedSchema());
+        let schema = LovSheetSchema.getValidSchema(this.lovSheet);
+        this.fillColValue(Lov.list, schema.listColIndex, this.lovSheet);
+        this.fillColValue(Lov.connect_up, schema.connectUpColIndex, this.lovSheet);
+        this.fillColValue(Lov.info, schema.infoColIndex, this.lovSheet);
+        this.fillColValue(Lov.edify, schema.edifyColIndex, this.lovSheet);
+        this.fillColValue(Lov.invite, schema.inviteColIndex, this.lovSheet);
+        this.fillColValue(Lov.plan, schema.planColIndex, this.lovSheet);
+        this.fillColValue(Lov.closing, schema.closingColIndex, this.lovSheet);
+        this.fillColValue(Lov.zone, schema.zoneColIndex, this.lovSheet);
+        this.fillColValue(Lov.cast, schema.castColIndex, this.lovSheet);
+
+        this.endSetUpSheet(this.lovSheet);
     }
 
     public createCitySheets() {
         this.citySheet = this.setUpSheet(CitySheetSchema.getCompormisedSchema());
+        let schema = CitySheetSchema.getValidSchema(this.citySheet);
+        this.fillColValue(Cities.list, schema.locationColIndex, this.citySheet);
+
+        this.endSetUpSheet(this.citySheet);
+    }
+
+    private fillColValue<T>(list: Array<T>, colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
+        if (list != null && list.length > 0) {
+            try {
+                sheet.getRange(2, colIndex, list.length, 1).setValues(Util.arrayOfArray(list));
+            } catch (error) {
+                Logger.log(error);
+                return false;
+            }
+            return true;
+        }
+    }
+
+    private endSetUpSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet): void {
+        try {
+            let numOfCols = sheet.getMaxColumns();
+            sheet.autoResizeColumns(1, numOfCols);
+            for (let i = 1; i <= numOfCols; i++) {
+                let currentColWidth = sheet.getColumnWidth(i);
+                sheet.setColumnWidth(i, currentColWidth + ThemeUtil.getCurrentTheme().colWidthOffset);
+            }
+        } catch (error) {
+            Logger.log(error);
+        }
     }
 
     private setUpSheet(schema: BaseSheetSchema): GoogleAppsScript.Spreadsheet.Sheet {
         let sheet = this.createOrClearSheet(schema.getSheetName());
-
+        // set rows and column
         this.ensureRowsCount(sheet, schema.DEFAULT_ROW_COUNT);
         this.ensureColsCount(sheet, schema.DEFAULT_COL_COUNT);
 
+        //set row height and tab color
         this.setRowsHeight(sheet, schema.ROW_HEIGHT);
+        sheet.setTabColor(schema.HEADDER_ROW_COLOR);
+
+        // apply sheet border and banding color
         sheet.getRange(1, 1, schema.DEFAULT_ROW_COUNT, schema.DEFAULT_COL_COUNT)
+            .setBorder(true, true, true, true, true, true, ThemeUtil.getCurrentTheme().borderColor, null)
             .applyRowBanding(ThemeUtil.getCurrentTheme().defaultBandingTheme, true, false)
             .setHeaderRowColor(schema.HEADDER_ROW_COLOR)
             .setFirstRowColor(schema.FIRST_ROW_COLOR)
             .setSecondRowColor(schema.SECOND_ROW_COLOR);
+
+        // set headder row value and alignment
+        let headderArray = schema.getHeadderValues();
+        if (headderArray.length > schema.DEFAULT_COL_COUNT) {
+            throw new Error("Failed creating schema, for " + schema.getSheetName() +
+                " sheet headder count is more than column count.");
+        }
+        if (headderArray.length > 0) {
+            sheet.getRange(1, 1, 1, headderArray.length)
+                .setValues([headderArray])
+                .setFontColor(schema.HEADDER_ROW_FONT_COLOR)
+                .setFontSize(ThemeUtil.getCurrentTheme().headderFontSize)
+                .setFontWeight("bold")
+                .setHorizontalAlignment("center");
+        }
+
         sheet.setActiveSelection("A1");
         return sheet;
     }

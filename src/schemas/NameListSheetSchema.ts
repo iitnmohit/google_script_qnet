@@ -2,14 +2,13 @@ import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
 export class NameListSheetSchema extends BaseSheetSchema {
-    public static readonly MSG_ERROR_SHEET_NOT_FOUND: string = "Name List sheet not found.";
-    public static readonly MSG_ERROR_INVALID_SHEET: string = "Name List sheet is not valid.";
-    public static readonly MSG_INVALID_NAME_CELL_FORMAT: string = "Name is not valid.";
-    public static readonly MSG_INVALID_SHEET_NAME: string = "Name list sheet name is not valid.";
-
     public static readonly SHEET_NAME: string = "NAME LIST";
     public static readonly SHEET_INDEX: number = 2;
 
+    //delete this
+    public static readonly MSG_INVALID_NAME_CELL_FORMAT: string = "Name is not valid.";
+
+    public static readonly COL_SELECT: string = "SELECT";
     public static readonly COL_SL_NO: string = "Sl No";
     public static readonly COL_NAME: string = "NAME";
     public static readonly COL_ADD_LOG: string = "ADD LOG";
@@ -29,18 +28,32 @@ export class NameListSheetSchema extends BaseSheetSchema {
     public static readonly COL_LINK: string = "LINK";
     public static readonly COL_TASK: string = "TASK";
 
+    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderFontColor;
+    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
 
     public DEFAULT_ROW_COUNT: number = 1000;
     public DEFAULT_COL_COUNT: number = 19;
 
+    public readonly selectNoColIndex: number = -1;
     public readonly slNoColIndex: number = -1;
     public readonly nameColIndex: number = -1;
     public readonly addLogColIndex: number = -1;
     public readonly updateColIndex: number = -1;
+    public readonly listColIndex: number = -1;
+    public readonly locationColIndex: number = -1;
+    public readonly zoneColIndex: number = -1;
+    public readonly connectUpColIndex: number = -1;
+    public readonly infoColIndex: number = -1;
+    public readonly edifyColIndex: number = -1;
+    public readonly inviteColIndex: number = -1;
+    public readonly planColIndex: number = -1;
+    public readonly planDateColIndex: number = -1;
+    public readonly closingColIndex: number = -1;
+    public readonly castColIndex: number = -1;
     public readonly updateOnColIndex: number = -1;
+    public readonly linkColIndex: number = -1;
     public readonly taskColIndex: number = -1;
 
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
@@ -48,20 +61,47 @@ export class NameListSheetSchema extends BaseSheetSchema {
         if (sheet == null) {
             return;
         }
-        let firstRowRangeValues = sheet.getRange(1, 1, 1, sheet.getMaxColumns()).getValues();
-        for (let i = 0; i < sheet.getMaxColumns(); i++) {
-            if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED_ON) {
-                this.updateOnColIndex = i + 1;
+        let columnLength = sheet.getMaxColumns();
+        let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
+        for (let i = 0; i < columnLength; i++) {
+            if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SELECT) {
+                this.selectNoColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SL_NO) {
+                this.slNoColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_NAME) {
                 this.nameColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_ADD_LOG) {
                 this.addLogColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED) {
                 this.updateColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_LIST) {
+                this.listColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_LOCATION) {
+                this.locationColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_ZONE) {
+                this.zoneColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_CONNECT_UP) {
+                this.connectUpColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_INFO) {
+                this.infoColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_EDIFY) {
+                this.edifyColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_INVITE) {
+                this.inviteColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_PLAN) {
+                this.planColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_PLAN_DATE) {
+                this.planDateColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_CLOSING) {
+                this.closingColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_CAST) {
+                this.castColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED_ON) {
+                this.updateOnColIndex = i + 1;
+            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_LINK) {
+                this.linkColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_TASK) {
                 this.taskColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SL_NO) {
-                this.slNoColIndex = i + 1;
             }
         }
     }
@@ -72,16 +112,16 @@ export class NameListSheetSchema extends BaseSheetSchema {
 
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): NameListSheetSchema {
         if (null == sheet) {
-            throw new Error(NameListSheetSchema.MSG_ERROR_SHEET_NOT_FOUND);
+            throw new Error(NameListSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_SHEET_EQ_NULL);
         }
         if (sheet.getName() !== NameListSheetSchema.SHEET_NAME) {
-            throw new Error(NameListSheetSchema.MSG_INVALID_SHEET_NAME);
+            throw new Error(NameListSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_INVALID_SHEET_NAME);
         }
         let newSchema = new NameListSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new Error(NameListSheetSchema.MSG_ERROR_INVALID_SHEET);
+        throw new Error(NameListSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_INVALID_SHEET);
     }
 
     public getSheetName(): string {
@@ -89,12 +129,49 @@ export class NameListSheetSchema extends BaseSheetSchema {
     }
 
     private isSchemaValid(): boolean {
+        if (this.selectNoColIndex < 1) return false;
         if (this.slNoColIndex < 1) return false;
         if (this.nameColIndex < 1) return false;
         if (this.addLogColIndex < 1) return false;
         if (this.updateColIndex < 1) return false;
+        if (this.listColIndex < 1) return false;
+        if (this.locationColIndex < 1) return false;
+        if (this.zoneColIndex < 1) return false;
+        if (this.connectUpColIndex < 1) return false;
+        if (this.infoColIndex < 1) return false;
+        if (this.edifyColIndex < 1) return false;
+        if (this.inviteColIndex < 1) return false;
+        if (this.planColIndex < 1) return false;
+        if (this.planDateColIndex < 1) return false;
+        if (this.closingColIndex < 1) return false;
+        if (this.castColIndex < 1) return false;
         if (this.updateOnColIndex < 1) return false;
+        if (this.linkColIndex < 1) return false;
         if (this.taskColIndex < 1) return false;
         return true;
+    }
+
+    public getHeadderValues(): Array<string> {
+        return [
+            NameListSheetSchema.COL_SELECT,
+            NameListSheetSchema.COL_SL_NO,
+            NameListSheetSchema.COL_NAME,
+            NameListSheetSchema.COL_ADD_LOG,
+            NameListSheetSchema.COL_UPDATED,
+            NameListSheetSchema.COL_LIST,
+            NameListSheetSchema.COL_LOCATION,
+            NameListSheetSchema.COL_ZONE,
+            NameListSheetSchema.COL_CONNECT_UP,
+            NameListSheetSchema.COL_INFO,
+            NameListSheetSchema.COL_EDIFY,
+            NameListSheetSchema.COL_INVITE,
+            NameListSheetSchema.COL_PLAN,
+            NameListSheetSchema.COL_PLAN_DATE,
+            NameListSheetSchema.COL_CLOSING,
+            NameListSheetSchema.COL_CAST,
+            NameListSheetSchema.COL_UPDATED_ON,
+            NameListSheetSchema.COL_LINK,
+            NameListSheetSchema.COL_TASK
+        ];
     }
 }

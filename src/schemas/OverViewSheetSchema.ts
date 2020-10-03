@@ -5,9 +5,10 @@ export class OverViewSheetSchema extends BaseSheetSchema {
     public static readonly SHEET_NAME: string = "OVERVIEW";
     public static readonly SHEET_INDEX: number = 1;
 
+    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderFontColor;
+    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableSecondRowColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderColor;
 
     public DEFAULT_ROW_COUNT: number = 10;
     public DEFAULT_COL_COUNT: number = 10;
@@ -25,5 +26,11 @@ export class OverViewSheetSchema extends BaseSheetSchema {
 
     public getSheetName(): string {
         return OverViewSheetSchema.SHEET_NAME;
+    }
+
+    public getHeadderValues(): Array<string> {
+        return [
+            
+        ];
     }
 }

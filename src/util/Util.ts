@@ -1,6 +1,12 @@
 export class Util {
     private static readonly monthArray: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    public static arrayOfArray<T>(array: Array<T>): Array<Array<T>> {
+        return array.map((t): Array<T> => {
+            return [t];
+        });
+    }
+
     public static formatUpdateLog(log: string, todayDate?: string): string {
         if (!(log != null && log.trim().length > 0)) {
             return "";
