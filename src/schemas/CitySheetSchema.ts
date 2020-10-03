@@ -64,6 +64,19 @@ export class CitySheetSchema extends BaseSheetSchema {
         ];
     }
 
+    public getMinColWidth(index: number): number {
+        if(index == null || index < 1){
+            return null;
+        }
+        switch (index) {
+            case this.locationColIndex: return 200;
+            default: return null;
+        }
+    }
+    public getMaxColWidth(index: number): number {
+        return null;
+    }
+
     private isSchemaValid(): boolean {
         if (this.locationColIndex < 1) return false;
         if (this.countColIndex < 1) return false;

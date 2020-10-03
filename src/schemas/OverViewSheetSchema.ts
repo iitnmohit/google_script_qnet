@@ -24,13 +24,25 @@ export class OverViewSheetSchema extends BaseSheetSchema {
         return new OverViewSheetSchema(sheet);
     }
 
+    public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): OverViewSheetSchema {
+        //todo
+        return new OverViewSheetSchema(sheet);
+    }
+
     public getSheetName(): string {
         return OverViewSheetSchema.SHEET_NAME;
     }
 
     public getHeadderValues(): Array<string> {
         return [
-            
+
         ];
+    }
+
+    public getMinColWidth(index: number): number {
+        return null;
+    }
+    public getMaxColWidth(index: number): number {
+        return null;
     }
 }

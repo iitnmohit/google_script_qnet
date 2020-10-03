@@ -27,4 +27,5 @@ export interface ITheme {
 
     rowHeight: number;
     colWidthOffset:number;
+    checkboxColWidth:number;
 }

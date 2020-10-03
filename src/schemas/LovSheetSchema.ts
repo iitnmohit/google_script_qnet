@@ -99,6 +99,13 @@ export class LovSheetSchema extends BaseSheetSchema {
         ];
     }
 
+    public getMinColWidth(index: number): number {
+        return null;
+    }
+    public getMaxColWidth(index: number): number {
+        return null;
+    }
+
     private isSchemaValid(): boolean {
         if (this.listColIndex < 1) return false;
         if (this.connectUpColIndex < 1) return false;

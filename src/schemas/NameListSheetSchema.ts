@@ -35,8 +35,9 @@ export class NameListSheetSchema extends BaseSheetSchema {
 
     public DEFAULT_ROW_COUNT: number = 1000;
     public DEFAULT_COL_COUNT: number = 19;
+    public FREEZE_COLUMN: number = 3;
 
-    public readonly selectNoColIndex: number = -1;
+    public readonly selectColIndex: number = -1;
     public readonly slNoColIndex: number = -1;
     public readonly nameColIndex: number = -1;
     public readonly addLogColIndex: number = -1;
@@ -65,7 +66,7 @@ export class NameListSheetSchema extends BaseSheetSchema {
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
             if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SELECT) {
-                this.selectNoColIndex = i + 1;
+                this.selectColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SL_NO) {
                 this.slNoColIndex = i + 1;
             } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_NAME) {
@@ -128,29 +129,6 @@ export class NameListSheetSchema extends BaseSheetSchema {
         return NameListSheetSchema.SHEET_NAME;
     }
 
-    private isSchemaValid(): boolean {
-        if (this.selectNoColIndex < 1) return false;
-        if (this.slNoColIndex < 1) return false;
-        if (this.nameColIndex < 1) return false;
-        if (this.addLogColIndex < 1) return false;
-        if (this.updateColIndex < 1) return false;
-        if (this.listColIndex < 1) return false;
-        if (this.locationColIndex < 1) return false;
-        if (this.zoneColIndex < 1) return false;
-        if (this.connectUpColIndex < 1) return false;
-        if (this.infoColIndex < 1) return false;
-        if (this.edifyColIndex < 1) return false;
-        if (this.inviteColIndex < 1) return false;
-        if (this.planColIndex < 1) return false;
-        if (this.planDateColIndex < 1) return false;
-        if (this.closingColIndex < 1) return false;
-        if (this.castColIndex < 1) return false;
-        if (this.updateOnColIndex < 1) return false;
-        if (this.linkColIndex < 1) return false;
-        if (this.taskColIndex < 1) return false;
-        return true;
-    }
-
     public getHeadderValues(): Array<string> {
         return [
             NameListSheetSchema.COL_SELECT,
@@ -173,5 +151,59 @@ export class NameListSheetSchema extends BaseSheetSchema {
             NameListSheetSchema.COL_LINK,
             NameListSheetSchema.COL_TASK
         ];
+    }
+
+    public getMinColWidth(index: number): number {
+        if(index == null || index < 1){
+            return null;
+        }
+        switch (index) {
+            case this.nameColIndex: return 275;
+            case this.listColIndex: return 170;
+            case this.locationColIndex: return 155;
+            case this.zoneColIndex: return 100;
+            case this.connectUpColIndex: return 130;
+            case this.infoColIndex: return 70;
+            case this.edifyColIndex: return 130;
+            case this.inviteColIndex: return 130;
+            case this.planColIndex: return 170;
+            case this.closingColIndex: return 200;
+            case this.castColIndex: return 85;
+            case this.linkColIndex: return 70;
+            default: return null;
+        }
+    }
+    public getMaxColWidth(index: number): number {
+        if(index == null || index < 1){
+            return null;
+        }
+        // switch (index) {
+        //     case this.selectColIndex: return 30;
+        //     default: return null;
+        // }
+        return null;
+    }
+
+    private isSchemaValid(): boolean {
+        if (this.selectColIndex < 1) return false;
+        if (this.slNoColIndex < 1) return false;
+        if (this.nameColIndex < 1) return false;
+        if (this.addLogColIndex < 1) return false;
+        if (this.updateColIndex < 1) return false;
+        if (this.listColIndex < 1) return false;
+        if (this.locationColIndex < 1) return false;
+        if (this.zoneColIndex < 1) return false;
+        if (this.connectUpColIndex < 1) return false;
+        if (this.infoColIndex < 1) return false;
+        if (this.edifyColIndex < 1) return false;
+        if (this.inviteColIndex < 1) return false;
+        if (this.planColIndex < 1) return false;
+        if (this.planDateColIndex < 1) return false;
+        if (this.closingColIndex < 1) return false;
+        if (this.castColIndex < 1) return false;
+        if (this.updateOnColIndex < 1) return false;
+        if (this.linkColIndex < 1) return false;
+        if (this.taskColIndex < 1) return false;
+        return true;
     }
 }

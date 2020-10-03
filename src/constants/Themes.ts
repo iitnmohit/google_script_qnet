@@ -20,13 +20,15 @@ export class DefaultTheme implements ITheme {
     lovTableSecondRowColor: string = "#ffffff";
 
     nameTableHeadderFontColor: string = "#ffffff";
-    nameTableHeadderColor: string = "#36721b";
+    nameTableHeadderColor: string = "#ca7925";
     nameTableFirstRowColor: string = "#ffffff";
-    nameTableSecondRowColor: string = "#e7f9ef";
+    nameTableSecondRowColor: string = "#ffffff";
+
     overviewTableHeadderFontColor: string = "#ffffff";
     overviewTableHeadderColor: string = "#36721b";
     overviewTableFirstRowColor: string = "#ffffff";
     overviewTableSecondRowColor: string = "#e7f9ef";
     rowHeight: number = 25;
     colWidthOffset: number = 10;
+    checkboxColWidth:number = 30;
 }

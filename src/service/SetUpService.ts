@@ -46,14 +46,20 @@ export class SetUpService {
 
     public createOverViewSheets() {
         this.overviewSheet = this.setUpSheet(OverViewSheetSchema.getCompormisedSchema());
-
-        this.endSetUpSheet(this.overviewSheet);
+        let schema = OverViewSheetSchema.getValidSchema(this.overviewSheet);
+        this.endSetUpSheet(this.overviewSheet, schema);
     }
 
     public createNameListSheets() {
         this.nameListSheet = this.setUpSheet(NameListSheetSchema.getCompormisedSchema());
+        let schema = NameListSheetSchema.getValidSchema(this.nameListSheet);
+        this.fillNumbers(schema.slNoColIndex, this.nameListSheet);
+        this.fillCheckBox(schema.taskColIndex, this.nameListSheet);
+        this.endSetUpSheet(this.nameListSheet, schema);
 
-        this.endSetUpSheet(this.nameListSheet);
+        // after end setup
+        this.fillCheckBox(schema.selectColIndex, this.nameListSheet);
+        this.fillCheckBox(schema.updateColIndex, this.nameListSheet);
     }
 
     public createLovSheets() {
@@ -69,7 +75,7 @@ export class SetUpService {
         this.fillColValue(Lov.zone, schema.zoneColIndex, this.lovSheet);
         this.fillColValue(Lov.cast, schema.castColIndex, this.lovSheet);
 
-        this.endSetUpSheet(this.lovSheet);
+        this.endSetUpSheet(this.lovSheet, schema);
     }
 
     public createCitySheets() {
@@ -77,7 +83,32 @@ export class SetUpService {
         let schema = CitySheetSchema.getValidSchema(this.citySheet);
         this.fillColValue(Cities.list, schema.locationColIndex, this.citySheet);
 
-        this.endSetUpSheet(this.citySheet);
+        this.endSetUpSheet(this.citySheet, schema);
+    }
+
+    private fillNumbers(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
+        try {
+            let sourceRange = sheet.getRange(2, colIndex, 2, 1);
+            sourceRange.setValues([[1], [2]]);
+            let destRange = sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1);
+            sourceRange.autoFill(destRange, SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
+            destRange.setHorizontalAlignment("left");
+        } catch (error) {
+            Logger.log(error);
+            return false;
+        }
+        return true;
+    }
+
+    private fillCheckBox(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
+        try {
+            sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1).insertCheckboxes();
+            sheet.setColumnWidth(colIndex, ThemeUtil.getCurrentTheme().checkboxColWidth);
+        } catch (error) {
+            Logger.log(error);
+            return false;
+        }
+        return true;
     }
 
     private fillColValue<T>(list: Array<T>, colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
@@ -92,13 +123,22 @@ export class SetUpService {
         }
     }
 
-    private endSetUpSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet): void {
+    private endSetUpSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet, schema: BaseSheetSchema): void {
         try {
             let numOfCols = sheet.getMaxColumns();
             sheet.autoResizeColumns(1, numOfCols);
             for (let i = 1; i <= numOfCols; i++) {
-                let currentColWidth = sheet.getColumnWidth(i);
-                sheet.setColumnWidth(i, currentColWidth + ThemeUtil.getCurrentTheme().colWidthOffset);
+                let colWidth = sheet.getColumnWidth(i);
+                colWidth = colWidth + ThemeUtil.getCurrentTheme().colWidthOffset;
+                let maxColWidth = schema.getMaxColWidth(i);
+                if (maxColWidth !== null && maxColWidth < colWidth) {
+                    colWidth = maxColWidth;
+                }
+                let minColWidth = schema.getMinColWidth(i);
+                if (minColWidth !== null && minColWidth > colWidth) {
+                    colWidth = minColWidth;
+                }
+                sheet.setColumnWidth(i, colWidth);
             }
         } catch (error) {
             Logger.log(error);
@@ -137,6 +177,10 @@ export class SetUpService {
                 .setFontWeight("bold")
                 .setHorizontalAlignment("center");
         }
+
+        //freeze
+        sheet.setFrozenRows(1);
+        sheet.setFrozenColumns(schema.FREEZE_COLUMN);
 
         sheet.setActiveSelection("A1");
         return sheet;
@@ -203,6 +247,7 @@ export class SetUpService {
             sheet = this.spreadsheet.insertSheet(sheetName);
         } else {
             sheet.clear();
+            sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).removeCheckboxes();
         }
         return sheet;
     }
