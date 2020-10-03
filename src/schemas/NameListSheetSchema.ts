@@ -65,44 +65,47 @@ export class NameListSheetSchema extends BaseSheetSchema {
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
-            if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SELECT) {
-                this.selectColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_SL_NO) {
-                this.slNoColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_NAME) {
-                this.nameColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_ADD_LOG) {
-                this.addLogColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED) {
-                this.updateColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_LIST) {
-                this.listColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_LOCATION) {
-                this.locationColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_ZONE) {
-                this.zoneColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_CONNECT_UP) {
-                this.connectUpColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_INFO) {
-                this.infoColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_EDIFY) {
-                this.edifyColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_INVITE) {
-                this.inviteColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_PLAN) {
-                this.planColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_PLAN_DATE) {
-                this.planDateColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_CLOSING) {
-                this.closingColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_CAST) {
-                this.castColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_UPDATED_ON) {
-                this.updateOnColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_LINK) {
-                this.linkColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === NameListSheetSchema.COL_TASK) {
-                this.taskColIndex = i + 1;
+            switch (firstRowRangeValues[0][i]) {
+                case NameListSheetSchema.COL_SELECT: this.selectColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_SL_NO: this.slNoColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_NAME: this.nameColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_ADD_LOG: this.addLogColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_UPDATED: this.updateColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_LIST: this.listColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_LOCATION: this.locationColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_ZONE: this.zoneColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_CONNECT_UP: this.connectUpColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_INFO: this.infoColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_EDIFY: this.edifyColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_INVITE: this.inviteColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_PLAN: this.planColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_PLAN_DATE: this.planDateColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_CLOSING: this.closingColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_CAST: this.castColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_UPDATED_ON: this.updateOnColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_LINK: this.linkColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_TASK: this.taskColIndex = i + 1;
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -154,7 +157,7 @@ export class NameListSheetSchema extends BaseSheetSchema {
     }
 
     public getMinColWidth(index: number): number {
-        if(index == null || index < 1){
+        if (index == null || index < 1) {
             return null;
         }
         switch (index) {
@@ -174,13 +177,6 @@ export class NameListSheetSchema extends BaseSheetSchema {
         }
     }
     public getMaxColWidth(index: number): number {
-        if(index == null || index < 1){
-            return null;
-        }
-        // switch (index) {
-        //     case this.selectColIndex: return 30;
-        //     default: return null;
-        // }
         return null;
     }
 

@@ -103,7 +103,7 @@ export class SetUpService {
     private fillCheckBox(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): boolean {
         try {
             sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1).insertCheckboxes();
-            sheet.setColumnWidth(colIndex, ThemeUtil.getCurrentTheme().checkboxColWidth);
+            sheet.setColumnWidth(colIndex, ThemeUtil.getCurrentTheme().checkBoxColWidth);
         } catch (error) {
             Logger.log(error);
             return false;

@@ -41,24 +41,27 @@ export class LovSheetSchema extends BaseSheetSchema {
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
-            if (firstRowRangeValues[0][i] === LovSheetSchema.COL_LIST) {
-                this.listColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_CONNECT_UP) {
-                this.connectUpColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_INFO) {
-                this.infoColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_EDIFY) {
-                this.edifyColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_INVITE) {
-                this.inviteColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_PLAN) {
-                this.planColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_CLOSING) {
-                this.closingColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_ZONE) {
-                this.zoneColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === LovSheetSchema.COL_CAST) {
-                this.castColIndex = i + 1;
+            switch (firstRowRangeValues[0][i]) {
+                case LovSheetSchema.COL_LIST: this.listColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_CONNECT_UP: this.connectUpColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_INFO: this.infoColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_EDIFY: this.edifyColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_INVITE: this.inviteColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_PLAN: this.planColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_CLOSING: this.closingColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_ZONE: this.zoneColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_CAST: this.castColIndex = i + 1;
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -11,7 +11,7 @@ function setUpSheet(): void {
 
     Logger.log("create overview");
     // create Overview Sheet
-    // setUpService.createOverViewSheets();
+    setUpService.createOverViewSheets();
 
     Logger.log("create namelist");
     //create NameList Sheet

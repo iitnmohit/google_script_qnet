@@ -27,10 +27,13 @@ export class CitySheetSchema extends BaseSheetSchema {
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
-            if (firstRowRangeValues[0][i] === CitySheetSchema.COL_LOCATION) {
-                this.locationColIndex = i + 1;
-            } else if (firstRowRangeValues[0][i] === CitySheetSchema.COL_COUNT) {
-                this.countColIndex = i + 1;
+            switch (firstRowRangeValues[0][i]) {
+                case CitySheetSchema.COL_LOCATION: this.locationColIndex = i + 1;
+                    break;
+                case CitySheetSchema.COL_COUNT: this.countColIndex = i + 1;
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -65,7 +68,7 @@ export class CitySheetSchema extends BaseSheetSchema {
     }
 
     public getMinColWidth(index: number): number {
-        if(index == null || index < 1){
+        if (index == null || index < 1) {
             return null;
         }
         switch (index) {

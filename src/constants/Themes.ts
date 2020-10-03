@@ -30,5 +30,5 @@ export class DefaultTheme implements ITheme {
     overviewTableSecondRowColor: string = "#e7f9ef";
     rowHeight: number = 25;
     colWidthOffset: number = 10;
-    checkboxColWidth:number = 30;
+    checkBoxColWidth:number = 30;
 }
