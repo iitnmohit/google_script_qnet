@@ -1,7 +1,8 @@
 import { SetUpService } from "./service/SetUpService";
-import { SetUpValidationService } from "./service/SetUpValidationService";
+import { ValidationService } from "./service/ValidationService";
 import { ThemeService } from "./service/ThemeService";
 import { UiService } from "./service/UiService";
+import { FormulaService } from "./service/FormulaService";
 
 function setUpSheet(): void {
     if (!UiService.doesUserReConfirmedAction(
@@ -12,9 +13,12 @@ function setUpSheet(): void {
     let spreadsheet = setUpService.createAllSheets();
     setUpService.deleteNonQnetSheets();
 
-    let validationService = new SetUpValidationService(spreadsheet);
+    let formulaService = new FormulaService(spreadsheet);
+    formulaService.applyFormulaToAllSheets();
+
+    let validationService = new ValidationService(spreadsheet);
     validationService.applyValidationToAllSheets();
 
     let themeService = new ThemeService(spreadsheet);
-    // themeService.applyBasicTheme();
+    themeService.applyBasicTheme();
 }

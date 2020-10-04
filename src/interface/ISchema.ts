@@ -20,4 +20,8 @@ export interface ISchema {
     getMaxColWidth(index: number): number | null;
 
     getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
+
+    getColumnA1Notation(colIndex: number, beginRow: number, hasSheetName: boolean): string;
+
+    getCellA1Notation(rowIndex: number, colIndex: number, hasSheetName: boolean): string;
 }

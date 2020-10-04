@@ -4,6 +4,7 @@ import { ISchema } from "../interface/ISchema";
 import { LovSheetSchema } from "./LovSheetSchema";
 import { NameListSheetSchema } from "./NameListSheetSchema";
 import { OverViewSheetSchema } from "./OverViewSheetSchema";
+import { Util } from "../util/Util";
 
 export abstract class BaseSheetSchema implements ISchema {
     public static readonly MSG_ERROR_SHEET_EQ_NULL: string = " sheet not found.";
@@ -60,6 +61,34 @@ export abstract class BaseSheetSchema implements ISchema {
     public FREEZE_ROW: number = 1;
     public FREEZE_COLUMN: number = 0;
 
+    public getColumnA1Notation(colIndex: number, beginRow: number, hasSheetName: boolean = false): string {
+        if (colIndex == null || colIndex < 1) {
+            throw new Error("col index invalid");
+        }
+        let colLetter = Util.getColumnLetter(colIndex);
+        let beginRowNum = "";
+        if (beginRow > 0) {
+            beginRowNum += beginRow;
+        }
+        if (hasSheetName) {
+            return `'${this.getSheetName()}'!${colLetter}${beginRowNum}:${colLetter}`;
+        } else {
+            return `${colLetter}${beginRowNum}:${colLetter}`;
+        }
+    }
+
+    public getCellA1Notation(rowIndex: number, colIndex: number, hasSheetName: boolean = false): string {
+        if (colIndex == null || colIndex < 1) {
+            throw new Error("col index invalid");
+        }
+        let letter = Util.getColumnLetter(colIndex);
+        if (hasSheetName) {
+            return `'${this.getSheetName()}'!${letter}${rowIndex}`;
+        } else {
+            return `${letter}${rowIndex}`;
+        }
+    }
+
     public abstract DEFAULT_ROW_COUNT: number;
     public abstract DEFAULT_COL_COUNT: number;
 
@@ -77,4 +106,6 @@ export abstract class BaseSheetSchema implements ISchema {
     public abstract getMaxColWidth(index: number): number | null;
 
     public abstract getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
+
+
 }

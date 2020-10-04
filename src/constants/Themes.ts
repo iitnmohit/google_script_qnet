@@ -6,7 +6,7 @@ export class DefaultTheme implements ITheme {
     fontFamily: string = "VERDANA";
     defaultBandingTheme: GoogleAppsScript.Spreadsheet.BandingTheme = SpreadsheetApp.BandingTheme.GREEN;
     textColor: string = "#2a5e90";
-    headderFontSize: number = 11;
+    headderFontSize: number = 10;
     borderColor: string = "#000000";
 
     cityTableHeadderFontColor: string = "#ffffff";
