@@ -1,4 +1,6 @@
 import { SetUpService } from "./service/SetUpService";
+import { SetUpValidationService } from "./service/SetUpValidationService";
+import { ThemeService } from "./service/ThemeService";
 import { UiService } from "./service/UiService";
 
 function setUpSheet(): void {
@@ -6,7 +8,13 @@ function setUpSheet(): void {
         "This will delete all the data and cannot be undone.\nAre you sure to proceed?")) {
         return;
     }
-    var setUpService = new SetUpService();
-    var spreadsheet = setUpService.createAllSheets();
+    let setUpService = new SetUpService();
+    let spreadsheet = setUpService.createAllSheets();
     setUpService.deleteNonQnetSheets();
+
+    let validationService = new SetUpValidationService(spreadsheet);
+    validationService.applyValidationToAllSheets();
+
+    let themeService = new ThemeService(spreadsheet);
+    // themeService.applyBasicTheme();
 }

@@ -1,3 +1,4 @@
+import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
@@ -13,11 +14,15 @@ export class OverViewSheetSchema extends BaseSheetSchema {
     public DEFAULT_ROW_COUNT: number = 10;
     public DEFAULT_COL_COUNT: number = 10;
 
+    private validSchema: boolean = false;
+    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
+
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
         if (sheet == null) {
             return;
         }
+        this.currentSheet = sheet;
     }
 
     public static getCompormisedSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet = null): OverViewSheetSchema {
@@ -25,8 +30,17 @@ export class OverViewSheetSchema extends BaseSheetSchema {
     }
 
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): OverViewSheetSchema {
-        //todo
-        return new OverViewSheetSchema(sheet);
+        if (null == sheet) {
+            throw new Error(OverViewSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_SHEET_EQ_NULL);
+        }
+        if (sheet.getName() !== OverViewSheetSchema.SHEET_NAME) {
+            throw new Error(OverViewSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_INVALID_SHEET_NAME);
+        }
+        let newSchema = new OverViewSheetSchema(sheet);
+        if (newSchema.isSchemaValid()) {
+            return newSchema;
+        }
+        throw new Error(OverViewSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_INVALID_SHEET);
     }
 
     public getSheetName(): string {
@@ -44,5 +58,17 @@ export class OverViewSheetSchema extends BaseSheetSchema {
     }
     public getMaxColWidth(index: number): number {
         return null;
+    }
+
+    public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
+        if (!this.validSchema) {
+            throw new Error("Invalid Schema");
+        }
+        return this.currentSheet;
+    }
+
+    private isSchemaValid(): boolean {
+        this.validSchema = true;
+        return true;
     }
 }

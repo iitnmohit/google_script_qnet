@@ -1,4 +1,4 @@
-export class TaskSchema {
+export class TaskMessage {
     public static readonly TASK_LIST_NAME: string = "QNET";
     public static readonly MAX_TASK_UPDATE: number = 10;
     public static readonly MAX_TASK_CREATE: number = 100;

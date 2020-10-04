@@ -1,7 +1,8 @@
 import { DefaultTheme } from "../constants/Themes";
-import { ITheme } from "../model/ITheme";
+import { ITheme } from "../interface/ITheme";
 
 export class ThemeUtil {
+    public static colWidthOffset: number = 10;
     private static defaultTheme: ITheme = DefaultTheme.instance;
 
     public static getCurrentTheme(): ITheme {

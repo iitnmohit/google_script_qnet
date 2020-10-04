@@ -14,7 +14,7 @@ export class CallLogService {
         let nameListSchema = NameListSheetSchema.getValidSchema(sheet);
         let rowIndex = range.getRow();
         if (range.isChecked()) {
-            this.appendLog(nameListSchema, sheet, rowIndex);
+            this.appendLog(nameListSchema, rowIndex);
             sheet.getRange(rowIndex, nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
         } else {
             this.clearContent(sheet, rowIndex, nameListSchema.addLogColIndex);
@@ -22,11 +22,8 @@ export class CallLogService {
         }
     }
 
-    private appendLog(nameListSchema: NameListSheetSchema,
-        sheet: GoogleAppsScript.Spreadsheet.Sheet,
-        rowIndex: number): void {
-
-        let logCell = sheet.getRange(rowIndex, nameListSchema.addLogColIndex);
+    private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
+        let logCell = nameListSchema.getCurrentSheet().getRange(rowIndex, nameListSchema.addLogColIndex);
         //read new logs
         let newLogs = logCell.getDisplayValue().trim();
         if (newLogs.length == 0) {
@@ -34,7 +31,7 @@ export class CallLogService {
         }
         newLogs = Util.formatUpdateLog(newLogs);
 
-        let nameCell = sheet.getRange(rowIndex, nameListSchema.nameColIndex);
+        let nameCell = nameListSchema.getCurrentSheet().getRange(rowIndex, nameListSchema.nameColIndex);
         //read old logs
         let oldLogs = nameCell.getNote().trim();
         if (oldLogs.length > 0) {

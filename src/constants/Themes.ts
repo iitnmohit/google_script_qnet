@@ -1,4 +1,4 @@
-import { ITheme } from "../model/ITheme";
+import { ITheme } from "../interface/ITheme";
 
 export class DefaultTheme implements ITheme {
     public static readonly instance = new DefaultTheme();
@@ -29,6 +29,4 @@ export class DefaultTheme implements ITheme {
     overviewTableFirstRowColor: string = "#ffffff";
     overviewTableSecondRowColor: string = "#e7f9ef";
     rowHeight: number = 25;
-    colWidthOffset: number = 10;
-    checkBoxColWidth:number = 30;
 }

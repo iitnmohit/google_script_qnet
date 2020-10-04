@@ -1,28 +1,30 @@
 import { TaskBuilder } from "../model/TaskBuilder";
 import { TaskListBuilder } from "../model/TaskListBuilder";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { TaskSchema } from "../schemas/TaskSchema";
+import { TaskMessage } from "../constants/TaskMessage";
 import { Util } from "../util/Util";
+import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
 
 export class TaskService {
-    private readonly nameListSheet: GoogleAppsScript.Spreadsheet.Sheet;
+    private readonly nameListSchema: NameListSheetSchema;
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
+
     public constructor () {
-        this.nameListSheet = SpreadsheetApp.getActiveSpreadsheet()
-            .getSheetByName(NameListSheetSchema.SHEET_NAME);
+        let schema = BaseSheetSchema.getSchema(SpreadsheetApp.getActiveSpreadsheet()
+            , NameListSheetSchema.SHEET_NAME);
+        if (schema instanceof NameListSheetSchema) {
+            this.nameListSchema = schema;
+        }
     }
 
-    public updateSelectedLog(count: number = TaskSchema.MAX_TASK_UPDATE): void {
-        if (count < 0 || count > TaskSchema.MAX_TASK_UPDATE) {
-            throw new Error(TaskSchema.MSG_INVALID_UPDATE_COUNT);
+    public updateSelectedLog(count: number = TaskMessage.MAX_TASK_UPDATE): void {
+        if (count < 0 || count > TaskMessage.MAX_TASK_UPDATE) {
+            throw new Error(TaskMessage.MSG_INVALID_UPDATE_COUNT);
         }
-
-        let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
-
         let numOfTaskUpdated = 0;
-        let taskColValues = this.nameListSheet
-            .getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getLastRow() - 1, 1)
+        let taskColValues = this.nameListSchema.getCurrentSheet()
+            .getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
             .getValues();
         for (let i = 0; i < taskColValues.length; i++) {
             if (taskColValues[i][0] === false) {
@@ -30,7 +32,7 @@ export class TaskService {
             }
 
             let row = i + 2;
-            let checkBoxCell = this.nameListSheet.getRange(row, nameListSchema.taskColIndex);
+            let checkBoxCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.taskColIndex);
             //skip if not checked
             if (!checkBoxCell.isChecked()) {
                 continue;
@@ -51,9 +53,9 @@ export class TaskService {
                 todayDate = _task.updated;
             }
             let callLog = Util.formatUpdateLog(_task.notes, todayDate);
-            this.nameListSheet.getRange(row, nameListSchema.nameColIndex).setNote(callLog);
-            this.nameListSheet.getRange(row, nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
-            this.nameListSheet.getRange(row, nameListSchema.updateColIndex).check();
+            this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.nameColIndex).setNote(callLog);
+            this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
+            this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.updateColIndex).check();
 
             //delete task
             this.deleteTaskById(_task.id);
@@ -70,33 +72,29 @@ export class TaskService {
     }
 
     public deleteAllTasks(): void {
-        let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
         if (null != this.getTaskList(false)) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
-                this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).clearNote();
+                this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).clearNote();
             } catch (error) {
                 Logger.log(error);
-                throw new Error(TaskSchema.MSG_ERROR_DELETE_TASK_LIST);
+                throw new Error(TaskMessage.MSG_ERROR_DELETE_TASK_LIST);
             }
         }
     }
 
     public clearAllCheckbox(): void {
-        let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
-        this.nameListSheet.getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getMaxRows() - 1, 1).uncheck();
+        this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).uncheck();
     }
 
-    public addAllTask(count: number = TaskSchema.MAX_TASK_CREATE): void {
-        if (count < 0 || count > TaskSchema.MAX_TASK_CREATE) {
-            throw new Error(TaskSchema.MSG_INVALID_CREATE_COUNT);
+    public addAllTask(count: number = TaskMessage.MAX_TASK_CREATE): void {
+        if (count < 0 || count > TaskMessage.MAX_TASK_CREATE) {
+            throw new Error(TaskMessage.MSG_INVALID_CREATE_COUNT);
         }
 
-        let nameListSchema = NameListSheetSchema.getValidSchema(this.nameListSheet);
-
         let numOfTaskAdded: number = 0;
-        let taskColValues = this.nameListSheet
-            .getRange(2, nameListSchema.taskColIndex, this.nameListSheet.getLastRow() - 1, 1)
+        let taskColValues = this.nameListSchema.getCurrentSheet()
+            .getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
             .getValues();
 
         for (let i = 0; i < taskColValues.length; i++) {
@@ -105,14 +103,14 @@ export class TaskService {
             }
             let row = i + 2;
 
-            let checkBoxRange = this.nameListSheet.getRange(row, nameListSchema.taskColIndex);
+            let checkBoxRange = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.taskColIndex);
             //skip if not checked
             if (!checkBoxRange.isChecked()) {
                 continue;
             }
 
             //add one task
-            let taskAdded = this.addNewTask(nameListSchema, row);
+            let taskAdded = this.addNewTask(row);
             checkBoxRange.setNote(taskAdded.id);
 
             numOfTaskAdded++;
@@ -139,7 +137,7 @@ export class TaskService {
             if (error instanceof Error) {
                 Logger.log("Error" + error.message + error.stack);
             }
-            throw new Error(TaskSchema.MSG_ERROR_DELETE_TASK);
+            throw new Error(TaskMessage.MSG_ERROR_DELETE_TASK);
         }
     }
 
@@ -162,9 +160,9 @@ export class TaskService {
         return null;
     }
 
-    private addNewTask(nameListSchema: NameListSheetSchema, row: number): GoogleAppsScript.Tasks.Schema.Task {
+    private addNewTask(row: number): GoogleAppsScript.Tasks.Schema.Task {
         // break if no name
-        let nameCell = this.nameListSheet.getRange(row, nameListSchema.nameColIndex);
+        let nameCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.nameColIndex);
         if (nameCell.isBlank()) {
             throw new Error(`No name present at row ${row}`);
         }
@@ -176,7 +174,7 @@ export class TaskService {
 
         let taskTitle: string = nameCellValue.trim()
             + " ("
-            + this.nameListSheet.getRange(row, nameListSchema.slNoColIndex).getDisplayValue()
+            + this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.slNoColIndex).getDisplayValue()
             + ")";
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)
@@ -186,7 +184,7 @@ export class TaskService {
             return Tasks.Tasks.insert(newTask, this.getTaskList().id);
         } catch (error) {
             Logger.log(error);
-            throw new Error(TaskSchema.MSG_ERROR_CREATE_TASK);
+            throw new Error(TaskMessage.MSG_ERROR_CREATE_TASK);
         }
     }
 
@@ -199,7 +197,7 @@ export class TaskService {
             let taskLists = Tasks.Tasklists.list();
             if (taskLists.items) {
                 for (let taskList of taskLists.items) {
-                    if (taskList.title === TaskSchema.TASK_LIST_NAME) {
+                    if (taskList.title === TaskMessage.TASK_LIST_NAME) {
                         this.myTaskList = taskList;
                         break;
                     }
@@ -207,18 +205,18 @@ export class TaskService {
             }
         } catch (error) {
             Logger.log(error);
-            throw new Error(TaskSchema.MSG_ERROR_READ_TASK_LIST);
+            throw new Error(TaskMessage.MSG_ERROR_READ_TASK_LIST);
         }
 
         if (this.myTaskList == null && create) {
             let newTaskList = TaskListBuilder.builder()
-                .setTitle(TaskSchema.TASK_LIST_NAME)
+                .setTitle(TaskMessage.TASK_LIST_NAME)
                 .build();
             try {
                 this.myTaskList = Tasks.Tasklists.insert(newTaskList);
             } catch (error) {
                 Logger.log(error);
-                throw new Error(TaskSchema.MSG_ERROR_CREATE_TASK_LIST);
+                throw new Error(TaskMessage.MSG_ERROR_CREATE_TASK_LIST);
             }
         }
         return this.myTaskList;

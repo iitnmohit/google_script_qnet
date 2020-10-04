@@ -1,3 +1,4 @@
+import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
@@ -5,7 +6,6 @@ export class NameListSheetSchema extends BaseSheetSchema {
     public static readonly SHEET_NAME: string = "NAME LIST";
     public static readonly SHEET_INDEX: number = 2;
 
-    //delete this
     public static readonly MSG_INVALID_NAME_CELL_FORMAT: string = "Name is not valid.";
 
     public static readonly COL_SELECT: string = "SELECT";
@@ -32,6 +32,9 @@ export class NameListSheetSchema extends BaseSheetSchema {
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
+
+    private validSchema: boolean = false;
+    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
 
     public DEFAULT_ROW_COUNT: number = 1000;
     public DEFAULT_COL_COUNT: number = 19;
@@ -62,6 +65,7 @@ export class NameListSheetSchema extends BaseSheetSchema {
         if (sheet == null) {
             return;
         }
+        this.currentSheet = sheet;
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
@@ -177,7 +181,21 @@ export class NameListSheetSchema extends BaseSheetSchema {
         }
     }
     public getMaxColWidth(index: number): number {
-        return null;
+        if (index == null || index < 1) {
+            return null;
+        }
+        switch (index) {
+            case this.selectColIndex: return 30;
+            case this.updateColIndex: return 30;
+            default: return null;
+        }
+    }
+
+    public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
+        if (!this.validSchema) {
+            throw new Error("Invalid Schema");
+        }
+        return this.currentSheet;
     }
 
     private isSchemaValid(): boolean {
@@ -200,6 +218,7 @@ export class NameListSheetSchema extends BaseSheetSchema {
         if (this.updateOnColIndex < 1) return false;
         if (this.linkColIndex < 1) return false;
         if (this.taskColIndex < 1) return false;
+        this.validSchema = true;
         return true;
     }
 }

@@ -1,3 +1,4 @@
+import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
@@ -23,6 +24,9 @@ export class LovSheetSchema extends BaseSheetSchema {
     public DEFAULT_ROW_COUNT: number = 100;
     public DEFAULT_COL_COUNT: number = 9;
 
+    private validSchema: boolean = false;
+    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
+
     public readonly listColIndex: number = -1;
     public readonly connectUpColIndex: number = -1;
     public readonly infoColIndex: number = -1;
@@ -38,6 +42,7 @@ export class LovSheetSchema extends BaseSheetSchema {
         if (sheet == null) {
             return;
         }
+        this.currentSheet = sheet;
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
@@ -109,6 +114,13 @@ export class LovSheetSchema extends BaseSheetSchema {
         return null;
     }
 
+    public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
+        if (!this.validSchema) {
+            throw new Error("Invalid Schema");
+        }
+        return this.currentSheet;
+    }
+
     private isSchemaValid(): boolean {
         if (this.listColIndex < 1) return false;
         if (this.connectUpColIndex < 1) return false;
@@ -119,6 +131,7 @@ export class LovSheetSchema extends BaseSheetSchema {
         if (this.closingColIndex < 1) return false;
         if (this.zoneColIndex < 1) return false;
         if (this.castColIndex < 1) return false;
+        this.validSchema = true;
         return true;
     }
 }

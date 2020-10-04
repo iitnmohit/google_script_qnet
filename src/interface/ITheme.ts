@@ -3,7 +3,7 @@ export interface ITheme {
     defaultBandingTheme: GoogleAppsScript.Spreadsheet.BandingTheme;
     textColor: string;
     headderFontSize: number;
-    borderColor:string;
+    borderColor: string;
 
     cityTableHeadderFontColor: string;
     cityTableHeadderColor: string;
@@ -26,6 +26,4 @@ export interface ITheme {
     overviewTableSecondRowColor: string;
 
     rowHeight: number;
-    colWidthOffset:number;
-    checkBoxColWidth:number;
 }

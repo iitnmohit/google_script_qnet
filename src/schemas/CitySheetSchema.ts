@@ -1,3 +1,4 @@
+import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
@@ -19,11 +20,15 @@ export class CitySheetSchema extends BaseSheetSchema {
     public readonly locationColIndex: number = -1;
     public readonly countColIndex: number = -1;
 
+    private validSchema: boolean = false;
+    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
+
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
         if (sheet == null) {
             return;
         }
+        this.currentSheet = sheet;
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
@@ -80,9 +85,17 @@ export class CitySheetSchema extends BaseSheetSchema {
         return null;
     }
 
+    public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
+        if (!this.validSchema) {
+            throw new Error("Invalid Schema");
+        }
+        return this.currentSheet;
+    }
+
     private isSchemaValid(): boolean {
         if (this.locationColIndex < 1) return false;
         if (this.countColIndex < 1) return false;
+        this.validSchema = true;
         return true;
     }
 }

@@ -1,5 +1,5 @@
 import { runSafely } from "./Code";
-import { TaskSchema } from "./schemas/TaskSchema";
+import { TaskMessage } from "./constants/TaskMessage";
 import { TaskService } from "./service/TaskService";
 import { UiService } from "./service/UiService";
 
@@ -11,7 +11,7 @@ function taskClearAllCheckBox(): void {
 }
 
 function taskDeleteAll(): void {
-  if (UiService.doesUserReConfirmedAction(TaskSchema.MSG_DELETE_ALERT)) {
+  if (UiService.doesUserReConfirmedAction(TaskMessage.MSG_DELETE_ALERT)) {
     runSafely((): void => {
       new TaskService().deleteAllTasks();
     });
