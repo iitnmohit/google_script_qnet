@@ -1,7 +1,6 @@
 import { DefaultSchema } from "../constants/DefaultSchema";
 import { ISchema } from "../interface/ISchema";
 import { ITheme } from "../interface/ITheme";
-import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";

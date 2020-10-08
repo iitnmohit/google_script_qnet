@@ -1,7 +1,6 @@
 import { Cities } from "../constants/Cities";
 import { Lov } from "../constants/Lov";
 import { ISchema } from "../interface/ISchema";
-import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -81,7 +80,9 @@ export class SetUpService {
     }
 
     private createCitySheets(): SetUpService {
-        var citySheet = this.startSetUpOfSheet(CitySheetSchema.getCompormisedSchema());
+        // need to check here
+        // what to pass here?
+        var citySheet = this.startSetUpOfSheet(CitySheetSchema.getCompormisedSchema(null));
         let schema = CitySheetSchema.getValidSchema(citySheet);
         return this.fillColValue(Cities.list, schema.locationColIndex, citySheet)
             .endSetUpOfSheet(schema);

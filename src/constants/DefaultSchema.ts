@@ -1,61 +1,161 @@
 export class DefaultSchema {
     // common
-    public static readonly numOfFreezeRow: number = 1;
-    public static readonly numOfFreezeCol: number = 0;
+    private static readonly defaultNumofFreezeRow: number = 1;
+    private static readonly defaultNumofFreezeCol: number = 0;
+
     public static readonly minRowHeight: number = 5;
 
     // City Sheet
-    public static readonly CITY_SHEET_NAME: string = "City";
-    public static readonly CITY_SHEET_INDEX: number = 4;
-
-    public static readonly CITY_SHEET_COL_LOCATION: string = "Location";
-    public static readonly CITY_SHEET_COL_COUNT: string = "Count";
-
-    public static readonly CITY_SHEET_NUM_OF_ROWS: number = 200;
-    public static readonly CITY_SHEET_NUM_OF_COLUMNS: number = 2;
-
-    public static readonly CITY_SHEET_MIN_WIDTH_COL_LOCATION: number = 200;
-    public static readonly CITY_SHEET_MIN_WIDTH_COL_COUNT: number = null;
-
-    public static readonly CITY_SHEET_MAX_WIDTH_COL_LOCATION: number = null;
-    public static readonly CITY_SHEET_MAX_WIDTH_COL_COUNT: number = null;
+    public static readonly CITY = {
+        NAME: "CITY",
+        INDEX: 4,
+        NUM_OF: {
+            ROWS: 200,
+            COLUMNS: 2
+        },
+        FREEZE: {
+            ROW: DefaultSchema.defaultNumofFreezeRow,
+            COLUMN: DefaultSchema.defaultNumofFreezeCol
+        },
+        COLUMN: {
+            LOCATION: "Location",
+            COUNT: "Count"
+        },
+        MIN_WIDTH: {
+            LOCATION: 200,
+            COUNT: null
+        },
+        MAX_WIDTH: {
+            LOCATION: null,
+            COUNT: null
+        }
+    };
 
     // Lov Sheet
-    public static readonly LOV_SHEET_NAME: string = "Lists";
-    public static readonly LOV_SHEET_INDEX: number = 3;
+    public static readonly LOV = {
+        NAME: "Lists",
+        INDEX: 3,
+        NUM_OF: {
+            ROWS: 100,
+            COLUMNS: 9
+        },
+        FREEZE: {
+            ROW: DefaultSchema.defaultNumofFreezeRow,
+            COLUMN: DefaultSchema.defaultNumofFreezeCol
+        },
+        COLUMN: {
+            LIST: "LIST",
+            CONNECT_UP: "CONNECT UP",
+            INFO: "INFO",
+            EDIFY: "EDIFY",
+            INVITE: "INVITE",
+            PLAN: "PLAN",
+            CLOSING: "CLOSING",
+            ZONE: "ZONE",
+            CAST: "CAST"
+        },
+        MIN_WIDTH: {
+            LIST: null,
+            CONNECT_UP: null,
+            INFO: null,
+            EDIFY: null,
+            INVITE: null,
+            PLAN: null,
+            CLOSING: null,
+            ZONE: null,
+            CAST: null
+        },
+        MAX_WIDTH: {
+            LIST: null,
+            CONNECT_UP: null,
+            INFO: null,
+            EDIFY: null,
+            INVITE: null,
+            PLAN: null,
+            CLOSING: null,
+            ZONE: null,
+            CAST: null
+        }
+    };
 
-    public static readonly LOV_SHEET_COL_LIST: string = "LIST";
-    public static readonly LOV_SHEET_COL_CONNECT_UP: string = "CONNECT UP";
-    public static readonly LOV_SHEET_COL_INFO: string = "INFO";
-    public static readonly LOV_SHEET_COL_EDIFY: string = "EDIFY";
-    public static readonly LOV_SHEET_COL_INVITE: string = "INVITE";
-    public static readonly LOV_SHEET_COL_PLAN: string = "PLAN";
-    public static readonly LOV_SHEET_COL_CLOSING: string = "CLOSING";
-    public static readonly LOV_SHEET_COL_ZONE: string = "ZONE";
-    public static readonly LOV_SHEET_COL_CAST: string = "CAST";
+    // NameList Sheet
+    public static readonly NAMELIST = {
+        NAME: "NAME LIST",
+        INDEX: 2,
+        NUM_OF: {
+            ROWS: 1000,
+            COLUMNS: 19
+        },
+        FREEZE: {
+            ROW: 3,
+            COLUMN: DefaultSchema.defaultNumofFreezeCol
+        },
+        COLUMN: {
+            SELECT: "X",
+            SL_NO: "Sl No",
+            NAME: "NAME",
+            ADD_LOG: "ADD LOG",
+            UPDATED: "UPDATED",
+            LIST: "LIST",
+            LOCATION: "LOCATION",
+            ZONE: "ZONE",
+            CONNECT_UP: "CONNECT UP",
+            INFO: "INFO",
+            EDIFY: "EDIFY",
+            INVITE: "INVITE",
+            PLAN: "PLAN",
+            PLAN_DATE: "PLAN DATE",
+            CLOSING: "CLOSING",
+            CAST: "CAST",
+            UPDATED_ON: "UPDATED ON",
+            LINK: "LINK",
+            TASK: "TASK"
+        },
+        MIN_WIDTH: {
+            SELECT: null,
+            SL_NO: null,
+            NAME: 275,
+            ADD_LOG: null,
+            UPDATED: null,
+            LIST: 170,
+            LOCATION: 155,
+            ZONE: 100,
+            CONNECT_UP: 130,
+            INFO: 70,
+            EDIFY: 130,
+            INVITE: 130,
+            PLAN: 170,
+            PLAN_DATE: null,
+            CLOSING: 200,
+            CAST: 85,
+            UPDATED_ON: null,
+            LINK: 70,
+            TASK: null
+        },
+        MAX_WIDTH: {
+            SELECT: 30,
+            SL_NO: null,
+            NAME: null,
+            ADD_LOG: null,
+            UPDATED: 30,
+            LIST: null,
+            LOCATION: null,
+            ZONE: null,
+            CONNECT_UP: null,
+            INFO: null,
+            EDIFY: null,
+            INVITE: null,
+            PLAN: null,
+            PLAN_DATE: null,
+            CLOSING: null,
+            CAST: null,
+            UPDATED_ON: null,
+            LINK: null,
+            TASK: null
+        }
+    };
 
-    public static readonly LOV_SHEET_NUM_OF_ROWS: number = 100;
-    public static readonly LOV_SHEET_NUM_OF_COLUMNS: number = 9;
 
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_LIST: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_CONNECT_UP: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_INFO: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_EDIFY: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_INVITE: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_PLAN: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_CLOSING: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_ZONE: number = null;
-    public static readonly LOV_SHEET_MIN_WIDTH_COL_CAST: number = null;
-
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_LIST: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_CONNECT_UP: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_INFO: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_EDIFY: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_INVITE: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_PLAN: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_CLOSING: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_ZONE: number = null;
-    public static readonly LOV_SHEET_MAX_WIDTH_COL_CAST: number = null;
 
 
 

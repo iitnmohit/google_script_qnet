@@ -1,9 +1,8 @@
 import { TaskBuilder } from "../builder/TaskBuilder";
 import { TaskListBuilder } from "../builder/TaskListBuilder";
+import { SheetMessage, TaskMessage } from "../constants/Message";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { TaskMessage } from "../constants/Message";
 import { Util } from "../util/Util";
-import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
 
 export class TaskService {
     private readonly nameListSchema: NameListSheetSchema;
@@ -168,7 +167,7 @@ export class TaskService {
 
         let nameCellValue = nameCell.getValue();
         if (typeof nameCellValue !== "string") {
-            throw new Error(NameListSheetSchema.MSG_INVALID_NAME_CELL_FORMAT);
+            throw new Error(SheetMessage.MSG_INVALID_NAME_CELL_FORMAT);
         }
 
         let taskTitle: string = nameCellValue.trim()

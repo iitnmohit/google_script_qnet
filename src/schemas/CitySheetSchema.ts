@@ -1,31 +1,34 @@
 import { DefaultSchema } from "../constants/DefaultSchema";
 import { SheetMessage } from "../constants/Message";
+import { ISchema } from "../interface/ISchema";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { ThemeUtil } from "../util/ThemeUtil";
-import { BaseSheetSchema } from "./BaseSheetSchema";
 
-export class CitySheetSchema extends BaseSheetSchema {
+export class CitySheetSchema implements ISchema {
     // static variable
-    public static readonly SHEET_NAME: string = DefaultSchema.CITY_SHEET_NAME;
-    public static readonly SHEET_INDEX: number = DefaultSchema.CITY_SHEET_INDEX;
+    public static readonly SHEET_NAME: string = DefaultSchema.CITY.NAME;
+    public static readonly SHEET_INDEX: number = DefaultSchema.CITY.INDEX;
 
-    public static readonly COL_LOCATION: string = DefaultSchema.CITY_SHEET_COL_LOCATION;
-    public static readonly COL_COUNT: string = DefaultSchema.CITY_SHEET_COL_COUNT;
+    public static readonly COL_LOCATION: string = DefaultSchema.CITY.COLUMN.LOCATION;
+    public static readonly COL_COUNT: string = DefaultSchema.CITY.COLUMN.COUNT;
 
     // public local variable
     public readonly locationColIndex: number = -1;
     public readonly countColIndex: number = -1;
 
     // public abstract variable
-    public NUM_OF_ROWS: number = DefaultSchema.CITY_SHEET_NUM_OF_ROWS;
-    public NUM_OF_COLUMNS: number = DefaultSchema.CITY_SHEET_NUM_OF_COLUMNS;
+    public NUM_OF_ROWS: number = DefaultSchema.CITY.NUM_OF.ROWS;
+    public NUM_OF_COLUMNS: number = DefaultSchema.CITY.NUM_OF.COLUMNS;
 
     public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderFontColor;
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableSecondRowColor;
+
+    public FREEZE_ROW: number = DefaultSchema.CITY.FREEZE.ROW;
+    public FREEZE_COLUMN: number = DefaultSchema.CITY.FREEZE.COLUMN;
 
     // private local variable
     private isThisSchemaValid: boolean = false;
@@ -33,7 +36,6 @@ export class CitySheetSchema extends BaseSheetSchema {
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super();
         this.currentSheet = Preconditions.checkNotNull(sheet, SheetMessage.SHEET_NOT_FOUND, CitySheetSchema.SHEET_NAME);
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
@@ -85,16 +87,16 @@ export class CitySheetSchema extends BaseSheetSchema {
 
     public getMinColWidth(index: number): number {
         switch (index) {
-            case this.locationColIndex: return DefaultSchema.CITY_SHEET_MIN_WIDTH_COL_LOCATION;
-            case this.countColIndex: return DefaultSchema.CITY_SHEET_MIN_WIDTH_COL_COUNT;
+            case this.locationColIndex: return DefaultSchema.CITY.MIN_WIDTH.LOCATION;
+            case this.countColIndex: return DefaultSchema.CITY.MIN_WIDTH.COUNT;
             default: return null;
         }
     }
 
     public getMaxColWidth(index: number): number {
         switch (index) {
-            case this.locationColIndex: return DefaultSchema.CITY_SHEET_MAX_WIDTH_COL_LOCATION;
-            case this.countColIndex: return DefaultSchema.CITY_SHEET_MAX_WIDTH_COL_COUNT;
+            case this.locationColIndex: return DefaultSchema.CITY.MAX_WIDTH.LOCATION;
+            case this.countColIndex: return DefaultSchema.CITY.MAX_WIDTH.COUNT;
             default: return null;
         }
     }

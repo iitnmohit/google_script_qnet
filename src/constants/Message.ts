@@ -19,4 +19,8 @@ export class TaskMessage {
 export class SheetMessage {
     public static readonly SHEET_NOT_FOUND: string = "%s sheet not found.";
     public static readonly INVALID_SHEET: string = "%s sheet is not valid.";
+
+
+    public static readonly MSG_INVALID_NAME_CELL_FORMAT: string = "Name is not valid.";
+
 }

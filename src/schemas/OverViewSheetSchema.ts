@@ -1,9 +1,9 @@
 import { SheetMessage } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
-import { BaseSheetSchema } from "./BaseSheetSchema";
 
-export class OverViewSheetSchema extends BaseSheetSchema {
+// yet to implement
+export class OverViewSheetSchema implements ISchema {
     // public local variable
 
     // public abstract variable
@@ -30,7 +30,6 @@ export class OverViewSheetSchema extends BaseSheetSchema {
     private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
 
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super();
         if (sheet == null) {
             return;
         }
@@ -90,4 +89,7 @@ export class OverViewSheetSchema extends BaseSheetSchema {
         this.validSchema = true;
         return true;
     }
+
+    public FREEZE_ROW: number = 0;
+    public FREEZE_COLUMN: number = 0;
 }
