@@ -1,4 +1,4 @@
-import { DefaultSchema } from "../constants/DefaultSchema";
+import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { ITheme } from "../interface/ITheme";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
@@ -81,7 +81,7 @@ export class ThemeService {
     }
 
     private setRowsHeight(sheet: GoogleAppsScript.Spreadsheet.Sheet, height: number): GoogleAppsScript.Spreadsheet.Sheet {
-        if (null == height || height < DefaultSchema.minRowHeight) {
+        if (null == height || height < Sheets.MIN_ROW_HEIGHT) {
             return sheet;
         }
         try {

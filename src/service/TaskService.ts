@@ -1,6 +1,7 @@
 import { TaskBuilder } from "../builder/TaskBuilder";
 import { TaskListBuilder } from "../builder/TaskListBuilder";
-import { SheetMessage, TaskMessage } from "../constants/Message";
+import { Msg } from "../constants/Message";
+import { Task } from "../constants/Task";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
 
@@ -16,9 +17,9 @@ export class TaskService {
         }
     }
 
-    public updateSelectedLog(count: number = TaskMessage.MAX_TASK_UPDATE): void {
-        if (count < 0 || count > TaskMessage.MAX_TASK_UPDATE) {
-            throw new Error(TaskMessage.MSG_INVALID_UPDATE_COUNT);
+    public updateSelectedLog(count: number = Task.MAX_TASK_UPDATE): void {
+        if (count < 0 || count > Task.MAX_TASK_UPDATE) {
+            throw new Error(Msg.TASK.UPDATE.COUNT);
         }
         let numOfTaskUpdated = 0;
         let taskColValues = this.nameListSchema.getCurrentSheet()
@@ -76,7 +77,7 @@ export class TaskService {
                 this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).clearNote();
             } catch (error) {
                 Logger.log(error);
-                throw new Error(TaskMessage.MSG_ERROR_DELETE_TASK_LIST);
+                throw new Error(Msg.TASK.DELETE.SERVER_ERROR);
             }
         }
     }
@@ -85,9 +86,9 @@ export class TaskService {
         this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).uncheck();
     }
 
-    public addAllTask(count: number = TaskMessage.MAX_TASK_CREATE): void {
-        if (count < 0 || count > TaskMessage.MAX_TASK_CREATE) {
-            throw new Error(TaskMessage.MSG_INVALID_CREATE_COUNT);
+    public addAllTask(count: number = Task.MAX_TASK_CREATE): void {
+        if (count < 0 || count > Task.MAX_TASK_CREATE) {
+            throw new Error(Msg.TASK.CREATE.COUNT);
         }
 
         let numOfTaskAdded: number = 0;
@@ -135,7 +136,7 @@ export class TaskService {
             if (error instanceof Error) {
                 Logger.log("Error" + error.message + error.stack);
             }
-            throw new Error(TaskMessage.MSG_ERROR_DELETE_TASK);
+            throw new Error(Msg.TASK.DELETE.SERVER_ERROR);
         }
     }
 
@@ -167,7 +168,7 @@ export class TaskService {
 
         let nameCellValue = nameCell.getValue();
         if (typeof nameCellValue !== "string") {
-            throw new Error(SheetMessage.MSG_INVALID_NAME_CELL_FORMAT);
+            throw new Error(Msg.SHEET.MSG_INVALID_NAME_CELL_FORMAT);
         }
 
         let taskTitle: string = nameCellValue.trim()
@@ -182,7 +183,7 @@ export class TaskService {
             return Tasks.Tasks.insert(newTask, this.getTaskList().id);
         } catch (error) {
             Logger.log(error);
-            throw new Error(TaskMessage.MSG_ERROR_CREATE_TASK);
+            throw new Error(Msg.TASK.CREATE.SERVER_ERROR);
         }
     }
 
@@ -195,7 +196,7 @@ export class TaskService {
             let taskLists = Tasks.Tasklists.list();
             if (taskLists.items) {
                 for (let taskList of taskLists.items) {
-                    if (taskList.title === TaskMessage.TASK_LIST_NAME) {
+                    if (taskList.title === Task.LIST_NAME) {
                         this.myTaskList = taskList;
                         break;
                     }
@@ -203,18 +204,18 @@ export class TaskService {
             }
         } catch (error) {
             Logger.log(error);
-            throw new Error(TaskMessage.MSG_ERROR_READ_TASK_LIST);
+            throw new Error(Msg.TASK.READ.SERVER_ERROR);
         }
 
         if (this.myTaskList == null && create) {
             let newTaskList = TaskListBuilder.builder()
-                .setTitle(TaskMessage.TASK_LIST_NAME)
+                .setTitle(Task.LIST_NAME)
                 .build();
             try {
                 this.myTaskList = Tasks.Tasklists.insert(newTaskList);
             } catch (error) {
                 Logger.log(error);
-                throw new Error(TaskMessage.MSG_ERROR_CREATE_TASK_LIST);
+                throw new Error(Msg.TASK.LIST.CREATE.SERVER_ERROR);
             }
         }
         return this.myTaskList;

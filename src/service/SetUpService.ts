@@ -1,6 +1,8 @@
 import { Cities } from "../constants/Cities";
 import { Lov } from "../constants/Lov";
+import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
+import { ISheet } from "../interface/ISheet";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -49,13 +51,13 @@ export class SetUpService {
     }
 
     private createOverViewSheets(): SetUpService {
-        var overviewSheet = this.startSetUpOfSheet(OverViewSheetSchema.getCompormisedSchema());
+        var overviewSheet = this.startSetUpOfSheet(Sheets.OVERVIEW);
         let schema = OverViewSheetSchema.getValidSchema(overviewSheet);
         return this.endSetUpOfSheet(schema);
     }
 
     private createNameListSheets(): SetUpService {
-        var nameListSheet = this.startSetUpOfSheet(NameListSheetSchema.getCompormisedSchema());
+        var nameListSheet = this.startSetUpOfSheet(Sheets.NAMELIST);
         let schema = NameListSheetSchema.getValidSchema(nameListSheet);
         return this.fillNumbers(schema.slNoColIndex, nameListSheet)
             .fillCheckBox(schema.taskColIndex, nameListSheet)
@@ -65,26 +67,26 @@ export class SetUpService {
     }
 
     private createLovSheets(): SetUpService {
-        var lovSheet = this.startSetUpOfSheet(LovSheetSchema.getCompormisedSchema());
+        var lovSheet = this.startSetUpOfSheet(Sheets.LOV);
         let schema = LovSheetSchema.getValidSchema(lovSheet);
-        return this.fillColValue(Lov.list, schema.listColIndex, lovSheet)
-            .fillColValue(Lov.connect_up, schema.connectUpColIndex, lovSheet)
-            .fillColValue(Lov.info, schema.infoColIndex, lovSheet)
-            .fillColValue(Lov.edify, schema.edifyColIndex, lovSheet)
-            .fillColValue(Lov.invite, schema.inviteColIndex, lovSheet)
-            .fillColValue(Lov.plan, schema.planColIndex, lovSheet)
-            .fillColValue(Lov.closing, schema.closingColIndex, lovSheet)
-            .fillColValue(Lov.zone, schema.zoneColIndex, lovSheet)
-            .fillColValue(Lov.cast, schema.castColIndex, lovSheet)
+        return this.fillColValue(Lov.LIST, schema.listColIndex, lovSheet)
+            .fillColValue(Lov.CONNECT_UP, schema.connectUpColIndex, lovSheet)
+            .fillColValue(Lov.INFO, schema.infoColIndex, lovSheet)
+            .fillColValue(Lov.EDIFY, schema.edifyColIndex, lovSheet)
+            .fillColValue(Lov.INVITE, schema.inviteColIndex, lovSheet)
+            .fillColValue(Lov.PLAN, schema.planColIndex, lovSheet)
+            .fillColValue(Lov.CLOSING, schema.closingColIndex, lovSheet)
+            .fillColValue(Lov.ZONE, schema.zoneColIndex, lovSheet)
+            .fillColValue(Lov.CAST, schema.castColIndex, lovSheet)
             .endSetUpOfSheet(schema);
     }
 
     private createCitySheets(): SetUpService {
         // need to check here
         // what to pass here?
-        var citySheet = this.startSetUpOfSheet(CitySheetSchema.getCompormisedSchema(null));
+        var citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
-        return this.fillColValue(Cities.list, schema.locationColIndex, citySheet)
+        return this.fillColValue(Cities.LIST, schema.locationColIndex, citySheet)
             .endSetUpOfSheet(schema);
     }
 
@@ -144,16 +146,16 @@ export class SetUpService {
         return this;
     }
 
-    private startSetUpOfSheet(schema: ISchema): GoogleAppsScript.Spreadsheet.Sheet {
-        let sheet = this.createOrClearSheet(schema.getSheetName());
+    private startSetUpOfSheet(iSheet: ISheet): GoogleAppsScript.Spreadsheet.Sheet {
+        let sheet = this.createOrClearSheet(iSheet.NAME);
         // set rows and column
-        this.ensureRowsCount(sheet, schema.NUM_OF_ROWS)
-            .ensureColsCount(sheet, schema.NUM_OF_COLUMNS);
+        this.ensureRowsCount(sheet, iSheet.NUM_OF.ROWS)
+            .ensureColsCount(sheet, iSheet.NUM_OF.COLUMNS);
 
         // set headder row value and alignment
-        let headderArray = schema.getHeadderValues();
-        if (headderArray.length > schema.NUM_OF_COLUMNS) {
-            throw new Error("Failed creating schema, for " + schema.getSheetName() +
+        let headderArray = Object.keys(iSheet.COLUMN);
+        if (headderArray.length > iSheet.NUM_OF.COLUMNS) {
+            throw new Error("Failed creating schema, for " + iSheet.NAME +
                 " sheet headder count is more than column count.");
         }
         if (headderArray.length > 0) {

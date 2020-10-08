@@ -1,8 +1,8 @@
-import { DefaultTheme } from "../constants/Themes";
+import { Themes } from "../constants/Themes";
 import { ITheme } from "../interface/ITheme";
 
 export class ThemeUtil {
-    private static currentTheme: ITheme = DefaultTheme.instance;
+    private static currentTheme: ITheme = Themes.DEFAULT;
 
     public static getCurrentTheme(): ITheme {
         return ThemeUtil.currentTheme;

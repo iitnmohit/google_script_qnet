@@ -1,5 +1,5 @@
 import { runSafely } from "./Code";
-import { TaskMessage } from "./constants/Message";
+import { Msg } from "./constants/Message";
 import { TaskService } from "./service/TaskService";
 import { UiService } from "./service/UiService";
 
@@ -11,7 +11,7 @@ function taskClearAllCheckBox(): void {
 }
 
 function taskDeleteAll(): void {
-  if (UiService.doesUserReConfirmedAction(TaskMessage.MSG_DELETE_ALERT)) {
+  if (UiService.doesUserReConfirmedAction(Msg.UI.MSG_DELETE_ALERT)) {
     runSafely((): void => {
       new TaskService().deleteAllTasks();
     });

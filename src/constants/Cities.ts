@@ -1,5 +1,5 @@
 export class Cities {
-    public static readonly list: Array<string> = [
+    public static readonly LIST: Array<string> = [
         "Delhi",
         "Mumbai"
     ];

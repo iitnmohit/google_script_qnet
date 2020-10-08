@@ -9,8 +9,8 @@ export class Predicate<T> {
         return new Predicate(condition);
     }
 
-    public test(x: T): boolean {
-        return this.condition(x);
+    public test(t: T): boolean {
+        return this.condition(t);
     }
 
     public and(input: Predicate<T>): Predicate<T> {

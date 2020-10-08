@@ -1,5 +1,5 @@
 export class Lov {
-    public static readonly list: Array<string> = [
+    public static readonly LIST: Array<string> = [
         "CLOSED",
         "WORKING NOW",
         "KEEP IN TOUCH",
@@ -14,7 +14,7 @@ export class Lov {
         "ALREADY SIGNED UP"
     ];
 
-    public static readonly connect_up: Array<string> = [
+    public static readonly CONNECT_UP: Array<string> = [
         "FAMILY",
         "RELATIVE",
         "SCHOOL",
@@ -30,13 +30,13 @@ export class Lov {
         "FLATMATE"
     ];
 
-    public static readonly info: Array<string> = [
+    public static readonly INFO: Array<string> = [
         "POSITIVE",
         "NEUTRAL",
         "NEGATIVE"
     ];
 
-    public static readonly edify: Array<string> = [
+    public static readonly EDIFY: Array<string> = [
         "WANT TO DO",
         "EXCITED",
         "GOOD",
@@ -51,7 +51,7 @@ export class Lov {
         "ALREADY KNOW"
     ];
 
-    public static readonly invite: Array<string> = [
+    public static readonly INVITE: Array<string> = [
         "YES",
         "NO",
         "ALREADY KNOW",
@@ -63,7 +63,7 @@ export class Lov {
         "NO TIME"
     ];
 
-    public static readonly plan: Array<string> = [
+    public static readonly PLAN: Array<string> = [
         "YES",
         "TOKEN",
         "NOT INTERESTED",
@@ -82,7 +82,7 @@ export class Lov {
         "ARRANGING MONEY"
     ];
 
-    public static readonly closing: Array<string> = [
+    public static readonly CLOSING: Array<string> = [
         "YES",
         "HIGHER STUDY",
         "PARTIAL AMOUNT",
@@ -99,7 +99,7 @@ export class Lov {
         "ARRANGING MONEY"
     ];
 
-    public static readonly zone: Array<string> = [
+    public static readonly ZONE: Array<string> = [
         "HOT",
         "OYE BUDDY",
         "WARM",
@@ -107,7 +107,7 @@ export class Lov {
         "SUPER COLD"
     ];
 
-    public static readonly cast: Array<string> = [
+    public static readonly CAST: Array<string> = [
         "HINDU",
         "MUSLIM",
         "PUNJABI",

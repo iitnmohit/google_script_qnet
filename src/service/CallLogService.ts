@@ -1,17 +1,18 @@
+import { Preconditions } from "../library/Preconditions";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
 
 export class CallLogService {
-
     public addLog(range: GoogleAppsScript.Spreadsheet.Range): void {
+        Preconditions.checkNotNull(range);
         let sheet = range.getSheet();
+        let nameListSchema = NameListSheetSchema.getValidSchema(sheet);
 
         // verify column edited
-        if (range.getColumn() != NameListSheetSchema.getCompormisedSchema(sheet).updateColIndex) {
+        if (range.getColumn() !== nameListSchema.updateColIndex) {
             return;
         }
 
-        let nameListSchema = NameListSheetSchema.getValidSchema(sheet);
         let rowIndex = range.getRow();
         if (range.isChecked()) {
             this.appendLog(nameListSchema, rowIndex);

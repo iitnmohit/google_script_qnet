@@ -1,9 +1,11 @@
-export class DefaultSchema {
-    // common
-    private static readonly defaultNumofFreezeRow: number = 1;
-    private static readonly defaultNumofFreezeCol: number = 0;
+import { ICitySheet, ILovSheet, INameListSheet, ISheet } from "../interface/ISheet";
 
-    public static readonly minRowHeight: number = 5;
+export class Sheets {
+    // common
+    private static readonly DEFAULT_FREEZE_ROW: number = 1;
+    private static readonly DEFAULT_FREEZE_COL: number = 0;
+
+    public static readonly MIN_ROW_HEIGHT: number = 5;
 
     // City Sheet
     public static readonly CITY = {
@@ -14,8 +16,8 @@ export class DefaultSchema {
             COLUMNS: 2
         },
         FREEZE: {
-            ROW: DefaultSchema.defaultNumofFreezeRow,
-            COLUMN: DefaultSchema.defaultNumofFreezeCol
+            ROW: Sheets.DEFAULT_FREEZE_ROW,
+            COLUMN: Sheets.DEFAULT_FREEZE_COL
         },
         COLUMN: {
             LOCATION: "Location",
@@ -29,7 +31,7 @@ export class DefaultSchema {
             LOCATION: null,
             COUNT: null
         }
-    };
+    } as ICitySheet;
 
     // Lov Sheet
     public static readonly LOV = {
@@ -40,8 +42,8 @@ export class DefaultSchema {
             COLUMNS: 9
         },
         FREEZE: {
-            ROW: DefaultSchema.defaultNumofFreezeRow,
-            COLUMN: DefaultSchema.defaultNumofFreezeCol
+            ROW: Sheets.DEFAULT_FREEZE_ROW,
+            COLUMN: Sheets.DEFAULT_FREEZE_COL
         },
         COLUMN: {
             LIST: "LIST",
@@ -76,7 +78,7 @@ export class DefaultSchema {
             ZONE: null,
             CAST: null
         }
-    };
+    } as ILovSheet;
 
     // NameList Sheet
     public static readonly NAMELIST = {
@@ -88,7 +90,7 @@ export class DefaultSchema {
         },
         FREEZE: {
             ROW: 3,
-            COLUMN: DefaultSchema.defaultNumofFreezeCol
+            COLUMN: Sheets.DEFAULT_FREEZE_COL
         },
         COLUMN: {
             SELECT: "X",
@@ -153,7 +155,7 @@ export class DefaultSchema {
             LINK: null,
             TASK: null
         }
-    };
+    } as INameListSheet;
 
     // overview sheet
     public static readonly OVERVIEW = {
@@ -167,6 +169,5 @@ export class DefaultSchema {
             ROW: 0,
             COLUMN: 0
         }
-    };
-
+    } as ISheet;
 }
