@@ -1,10 +1,14 @@
 export interface ITheme {
+    //common to all
     fontFamily: string;
     defaultBandingTheme: GoogleAppsScript.Spreadsheet.BandingTheme;
     textColor: string;
     headderFontSize: number;
     borderColor: string;
+    rowHeight: number;
+    colWidthOffset: number;
 
+    //sheet specific 
     cityTableHeadderFontColor: string;
     cityTableHeadderColor: string;
     cityTableFirstRowColor: string;
@@ -24,6 +28,4 @@ export interface ITheme {
     overviewTableHeadderColor: string;
     overviewTableFirstRowColor: string;
     overviewTableSecondRowColor: string;
-
-    rowHeight: number;
 }

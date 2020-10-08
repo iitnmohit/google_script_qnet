@@ -1,7 +1,7 @@
-import { TaskBuilder } from "../model/TaskBuilder";
-import { TaskListBuilder } from "../model/TaskListBuilder";
+import { TaskBuilder } from "../builder/TaskBuilder";
+import { TaskListBuilder } from "../builder/TaskListBuilder";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { TaskMessage } from "../constants/TaskMessage";
+import { TaskMessage } from "../constants/Message";
 import { Util } from "../util/Util";
 import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
 
@@ -11,8 +11,7 @@ export class TaskService {
 
 
     public constructor () {
-        let schema = BaseSheetSchema.getSchema(SpreadsheetApp.getActiveSpreadsheet()
-            , NameListSheetSchema.SHEET_NAME);
+        let schema = NameListSheetSchema.getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
         if (schema instanceof NameListSheetSchema) {
             this.nameListSchema = schema;
         }

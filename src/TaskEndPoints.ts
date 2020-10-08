@@ -1,5 +1,5 @@
 import { runSafely } from "./Code";
-import { TaskMessage } from "./constants/TaskMessage";
+import { TaskMessage } from "./constants/Message";
 import { TaskService } from "./service/TaskService";
 import { UiService } from "./service/UiService";
 

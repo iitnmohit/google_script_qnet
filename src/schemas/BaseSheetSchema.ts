@@ -1,101 +1,18 @@
-import { ThemeUtil } from "../util/ThemeUtil";
-import { CitySheetSchema } from "./CitySheetSchema";
+import { DefaultSchema } from "../constants/DefaultSchema";
 import { ISchema } from "../interface/ISchema";
-import { LovSheetSchema } from "./LovSheetSchema";
-import { NameListSheetSchema } from "./NameListSheetSchema";
-import { OverViewSheetSchema } from "./OverViewSheetSchema";
-import { Util } from "../util/Util";
 
 export abstract class BaseSheetSchema implements ISchema {
-    public static readonly MSG_ERROR_SHEET_EQ_NULL: string = " sheet not found.";
-    public static readonly MSG_INVALID_SHEET_NAME: string = " sheet name is not valid.";
-    public static readonly MSG_ERROR_INVALID_SHEET: string = " sheet is not valid.";
-
-    public static readonly MINIUM_ROW_HEIGHT: number = 5;
-
-    public static getSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, sheetName: string)
-        : CitySheetSchema | LovSheetSchema | NameListSheetSchema | OverViewSheetSchema {
-        if (spreadsheet == null) {
-            throw new Error();
-        }
-        switch (sheetName) {
-            case CitySheetSchema.SHEET_NAME: {
-                let citySheet = spreadsheet.getSheetByName(sheetName);
-                if (citySheet == null) {
-                    throw new Error();
-                } else {
-                    return CitySheetSchema.getValidSchema(citySheet);
-                }
-            }
-            case LovSheetSchema.SHEET_NAME: {
-                let lovSheet = spreadsheet.getSheetByName(sheetName);
-                if (lovSheet == null) {
-                    throw new Error();
-                } else {
-                    return LovSheetSchema.getValidSchema(lovSheet);
-                }
-            }
-            case NameListSheetSchema.SHEET_NAME: {
-                let nameSheet = spreadsheet.getSheetByName(sheetName);
-                if (nameSheet == null) {
-                    throw new Error();
-                } else {
-                    return NameListSheetSchema.getValidSchema(nameSheet);
-                }
-            }
-            case OverViewSheetSchema.SHEET_NAME: {
-                let overviewSheet = spreadsheet.getSheetByName(sheetName);
-                if (overviewSheet == null) {
-                    throw new Error();
-                } else {
-                    return OverViewSheetSchema.getValidSchema(overviewSheet);
-                }
-            }
-            default: throw new Error();
-        }
-    }
-
     //implement from interface
-
-    public ROW_HEIGHT: number = ThemeUtil.getCurrentTheme().rowHeight;
-    public FREEZE_ROW: number = 1;
-    public FREEZE_COLUMN: number = 0;
-
-    public getColumnA1Notation(colIndex: number, beginRow: number, hasSheetName: boolean = false): string {
-        if (colIndex == null || colIndex < 1) {
-            throw new Error("col index invalid");
-        }
-        let colLetter = Util.getColumnLetter(colIndex);
-        let beginRowNum = "";
-        if (beginRow > 0) {
-            beginRowNum += beginRow;
-        }
-        if (hasSheetName) {
-            return `'${this.getSheetName()}'!${colLetter}${beginRowNum}:${colLetter}`;
-        } else {
-            return `${colLetter}${beginRowNum}:${colLetter}`;
-        }
-    }
-
-    public getCellA1Notation(rowIndex: number, colIndex: number, hasSheetName: boolean = false): string {
-        if (colIndex == null || colIndex < 1) {
-            throw new Error("col index invalid");
-        }
-        let letter = Util.getColumnLetter(colIndex);
-        if (hasSheetName) {
-            return `'${this.getSheetName()}'!${letter}${rowIndex}`;
-        } else {
-            return `${letter}${rowIndex}`;
-        }
-    }
-
-    public abstract DEFAULT_ROW_COUNT: number;
-    public abstract DEFAULT_COL_COUNT: number;
+    public abstract NUM_OF_ROWS: number;
+    public abstract NUM_OF_COLUMNS: number;
 
     public abstract HEADDER_ROW_FONT_COLOR: string;
     public abstract HEADDER_ROW_COLOR: string;
     public abstract FIRST_ROW_COLOR: string;
     public abstract SECOND_ROW_COLOR: string;
+
+    public FREEZE_ROW: number = DefaultSchema.numOfFreezeRow;
+    public FREEZE_COLUMN: number = DefaultSchema.numOfFreezeCol;
 
     public abstract getSheetName(): string;
 
@@ -106,6 +23,4 @@ export abstract class BaseSheetSchema implements ISchema {
     public abstract getMaxColWidth(index: number): number | null;
 
     public abstract getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
-
-
 }

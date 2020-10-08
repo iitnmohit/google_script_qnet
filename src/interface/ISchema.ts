@@ -1,27 +1,22 @@
 export interface ISchema {
-    DEFAULT_ROW_COUNT: number;
-    DEFAULT_COL_COUNT: number;
+    NUM_OF_ROWS: number;
+    NUM_OF_COLUMNS: number;
 
     HEADDER_ROW_FONT_COLOR: string;
     HEADDER_ROW_COLOR: string;
     FIRST_ROW_COLOR: string;
     SECOND_ROW_COLOR: string;
 
-    ROW_HEIGHT: number;
     FREEZE_ROW: number;
     FREEZE_COLUMN: number;
 
     getSheetName(): string;
+
+    getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
 
     getHeadderValues(): Array<string>;
 
     getMinColWidth(index: number): number;
 
     getMaxColWidth(index: number): number | null;
-
-    getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
-
-    getColumnA1Notation(colIndex: number, beginRow: number, hasSheetName: boolean): string;
-
-    getCellA1Notation(rowIndex: number, colIndex: number, hasSheetName: boolean): string;
 }

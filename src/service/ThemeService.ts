@@ -1,3 +1,4 @@
+import { DefaultSchema } from "../constants/DefaultSchema";
 import { ISchema } from "../interface/ISchema";
 import { ITheme } from "../interface/ITheme";
 import { BaseSheetSchema } from "../schemas/BaseSheetSchema";
@@ -17,10 +18,10 @@ export class ThemeService {
 
     constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
         this.spreadsheet = spreadsheet;
-        this.citySchema = BaseSheetSchema.getSchema(spreadsheet, CitySheetSchema.SHEET_NAME);
-        this.lovSchema = BaseSheetSchema.getSchema(spreadsheet, LovSheetSchema.SHEET_NAME);
-        this.nameSchema = BaseSheetSchema.getSchema(spreadsheet, NameListSheetSchema.SHEET_NAME);
-        this.overviewSchema = BaseSheetSchema.getSchema(spreadsheet, OverViewSheetSchema.SHEET_NAME);
+        this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
+        this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
+        this.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
+        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
     }
 
     public applyBasicTheme(): void {
@@ -52,11 +53,11 @@ export class ThemeService {
 
     private setCommonTheme(schema: ISchema): ThemeService {
         let sheet = schema.getCurrentSheet();
-        this.setRowsHeight(sheet, schema.ROW_HEIGHT)
+        this.setRowsHeight(sheet, ThemeUtil.getCurrentTheme().rowHeight)
             .setTabColor(schema.HEADDER_ROW_COLOR)
 
             // apply sheet border and banding color
-            .getRange(1, 1, schema.DEFAULT_ROW_COUNT, schema.DEFAULT_COL_COUNT)
+            .getRange(1, 1, schema.NUM_OF_ROWS, schema.NUM_OF_COLUMNS)
             .setBorder(true, true, true, true, true, true, this.currentTheme.borderColor, null)
             .applyRowBanding(this.currentTheme.defaultBandingTheme, true, false)
             .setHeaderRowColor(schema.HEADDER_ROW_COLOR)
@@ -69,6 +70,9 @@ export class ThemeService {
             .setFontWeight("bold")
             .setHorizontalAlignment("center");
 
+        // vertical alignment
+        sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).setVerticalAlignment("middle");
+
         //freeze
         sheet.setFrozenRows(schema.FREEZE_ROW);
         sheet.setFrozenColumns(schema.FREEZE_COLUMN);
@@ -78,7 +82,7 @@ export class ThemeService {
     }
 
     private setRowsHeight(sheet: GoogleAppsScript.Spreadsheet.Sheet, height: number): GoogleAppsScript.Spreadsheet.Sheet {
-        if (null == height || height < BaseSheetSchema.MINIUM_ROW_HEIGHT) {
+        if (null == height || height < DefaultSchema.minRowHeight) {
             return sheet;
         }
         try {

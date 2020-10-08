@@ -1,32 +1,27 @@
-import { ISchema } from "../interface/ISchema";
+import { DefaultSchema } from "../constants/DefaultSchema";
+import { SheetMessage } from "../constants/Message";
+import { InvalidSheetException } from "../library/Exceptions";
+import { Preconditions } from "../library/Preconditions";
+import { Predicates } from "../library/Predicates";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
 export class LovSheetSchema extends BaseSheetSchema {
-    public static readonly SHEET_NAME: string = "Lists";
-    public static readonly SHEET_INDEX: number = 3;
+    // static variable
+    public static readonly SHEET_NAME: string = DefaultSchema.LOV_SHEET_NAME;
+    public static readonly SHEET_INDEX: number = DefaultSchema.LOV_SHEET_INDEX;
 
-    public static readonly COL_LIST: string = "LIST";
-    public static readonly COL_CONNECT_UP: string = "CONNECT UP";
-    public static readonly COL_INFO: string = "INFO";
-    public static readonly COL_EDIFY: string = "EDIFY";
-    public static readonly COL_INVITE: string = "INVITE";
-    public static readonly COL_PLAN: string = "PLAN";
-    public static readonly COL_CLOSING: string = "CLOSING";
-    public static readonly COL_ZONE: string = "ZONE";
-    public static readonly COL_CAST: string = "CAST";
+    public static readonly COL_LIST: string = DefaultSchema.LOV_SHEET_COL_LIST;
+    public static readonly COL_CONNECT_UP: string = DefaultSchema.LOV_SHEET_COL_CONNECT_UP;
+    public static readonly COL_INFO: string = DefaultSchema.LOV_SHEET_COL_INFO;
+    public static readonly COL_EDIFY: string = DefaultSchema.LOV_SHEET_COL_EDIFY;
+    public static readonly COL_INVITE: string = DefaultSchema.LOV_SHEET_COL_INVITE;
+    public static readonly COL_PLAN: string = DefaultSchema.LOV_SHEET_COL_PLAN;
+    public static readonly COL_CLOSING: string = DefaultSchema.LOV_SHEET_COL_CLOSING;
+    public static readonly COL_ZONE: string = DefaultSchema.LOV_SHEET_COL_ZONE;
+    public static readonly COL_CAST: string = DefaultSchema.LOV_SHEET_COL_CAST;
 
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableSecondRowColor;
-
-    public DEFAULT_ROW_COUNT: number = 100;
-    public DEFAULT_COL_COUNT: number = 9;
-
-    private validSchema: boolean = false;
-    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
-
+    // public local variable
     public readonly listColIndex: number = -1;
     public readonly connectUpColIndex: number = -1;
     public readonly infoColIndex: number = -1;
@@ -37,12 +32,23 @@ export class LovSheetSchema extends BaseSheetSchema {
     public readonly zoneColIndex: number = -1;
     public readonly castColIndex: number = -1;
 
+    // public abstract variable
+    public NUM_OF_ROWS: number = DefaultSchema.LOV_SHEET_NUM_OF_ROWS;
+    public NUM_OF_COLUMNS: number = DefaultSchema.LOV_SHEET_NUM_OF_COLUMNS;
+
+    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderFontColor;
+    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderColor;
+    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableFirstRowColor;
+    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableSecondRowColor;
+
+    // private local variable
+    private isThisSchemaValid: boolean = false;
+    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
+
+    //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
-        if (sheet == null) {
-            return;
-        }
-        this.currentSheet = sheet;
+        this.currentSheet = Preconditions.checkNotNull(sheet, SheetMessage.SHEET_NOT_FOUND, LovSheetSchema.SHEET_NAME);
         let columnLength = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
         for (let i = 0; i < columnLength; i++) {
@@ -71,24 +77,29 @@ export class LovSheetSchema extends BaseSheetSchema {
         }
     }
 
+    // static method
     public static getCompormisedSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet = null): LovSheetSchema {
         return new LovSheetSchema(sheet);
     }
 
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): LovSheetSchema {
-        if (null == sheet) {
-            throw new Error(LovSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_SHEET_EQ_NULL);
-        }
-        if (sheet.getName() !== LovSheetSchema.SHEET_NAME) {
-            throw new Error(LovSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_INVALID_SHEET_NAME);
-        }
+        Preconditions.checkNotNull(sheet, SheetMessage.SHEET_NOT_FOUND, LovSheetSchema.SHEET_NAME);
+        Preconditions.checkArgument(sheet.getName() === LovSheetSchema.SHEET_NAME,
+            SheetMessage.INVALID_SHEET, LovSheetSchema.SHEET_NAME);
+
         let newSchema = new LovSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new Error(LovSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_INVALID_SHEET);
+        throw new InvalidSheetException(Preconditions.format(SheetMessage.INVALID_SHEET, LovSheetSchema.SHEET_NAME));
     }
 
+    public static getValidLovSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): LovSheetSchema {
+        Preconditions.checkNotNull(spreadsheet, SheetMessage.SHEET_NOT_FOUND, LovSheetSchema.SHEET_NAME);
+        return LovSheetSchema.getValidSchema(spreadsheet.getSheetByName(LovSheetSchema.SHEET_NAME));
+    }
+
+    // public abstract methods 
     public getSheetName(): string {
         return LovSheetSchema.SHEET_NAME;
     }
@@ -108,30 +119,54 @@ export class LovSheetSchema extends BaseSheetSchema {
     }
 
     public getMinColWidth(index: number): number {
-        return null;
+        switch (index) {
+            case this.listColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_LIST;
+            case this.connectUpColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_CONNECT_UP;
+            case this.infoColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_INFO;
+            case this.edifyColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_EDIFY;
+            case this.inviteColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_INVITE;
+            case this.planColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_PLAN;
+            case this.closingColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_CLOSING;
+            case this.zoneColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_ZONE;
+            case this.castColIndex: return DefaultSchema.LOV_SHEET_MIN_WIDTH_COL_CAST;
+            default: return null;
+        }
     }
+
     public getMaxColWidth(index: number): number {
-        return null;
+        switch (index) {
+            case this.listColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_LIST;
+            case this.connectUpColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_CONNECT_UP;
+            case this.infoColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_INFO;
+            case this.edifyColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_EDIFY;
+            case this.inviteColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_INVITE;
+            case this.planColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_PLAN;
+            case this.closingColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_CLOSING;
+            case this.zoneColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_ZONE;
+            case this.castColIndex: return DefaultSchema.LOV_SHEET_MAX_WIDTH_COL_CAST;
+            default: return null;
+        }
     }
 
     public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
-        if (!this.validSchema) {
-            throw new Error("Invalid Schema");
-        }
+        Preconditions.checkArgument(this.isThisSchemaValid, SheetMessage.INVALID_SHEET, LovSheetSchema.SHEET_NAME);
         return this.currentSheet;
     }
 
+    // public local methods
+
+    // private local method
     private isSchemaValid(): boolean {
-        if (this.listColIndex < 1) return false;
-        if (this.connectUpColIndex < 1) return false;
-        if (this.infoColIndex < 1) return false;
-        if (this.edifyColIndex < 1) return false;
-        if (this.inviteColIndex < 1) return false;
-        if (this.planColIndex < 1) return false;
-        if (this.closingColIndex < 1) return false;
-        if (this.zoneColIndex < 1) return false;
-        if (this.castColIndex < 1) return false;
-        this.validSchema = true;
+        if (Predicates.IS_NOT_POSITIVE.test(this.listColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.connectUpColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.infoColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.edifyColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.inviteColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.planColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.closingColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.zoneColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.castColIndex)) return false;
+        this.isThisSchemaValid = true;
         return true;
     }
 }

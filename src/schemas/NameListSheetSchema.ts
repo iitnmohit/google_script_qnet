@@ -1,14 +1,26 @@
+import { SheetMessage } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
 export class NameListSheetSchema extends BaseSheetSchema {
+    // public local variable
+
+    // public abstract variable
+
+    // private local variable
+
+    // public abstract methods 
+
+    // public local methods
+
+    // private local method
     public static readonly SHEET_NAME: string = "NAME LIST";
     public static readonly SHEET_INDEX: number = 2;
 
     public static readonly MSG_INVALID_NAME_CELL_FORMAT: string = "Name is not valid.";
 
-    public static readonly COL_SELECT: string = "SELECT";
+    public static readonly COL_SELECT: string = "X";
     public static readonly COL_SL_NO: string = "Sl No";
     public static readonly COL_NAME: string = "NAME";
     public static readonly COL_ADD_LOG: string = "ADD LOG";
@@ -36,8 +48,8 @@ export class NameListSheetSchema extends BaseSheetSchema {
     private validSchema: boolean = false;
     private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
 
-    public DEFAULT_ROW_COUNT: number = 1000;
-    public DEFAULT_COL_COUNT: number = 19;
+    public NUM_OF_ROWS: number = 1000;
+    public NUM_OF_COLUMNS: number = 19;
     public FREEZE_COLUMN: number = 3;
 
     public readonly selectColIndex: number = -1;
@@ -120,16 +132,23 @@ export class NameListSheetSchema extends BaseSheetSchema {
 
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): NameListSheetSchema {
         if (null == sheet) {
-            throw new Error(NameListSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_SHEET_EQ_NULL);
+            throw new Error(NameListSheetSchema.SHEET_NAME + SheetMessage.SHEET_NOT_FOUND);
         }
         if (sheet.getName() !== NameListSheetSchema.SHEET_NAME) {
-            throw new Error(NameListSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_INVALID_SHEET_NAME);
+            throw new Error(NameListSheetSchema.SHEET_NAME + SheetMessage.INVALID_SHEET);
         }
         let newSchema = new NameListSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new Error(NameListSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_INVALID_SHEET);
+        throw new Error(NameListSheetSchema.SHEET_NAME + SheetMessage.INVALID_SHEET);
+    }
+
+    public static getValidNameListSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): NameListSheetSchema {
+        if (null == spreadsheet) {
+            throw new Error(NameListSheetSchema.SHEET_NAME + SheetMessage.SHEET_NOT_FOUND);
+        }
+        return NameListSheetSchema.getValidSchema(spreadsheet.getSheetByName(NameListSheetSchema.SHEET_NAME));
     }
 
     public getSheetName(): string {

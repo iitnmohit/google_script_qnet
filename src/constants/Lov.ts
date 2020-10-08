@@ -20,7 +20,7 @@ export class Lov {
         "SCHOOL",
         "COLLAGE",
         "OFFICE",
-        "NABOUR",
+        "NEIGHBOUR",
         "DOCTOR",
         "FACEBOOK",
         "NATIVE",

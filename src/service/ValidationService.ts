@@ -14,10 +14,10 @@ export class ValidationService {
 
     constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
         this.spreadSheet = spreadsheet;
-        this.citySchema = BaseSheetSchema.getSchema(spreadsheet, CitySheetSchema.SHEET_NAME) as CitySheetSchema;
-        this.lovSchema = BaseSheetSchema.getSchema(spreadsheet, LovSheetSchema.SHEET_NAME) as LovSheetSchema;
-        this.nameSchema = BaseSheetSchema.getSchema(spreadsheet, NameListSheetSchema.SHEET_NAME) as NameListSheetSchema;
-        this.overviewSchema = BaseSheetSchema.getSchema(spreadsheet, OverViewSheetSchema.SHEET_NAME) as OverViewSheetSchema;
+        this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
+        this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
+        this.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
+        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
     }
 
     public applyValidationToAllSheets(): void {

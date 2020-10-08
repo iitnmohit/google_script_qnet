@@ -60,6 +60,38 @@ export class Util {
         return Util.dateString(date);
     }
 
+    public static getColumnA1Notation(colIndex: number): string;
+    public static getColumnA1Notation(colIndex: number, beginRow: number): string;
+    public static getColumnA1Notation(colIndex: number, beginRow: number, sheetName: string): string;
+    public static getColumnA1Notation(colIndex: number, beginRow?: number, sheetName?: string): string {
+        if (colIndex == null || colIndex < 1) {
+            throw new Error("col index invalid");
+        }
+        let colLetter = Util.getColumnLetter(colIndex);
+        let beginRowNum = "";
+        if (beginRow > 1) {
+            beginRowNum += beginRow;
+        }
+        if (sheetName == null) {
+            return `${colLetter}${beginRowNum}:${colLetter}`;
+        } else {
+            return `'${sheetName}'!${colLetter}${beginRowNum}:${colLetter}`;
+        }
+    }
+
+    public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range): string;
+    public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range, sheetName: string): string;
+    public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range, sheetName?: string): string {
+        if (range == null) {
+            throw new Error("Invalid Range");
+        }
+        if (sheetName == null) {
+            return range.getA1Notation();
+        } else {
+            return sheetName + "!" + range.getA1Notation();
+        }
+    }
+
     public static getColumnLetter(index: number): string {
         switch (index) {
             case 1: return "A";

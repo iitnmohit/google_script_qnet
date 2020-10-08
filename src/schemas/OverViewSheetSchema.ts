@@ -1,8 +1,20 @@
+import { SheetMessage } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseSheetSchema } from "./BaseSheetSchema";
 
 export class OverViewSheetSchema extends BaseSheetSchema {
+    // public local variable
+
+    // public abstract variable
+
+    // private local variable
+
+    // public abstract methods 
+
+    // public local methods
+
+    // private local method
     public static readonly SHEET_NAME: string = "OVERVIEW";
     public static readonly SHEET_INDEX: number = 1;
 
@@ -11,8 +23,8 @@ export class OverViewSheetSchema extends BaseSheetSchema {
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableSecondRowColor;
 
-    public DEFAULT_ROW_COUNT: number = 10;
-    public DEFAULT_COL_COUNT: number = 10;
+    public NUM_OF_ROWS: number = 10;
+    public NUM_OF_COLUMNS: number = 10;
 
     private validSchema: boolean = false;
     private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
@@ -31,16 +43,23 @@ export class OverViewSheetSchema extends BaseSheetSchema {
 
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): OverViewSheetSchema {
         if (null == sheet) {
-            throw new Error(OverViewSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_SHEET_EQ_NULL);
+            throw new Error(OverViewSheetSchema.SHEET_NAME + SheetMessage.SHEET_NOT_FOUND);
         }
         if (sheet.getName() !== OverViewSheetSchema.SHEET_NAME) {
-            throw new Error(OverViewSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_INVALID_SHEET_NAME);
+            throw new Error(OverViewSheetSchema.SHEET_NAME + SheetMessage.INVALID_SHEET);
         }
         let newSchema = new OverViewSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new Error(OverViewSheetSchema.SHEET_NAME + BaseSheetSchema.MSG_ERROR_INVALID_SHEET);
+        throw new Error(OverViewSheetSchema.SHEET_NAME + SheetMessage.INVALID_SHEET);
+    }
+
+    public static getValidOverViewSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): OverViewSheetSchema {
+        if (null == spreadsheet) {
+            throw new Error(OverViewSheetSchema.SHEET_NAME + SheetMessage.SHEET_NOT_FOUND);
+        }
+        return OverViewSheetSchema.getValidSchema(spreadsheet.getSheetByName(OverViewSheetSchema.SHEET_NAME));
     }
 
     public getSheetName(): string {

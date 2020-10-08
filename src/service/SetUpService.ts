@@ -126,7 +126,7 @@ export class SetUpService {
             schema.getCurrentSheet().autoResizeColumns(1, numOfCols);
             for (let i = 1; i <= numOfCols; i++) {
                 let colWidth = schema.getCurrentSheet().getColumnWidth(i);
-                colWidth = colWidth + ThemeUtil.colWidthOffset;
+                colWidth = colWidth + ThemeUtil.getCurrentTheme().colWidthOffset;
                 let maxColWidth = schema.getMaxColWidth(i);
                 if (maxColWidth !== null && maxColWidth < colWidth) {
                     colWidth = maxColWidth;
@@ -146,12 +146,12 @@ export class SetUpService {
     private startSetUpOfSheet(schema: ISchema): GoogleAppsScript.Spreadsheet.Sheet {
         let sheet = this.createOrClearSheet(schema.getSheetName());
         // set rows and column
-        this.ensureRowsCount(sheet, schema.DEFAULT_ROW_COUNT)
-            .ensureColsCount(sheet, schema.DEFAULT_COL_COUNT);
+        this.ensureRowsCount(sheet, schema.NUM_OF_ROWS)
+            .ensureColsCount(sheet, schema.NUM_OF_COLUMNS);
 
         // set headder row value and alignment
         let headderArray = schema.getHeadderValues();
-        if (headderArray.length > schema.DEFAULT_COL_COUNT) {
+        if (headderArray.length > schema.NUM_OF_COLUMNS) {
             throw new Error("Failed creating schema, for " + schema.getSheetName() +
                 " sheet headder count is more than column count.");
         }
