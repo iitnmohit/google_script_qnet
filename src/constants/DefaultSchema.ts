@@ -155,11 +155,18 @@ export class DefaultSchema {
         }
     };
 
-
-
-
-
-
-
+    // overview sheet
+    public static readonly OVERVIEW = {
+        NAME: "OVERVIEW",
+        INDEX: 1,
+        NUM_OF: {
+            ROWS: 10,
+            COLUMNS: 10
+        },
+        FREEZE: {
+            ROW: 0,
+            COLUMN: 0
+        }
+    };
 
 }
