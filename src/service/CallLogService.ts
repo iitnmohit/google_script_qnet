@@ -1,4 +1,8 @@
+import { Msg } from "../constants/Message";
+import { Sheets } from "../constants/Sheets";
+import { ServerException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
+import { Predicates } from "../library/Predicates";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
 
@@ -24,18 +28,19 @@ export class CallLogService {
     }
 
     private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
-        let logCell = nameListSchema.getCurrentSheet().getRange(rowIndex, nameListSchema.addLogColIndex);
+        let sheet = nameListSchema.getCurrentSheet();
+        let logCell = sheet.getRange(rowIndex, nameListSchema.addLogColIndex);
         //read new logs
-        let newLogs = logCell.getDisplayValue().trim();
-        if (newLogs.length == 0) {
+        let newLogs = logCell.getDisplayValue();
+        if (Predicates.IS_BLANK.test(newLogs)) {
             return;
         }
         newLogs = Util.formatUpdateLog(newLogs);
 
-        let nameCell = nameListSchema.getCurrentSheet().getRange(rowIndex, nameListSchema.nameColIndex);
+        let nameCell = sheet.getRange(rowIndex, nameListSchema.nameColIndex);
         //read old logs
         let oldLogs = nameCell.getNote().trim();
-        if (oldLogs.length > 0) {
+        if (Predicates.IS_NOT_BLANK.test(oldLogs)) {
             oldLogs = oldLogs + "\n\n";
         }
 
@@ -44,7 +49,7 @@ export class CallLogService {
         nameCell.setNote(updatedLog);
 
         //clear log cell
-        logCell.setValue("UPDATED!");
+        logCell.setValue(Sheets.VALUE_DISPLAY_AFTER_LOG_ADDED);
     }
 
     private clearContent(sheet: GoogleAppsScript.Spreadsheet.Sheet,
@@ -53,6 +58,7 @@ export class CallLogService {
         try {
             sheet.getRange(rowIndex, colIndex).clear({ contentsOnly: true });
         } catch (error) {
+            throw new ServerException(Msg.SHEET.SERVER_ERROR);
         }
     }
 }

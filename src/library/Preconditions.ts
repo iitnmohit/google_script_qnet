@@ -1,4 +1,5 @@
 import { IllegalArgumentException, NullPointerException } from "./Exceptions";
+import { Predicates } from "./Predicates";
 
 export class Preconditions {
     private constructor () { }
@@ -30,7 +31,7 @@ export class Preconditions {
     public static checkNotNull<T>(reference: T, errorMessage: string, errorMessageArg1: string | number): T;
     public static checkNotNull<T>(reference: T, errorMessage: string, errorMessageArg1: string | number, errorMessageArg2: string | number): T;
     public static checkNotNull<T>(reference: T, errorMessage?: string, errorMessageArg1?: string | number, errorMessageArg2?: string | number): T {
-        if (reference == null || errorMessage == undefined) {
+        if (reference == null || reference == undefined) {
             if (errorMessage == null) {
                 errorMessage = "";
             } else {
@@ -38,6 +39,46 @@ export class Preconditions {
             }
             throw new NullPointerException(errorMessage);
         }
+        return reference;
+    }
+
+    /**
+     * Ensures that an object reference passed as a parameter to the calling method is POSITIVE NUMBER.
+     */
+
+    public static checkPositive<T>(reference: T): T;
+    public static checkPositive<T>(reference: T, errorMessage: string): T;
+    public static checkPositive<T>(reference: T, errorMessage: string, errorMessageArg1: string | number): T;
+    public static checkPositive<T>(reference: T, errorMessage: string, errorMessageArg1: string | number, errorMessageArg2: string | number): T;
+    public static checkPositive<T>(reference: T, errorMessage?: string, errorMessageArg1?: string | number, errorMessageArg2?: string | number): T {
+        Preconditions.checkNotNull(reference, errorMessage, errorMessageArg1, errorMessageArg2);
+        let isValid: boolean = false;
+        if (typeof reference === "number") {
+            if (reference > 0) {
+                isValid = true;
+            }
+        }
+        Preconditions.checkArgument(isValid, errorMessage, errorMessageArg1, errorMessageArg2);
+        return reference;
+    }
+
+    /**
+     * Ensures that an object reference passed as a parameter to the calling method is not blank string.
+     */
+
+    public static checkNotBlank<T>(reference: T): T;
+    public static checkNotBlank<T>(reference: T, errorMessage: string): T;
+    public static checkNotBlank<T>(reference: T, errorMessage: string, errorMessageArg1: string | number): T;
+    public static checkNotBlank<T>(reference: T, errorMessage: string, errorMessageArg1: string | number, errorMessageArg2: string | number): T;
+    public static checkNotBlank<T>(reference: T, errorMessage?: string, errorMessageArg1?: string | number, errorMessageArg2?: string | number): T {
+        Preconditions.checkNotNull(reference, errorMessage, errorMessageArg1, errorMessageArg2);
+        let isValid: boolean = false;
+        if (typeof reference === "string") {
+            if (Predicates.IS_NOT_BLANK.test(reference)) {
+                isValid = true;
+            }
+        }
+        Preconditions.checkArgument(isValid, errorMessage, errorMessageArg1, errorMessageArg2);
         return reference;
     }
 

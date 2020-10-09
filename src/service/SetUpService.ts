@@ -1,8 +1,12 @@
 import { Cities } from "../constants/Cities";
 import { Lov } from "../constants/Lov";
+import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { ISheet } from "../interface/ISheet";
+import { InvalidConfigurationException, ServerException } from "../library/Exceptions";
+import { Preconditions } from "../library/Preconditions";
+import { Predicates } from "../library/Predicates";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -30,22 +34,20 @@ export class SetUpService {
         let sheets = this.spreadsheet.getSheets();
         let totalNumOfSheets = sheets.length;
         let numOfSheetDeleted = 0;
-        if (sheets != null && totalNumOfSheets > 0) {
-            for (let sheet of sheets) {
-                let sheetName = sheet.getName();
-                if (sheetName === OverViewSheetSchema.SHEET_NAME
-                    || sheetName === NameListSheetSchema.SHEET_NAME
-                    || sheetName === LovSheetSchema.SHEET_NAME
-                    || sheetName === CitySheetSchema.SHEET_NAME) {
-                    continue;
-                }
-                if (totalNumOfSheets - numOfSheetDeleted != 1) {
-                    this.spreadsheet.deleteSheet(sheet);
-                    numOfSheetDeleted++;
-                } else {
-                    sheet.setName("Sheet 1");
-                    sheet.clear();
-                }
+        for (let sheet of sheets) {
+            let sheetName = sheet.getName();
+            if (sheetName === OverViewSheetSchema.SHEET_NAME
+                || sheetName === NameListSheetSchema.SHEET_NAME
+                || sheetName === LovSheetSchema.SHEET_NAME
+                || sheetName === CitySheetSchema.SHEET_NAME) {
+                continue;
+            }
+            if (totalNumOfSheets - numOfSheetDeleted != 1) {
+                this.spreadsheet.deleteSheet(sheet);
+                numOfSheetDeleted++;
+            } else {
+                sheet.setName("Sheet 1");
+                sheet.clear();
             }
         }
     }
@@ -82,8 +84,6 @@ export class SetUpService {
     }
 
     private createCitySheets(): SetUpService {
-        // need to check here
-        // what to pass here?
         var citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
         return this.fillColValue(Cities.LIST, schema.locationColIndex, citySheet)
@@ -98,7 +98,7 @@ export class SetUpService {
             sourceRange.autoFill(destRange, SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
             destRange.setHorizontalAlignment("left");
         } catch (error) {
-            Logger.log(error);
+            throw new ServerException(error);
         }
         return this;
     }
@@ -107,58 +107,66 @@ export class SetUpService {
         try {
             sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1).insertCheckboxes();
         } catch (error) {
-            Logger.log(error);
+            throw new ServerException(error);
         }
         return this;
     }
 
-    private fillColValue<T>(list: Array<T>, colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): SetUpService {
-        if (list != null && list.length > 0) {
-            try {
-                sheet.getRange(2, colIndex, list.length, 1).setValues(Util.arrayOfArray(list));
-            } catch (error) {
-                Logger.log(error);
-            }
+    private fillColValue(list: Array<string>, colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): SetUpService {
+        Preconditions.checkNotNull(list);
+        Preconditions.checkNotNull(sheet);
+        Preconditions.checkPositive(colIndex);
+        if (Predicates.IS_LIST_EMPTY.test(list)) {
+            return this;
+        }
+        try {
+            sheet.getRange(2, colIndex, list.length, 1).setValues(Util.arrayOfArray(list));
+        } catch (error) {
+            throw new ServerException(error);
         }
         return this;
     }
 
     private endSetUpOfSheet(schema: ISchema): SetUpService {
+        Preconditions.checkNotNull(schema);
         try {
-            let numOfCols = schema.getCurrentSheet().getMaxColumns();
-            schema.getCurrentSheet().autoResizeColumns(1, numOfCols);
+            let sheet = schema.getCurrentSheet();
+            let numOfCols = sheet.getMaxColumns();
+            sheet.autoResizeColumns(1, numOfCols);
             for (let i = 1; i <= numOfCols; i++) {
-                let colWidth = schema.getCurrentSheet().getColumnWidth(i);
+                let colWidth = sheet.getColumnWidth(i);
                 colWidth = colWidth + ThemeUtil.getCurrentTheme().colWidthOffset;
                 let maxColWidth = schema.getMaxColWidth(i);
+                let minColWidth = schema.getMinColWidth(i);
+
                 if (maxColWidth !== null && maxColWidth < colWidth) {
                     colWidth = maxColWidth;
                 }
-                let minColWidth = schema.getMinColWidth(i);
                 if (minColWidth !== null && minColWidth > colWidth) {
                     colWidth = minColWidth;
                 }
-                schema.getCurrentSheet().setColumnWidth(i, colWidth);
+                sheet.setColumnWidth(i, colWidth);
             }
         } catch (error) {
-            Logger.log(error);
+            throw new ServerException(error);
         }
         return this;
     }
 
     private startSetUpOfSheet(iSheet: ISheet): GoogleAppsScript.Spreadsheet.Sheet {
+        Preconditions.checkNotNull(iSheet);
         let sheet = this.createOrClearSheet(iSheet.NAME);
         // set rows and column
         this.ensureRowsCount(sheet, iSheet.NUM_OF.ROWS)
             .ensureColsCount(sheet, iSheet.NUM_OF.COLUMNS);
 
         // set headder row value and alignment
-        let headderArray = Object.keys(iSheet.COLUMN);
+        let headderArray = Object.values<string>(iSheet.COLUMN);
         if (headderArray.length > iSheet.NUM_OF.COLUMNS) {
-            throw new Error("Failed creating schema, for " + iSheet.NAME +
-                " sheet headder count is more than column count.");
+            throw new InvalidConfigurationException(Preconditions
+                .format(Msg.SHEET.HEADDER_MORE_THAN_COLUMN, iSheet.NAME));
         }
-        if (headderArray.length > 0) {
+        if (Predicates.IS_LIST_NOT_EMPTY.test(headderArray)) {
             sheet.getRange(1, 1, 1, headderArray.length)
                 .setValues([headderArray]);
         }
@@ -167,13 +175,10 @@ export class SetUpService {
         return sheet;
     }
 
-    private ensureRowsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfRows: number = 1000): SetUpService {
-        if (null == requiredNumOfRows || requiredNumOfRows < 1) {
-            throw new Error("Invalid Num of row value : " + requiredNumOfRows);
-        }
-        if (sheet == null) {
-            throw new Error("Invalid Sheet");
-        }
+    private ensureRowsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfRows: number = Sheets.DEFAULT_NUM_OF_ROWS): SetUpService {
+        Preconditions.checkNotNull(sheet, Msg.SHEET.INVALID_SHEET);
+        Preconditions.checkPositive(requiredNumOfRows, Msg.SHEET.INVALI_ROW_COUNT, requiredNumOfRows);
+
         let existingRow: number = sheet.getMaxRows();
         if (existingRow == requiredNumOfRows) {
         } else if (existingRow > requiredNumOfRows) {
@@ -186,13 +191,9 @@ export class SetUpService {
         return this;
     }
 
-    private ensureColsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfCols: number = 26): SetUpService {
-        if (null == requiredNumOfCols || requiredNumOfCols < 1) {
-            throw new Error("Invalid Num of col value : " + requiredNumOfCols);
-        }
-        if (sheet == null) {
-            throw new Error("Invalid Sheet");
-        }
+    private ensureColsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfCols: number = Sheets.DEFAULT_NUM_OF_COLS): SetUpService {
+        Preconditions.checkNotNull(sheet, Msg.SHEET.INVALID_SHEET);
+        Preconditions.checkPositive(requiredNumOfCols, Msg.SHEET.INVALI_COL_COUNT, requiredNumOfCols);
         let existingCol: number = sheet.getMaxColumns();
         if (existingCol == requiredNumOfCols) {
         } else if (existingCol > requiredNumOfCols) {
@@ -206,9 +207,7 @@ export class SetUpService {
     }
 
     private createOrClearSheet(sheetName: string): GoogleAppsScript.Spreadsheet.Sheet {
-        if (sheetName == null || sheetName.trim().length < 1) {
-            throw new Error("Sheet name not present");
-        }
+        Preconditions.checkNotBlank(sheetName, Msg.SHEET.INVALID_SHEET_NAME);
         let sheet = this.spreadsheet.getSheetByName(sheetName);
         if (sheet == null) {
             sheet = this.spreadsheet.insertSheet(sheetName);

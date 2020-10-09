@@ -142,30 +142,6 @@ export class NameListSheetSchema implements ISchema {
         return NameListSheetSchema.SHEET_NAME;
     }
 
-    public getHeadderValues(): Array<string> {
-        return [
-            NameListSheetSchema.COL_SELECT,
-            NameListSheetSchema.COL_SL_NO,
-            NameListSheetSchema.COL_NAME,
-            NameListSheetSchema.COL_ADD_LOG,
-            NameListSheetSchema.COL_UPDATED,
-            NameListSheetSchema.COL_LIST,
-            NameListSheetSchema.COL_LOCATION,
-            NameListSheetSchema.COL_ZONE,
-            NameListSheetSchema.COL_CONNECT_UP,
-            NameListSheetSchema.COL_INFO,
-            NameListSheetSchema.COL_EDIFY,
-            NameListSheetSchema.COL_INVITE,
-            NameListSheetSchema.COL_PLAN,
-            NameListSheetSchema.COL_PLAN_DATE,
-            NameListSheetSchema.COL_CLOSING,
-            NameListSheetSchema.COL_CAST,
-            NameListSheetSchema.COL_UPDATED_ON,
-            NameListSheetSchema.COL_LINK,
-            NameListSheetSchema.COL_TASK
-        ];
-    }
-
     public getMinColWidth(index: number): number {
         switch (index) {
             case this.selectColIndex: return Sheets.NAMELIST.MIN_WIDTH.SELECT;

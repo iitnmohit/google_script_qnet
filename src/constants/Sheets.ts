@@ -1,11 +1,17 @@
 import { ICitySheet, ILovSheet, INameListSheet, ISheet } from "../interface/ISheet";
 
 export class Sheets {
-    // common
+    // public 
+    public static readonly VALUE_DISPLAY_AFTER_LOG_ADDED: string = "Updated!";
+
+    // common public
+    public static readonly MIN_ROW_HEIGHT: number = 5;
+    public static readonly DEFAULT_NUM_OF_ROWS: number = 1000;
+    public static readonly DEFAULT_NUM_OF_COLS: number = 26;
+
+    // common private
     private static readonly DEFAULT_FREEZE_ROW: number = 1;
     private static readonly DEFAULT_FREEZE_COL: number = 0;
-
-    public static readonly MIN_ROW_HEIGHT: number = 5;
 
     // City Sheet
     public static readonly CITY = {

@@ -28,12 +28,12 @@ export class FormulaService {
     }
 
     private applyFormulaToCitySheets(): FormulaService {
-        let sheet = this.citySchema.getCurrentSheet();
-        let countColRange = sheet.getRange(2, this.citySchema.countColIndex, sheet.getMaxRows() - 1, 1);
+        let citySheet = this.citySchema.getCurrentSheet();
+        let countColRange = citySheet.getRange(2, this.citySchema.countColIndex, citySheet.getMaxRows() - 1, 1);
         let formula = FormulaBuilder.newBuilder()
             .COUNTIF(
                 Util.getColumnA1Notation(this.nameSchema.locationColIndex, 1, this.nameSchema.getSheetName())
-                , Util.getRangeA1Notation(this.citySchema.getCurrentSheet().getRange(2, this.citySchema.locationColIndex)))
+                , Util.getRangeA1Notation(citySheet.getRange(2, this.citySchema.locationColIndex)))
             .showIfNonZero()
             .build();
         countColRange.setFormula(formula);

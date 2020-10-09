@@ -102,20 +102,6 @@ export class LovSheetSchema implements ISchema {
         return LovSheetSchema.SHEET_NAME;
     }
 
-    public getHeadderValues(): Array<string> {
-        return [
-            LovSheetSchema.COL_LIST,
-            LovSheetSchema.COL_CONNECT_UP,
-            LovSheetSchema.COL_INFO,
-            LovSheetSchema.COL_EDIFY,
-            LovSheetSchema.COL_INVITE,
-            LovSheetSchema.COL_PLAN,
-            LovSheetSchema.COL_CLOSING,
-            LovSheetSchema.COL_ZONE,
-            LovSheetSchema.COL_CAST
-        ];
-    }
-
     public getMinColWidth(index: number): number {
         switch (index) {
             case this.listColIndex: return Sheets.LOV.MIN_WIDTH.LIST;

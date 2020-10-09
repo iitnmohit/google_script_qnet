@@ -74,13 +74,6 @@ export class CitySheetSchema implements ISchema {
         return CitySheetSchema.SHEET_NAME;
     }
 
-    public getHeadderValues(): Array<string> {
-        return [
-            CitySheetSchema.COL_LOCATION,
-            CitySheetSchema.COL_COUNT
-        ];
-    }
-
     public getMinColWidth(index: number): number {
         switch (index) {
             case this.locationColIndex: return Sheets.CITY.MIN_WIDTH.LOCATION;

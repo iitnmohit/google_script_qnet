@@ -56,12 +56,6 @@ export class OverViewSheetSchema implements ISchema {
         return OverViewSheetSchema.SHEET_NAME;
     }
 
-    public getHeadderValues(): Array<string> {
-        return [
-
-        ];
-    }
-
     public getMinColWidth(index: number): number {
         return null;
     }

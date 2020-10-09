@@ -14,8 +14,6 @@ export interface ISchema {
 
     getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
 
-    getHeadderValues(): Array<string>;
-
     getMinColWidth(index: number): number;
 
     getMaxColWidth(index: number): number | null;
