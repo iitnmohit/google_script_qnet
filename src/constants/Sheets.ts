@@ -95,8 +95,8 @@ export class Sheets {
             COLUMNS: 19
         },
         FREEZE: {
-            ROW: 3,
-            COLUMN: Sheets.DEFAULT_FREEZE_COL
+            ROW: Sheets.DEFAULT_FREEZE_ROW,
+            COLUMN: 3
         },
         COLUMN: {
             SELECT: "X",
