@@ -1,8 +1,9 @@
+import { FormulaService } from "./service/FormulaService";
 import { SetUpService } from "./service/SetUpService";
-import { ValidationService } from "./service/ValidationService";
 import { ThemeService } from "./service/ThemeService";
 import { UiService } from "./service/UiService";
-import { FormulaService } from "./service/FormulaService";
+import { ValidationService } from "./service/ValidationService";
+import { ThemeUtil } from "./util/ThemeUtil";
 
 function setUpSheet(): void {
     if (!UiService.doesUserReConfirmedAction(
@@ -19,6 +20,6 @@ function setUpSheet(): void {
     let validationService = new ValidationService(spreadsheet);
     validationService.applyValidationToAllSheets();
 
-    let themeService = new ThemeService(spreadsheet);
-    themeService.applyBasicTheme();
+    let themeService = new ThemeService(spreadsheet, ThemeUtil.getCurrentTheme());
+    themeService.setTheme();
 }

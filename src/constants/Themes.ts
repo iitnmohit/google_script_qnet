@@ -3,9 +3,12 @@ import { ITheme } from "../interface/ITheme";
 export class Themes {
     public static readonly DEFAULT = {
         fontFamily: "VERDANA",
-        defaultBandingTheme: SpreadsheetApp.BandingTheme.GREEN,
+        fontVerticalAlignment: "middle",
+        bandingTheme: SpreadsheetApp.BandingTheme.GREEN,
         textColor: "#2a5e90",
         headderFontSize: 10,
+        headderFontWeight: "bold",
+        headderFontAlignment: "center",
         borderColor: "#000000",
         rowHeight: 25,
         colWidthOffset: 14,
