@@ -2,6 +2,9 @@ import { TaskBuilder } from "../builder/TaskBuilder";
 import { TaskListBuilder } from "../builder/TaskListBuilder";
 import { Msg } from "../constants/Message";
 import { Task } from "../constants/Task";
+import { ServerException } from "../library/Exceptions";
+import { Preconditions } from "../library/Preconditions";
+import { Predicates } from "../library/Predicates";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
 
@@ -9,24 +12,21 @@ export class TaskService {
     private readonly nameListSchema: NameListSheetSchema;
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
-
     public constructor () {
-        let schema = NameListSheetSchema.getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
-        if (schema instanceof NameListSheetSchema) {
-            this.nameListSchema = schema;
-        }
+        this.nameListSchema = NameListSheetSchema
+            .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
     }
 
     public updateSelectedLog(count: number = Task.MAX_TASK_UPDATE): void {
-        if (count < 0 || count > Task.MAX_TASK_UPDATE) {
-            throw new Error(Msg.TASK.UPDATE.COUNT);
-        }
+        Preconditions.checkPositive(count, Msg.TASK.UPDATE.COUNT);
+        Preconditions.checkArgument(count <= Task.MAX_TASK_UPDATE, Msg.TASK.UPDATE.COUNT);
+
         let numOfTaskUpdated = 0;
         let taskColValues = this.nameListSchema.getCurrentSheet()
             .getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
             .getValues();
         for (let i = 0; i < taskColValues.length; i++) {
-            if (taskColValues[i][0] === false) {
+            if (Predicates.IS_FLASE.test(taskColValues[i][0])) {
                 continue;
             }
 
@@ -40,15 +40,15 @@ export class TaskService {
             // get task
             let taskId = checkBoxCell.getNote().trim();
             let _task = this.getTaskById(taskId);
-            if (_task == null) {
+            if (Predicates.IS_NULL.test(_task)) {
                 continue;
             }
 
             //update task
             let todayDate: string = "today";
-            if (_task.completed != null) {
+            if (Predicates.IS_NOT_NULL.test(_task.completed)) {
                 todayDate = _task.completed;
-            } else if (_task.updated != null) {
+            } else if (Predicates.IS_NOT_NULL.test(_task.updated)) {
                 todayDate = _task.updated;
             }
             let callLog = Util.formatUpdateLog(_task.notes, todayDate);
@@ -71,13 +71,12 @@ export class TaskService {
     }
 
     public deleteAllTasks(): void {
-        if (null != this.getTaskList(false)) {
+        if (Predicates.IS_NOT_NULL.test(this.getTaskList(false))) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
                 this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).clearNote();
             } catch (error) {
-                Logger.log(error);
-                throw new Error(Msg.TASK.DELETE.SERVER_ERROR);
+                throw new ServerException(Msg.TASK.DELETE.SERVER_ERROR);
             }
         }
     }
@@ -87,9 +86,8 @@ export class TaskService {
     }
 
     public addAllTask(count: number = Task.MAX_TASK_CREATE): void {
-        if (count < 0 || count > Task.MAX_TASK_CREATE) {
-            throw new Error(Msg.TASK.CREATE.COUNT);
-        }
+        Preconditions.checkPositive(count, Msg.TASK.CREATE.COUNT);
+        Preconditions.checkArgument(count <= Task.MAX_TASK_CREATE, Msg.TASK.CREATE.COUNT);
 
         let numOfTaskAdded: number = 0;
         let taskColValues = this.nameListSchema.getCurrentSheet()
@@ -97,7 +95,7 @@ export class TaskService {
             .getValues();
 
         for (let i = 0; i < taskColValues.length; i++) {
-            if (taskColValues[i][0] === false) {
+            if (Predicates.IS_FLASE.test(taskColValues[i][0])) {
                 continue;
             }
             let row = i + 2;
@@ -124,52 +122,34 @@ export class TaskService {
     }
 
     private deleteTaskById(taskId: string): void {
-        if (null == taskId || taskId.length < 1) {
+        if (Predicates.IS_BLANK.test(taskId)) {
             return;
         }
         try {
             Tasks.Tasks.remove(this.getTaskList().id, taskId);
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                Logger.log("Error");
-            }
-            if (error instanceof Error) {
-                Logger.log("Error" + error.message + error.stack);
-            }
-            throw new Error(Msg.TASK.DELETE.SERVER_ERROR);
+        } catch (error) {
+            throw new ServerException(error);
         }
     }
 
     private getTaskById(taskId: string): GoogleAppsScript.Tasks.Schema.Task {
-        if (null == taskId || taskId.length < 1) {
+        if (Predicates.IS_BLANK.test(taskId)) {
             return null;
         }
-
         try {
             return Tasks.Tasks.get(this.getTaskList().id, taskId);
         } catch (error: unknown) {
-            if (typeof error === "string") {
-                Logger.log(error);
-            }
-            if (error instanceof Error) {
-                Logger.log("Error" + error.message + error.stack);
-            }
         }
-
         return null;
     }
 
     private addNewTask(row: number): GoogleAppsScript.Tasks.Schema.Task {
         // break if no name
         let nameCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.nameColIndex);
-        if (nameCell.isBlank()) {
-            throw new Error(`No name present at row ${row}`);
-        }
+        Preconditions.checkFalse(nameCell.isBlank(), Msg.SHEET.NAME_NOT_PRESENT, row);
 
         let nameCellValue = nameCell.getValue();
-        if (typeof nameCellValue !== "string") {
-            throw new Error(Msg.SHEET.MSG_INVALID_NAME_CELL_FORMAT);
-        }
+        Preconditions.checkTypeOfString(nameCell.getValue(), Msg.SHEET.MSG_INVALID_NAME_CELL_FORMAT);
 
         let taskTitle: string = nameCellValue.trim()
             + " ("
@@ -182,13 +162,13 @@ export class TaskService {
         try {
             return Tasks.Tasks.insert(newTask, this.getTaskList().id);
         } catch (error) {
-            Logger.log(error);
-            throw new Error(Msg.TASK.CREATE.SERVER_ERROR);
+            throw new ServerException(Msg.TASK.CREATE.SERVER_ERROR);
         }
     }
 
     private getTaskList(create: boolean = true): GoogleAppsScript.Tasks.Schema.TaskList {
-        if (this.myTaskList != null) {
+        Preconditions.checkNotNull(create);
+        if (Predicates.IS_NOT_NULL.test(this.myTaskList)) {
             return this.myTaskList;
         }
 
@@ -203,8 +183,7 @@ export class TaskService {
                 }
             }
         } catch (error) {
-            Logger.log(error);
-            throw new Error(Msg.TASK.READ.SERVER_ERROR);
+            throw new ServerException(Msg.TASK.READ.SERVER_ERROR);
         }
 
         if (this.myTaskList == null && create) {
@@ -214,8 +193,7 @@ export class TaskService {
             try {
                 this.myTaskList = Tasks.Tasklists.insert(newTaskList);
             } catch (error) {
-                Logger.log(error);
-                throw new Error(Msg.TASK.LIST.CREATE.SERVER_ERROR);
+                throw new ServerException(Msg.TASK.LIST.CREATE.SERVER_ERROR);
             }
         }
         return this.myTaskList;

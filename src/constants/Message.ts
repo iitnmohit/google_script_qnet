@@ -20,7 +20,6 @@ export class Msg {
                 SERVER_ERROR: "Server error while creating task list, Try after sometime."
             }
         }
-
     };
 
     public static readonly UI = {
@@ -36,6 +35,7 @@ export class Msg {
         INVALI_ROW_COUNT: "Invalid Num of row value : %s",
         INVALI_COL_COUNT: "Invalid Num of col value : %s",
         INVALID_SHEET_NAME: "Sheet name is not valid!",
+        NAME_NOT_PRESENT: "No name present at row %s",
     };
 }
 

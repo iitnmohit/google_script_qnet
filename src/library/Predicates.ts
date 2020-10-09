@@ -39,5 +39,13 @@ export class Predicates {
         return Predicates.IS_LIST_EMPTY.negate().test(arr);
     });
 
+    public static IS_TRUE: Predicate<any> = Predicate.of((object: any) => {
+        return object === true;
+    });
+
+    public static IS_FLASE: Predicate<any> = Predicate.of((object: any) => {
+        return object === false;
+    });
+
 }
 

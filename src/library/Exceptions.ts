@@ -13,3 +13,6 @@ export class ServerException extends Error {
 export class InvalidConfigurationException extends Error {
 
 }
+export class IllegalOperationException extends Error {
+
+}
