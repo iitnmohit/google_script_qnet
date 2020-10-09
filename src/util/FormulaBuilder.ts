@@ -23,5 +23,4 @@ export class FormulaBuilder {
     public build(): string {
         return "=" + this.formulaString;
     }
-
 }

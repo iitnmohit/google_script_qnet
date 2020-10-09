@@ -1,7 +1,7 @@
 export class UiService {
     private static readonly confirmMessage: string = "Confirm to proceed";
 
-    public addBusinessMenu(spreadSheet?: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
+    public addBusinessMenu(): void {
         SpreadsheetApp.getUi()
             .createMenu('QNET')
             .addSubMenu(this.getCreateMenu())

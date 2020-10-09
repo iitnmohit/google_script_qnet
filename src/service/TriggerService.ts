@@ -4,7 +4,7 @@ import { UiService } from './UiService';
 
 export class TriggerService {
     public onOpen(event: GoogleAppsScript.Events.SheetsOnOpen): void {
-        new UiService().addBusinessMenu(event.source);
+        new UiService().addBusinessMenu();
     }
 
     public onEdit(event: GoogleAppsScript.Events.SheetsOnEdit): void {
