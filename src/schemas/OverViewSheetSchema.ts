@@ -4,6 +4,7 @@ import { ISchema } from "../interface/ISchema";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { ThemeUtil } from "../util/ThemeUtil";
+import { ISheet } from "../interface/ISheet";
 
 export class OverViewSheetSchema implements ISchema {
     // static variable
@@ -13,8 +14,9 @@ export class OverViewSheetSchema implements ISchema {
     // public local variable
 
     // public abstract variable
-    public NUM_OF_ROWS: number = Sheets.OVERVIEW.NUM_OF.ROWS;
-    public NUM_OF_COLUMNS: number = Sheets.OVERVIEW.NUM_OF.COLUMNS;
+    public ISHEET: ISheet = Sheets.OVERVIEW;
+    public NUM_OF_ROWS: number = 1;
+    public NUM_OF_COLUMNS: number = 1;
 
     public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderFontColor;
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderColor;
@@ -31,6 +33,8 @@ export class OverViewSheetSchema implements ISchema {
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         this.currentSheet = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET_NAME);
+        this.NUM_OF_ROWS = sheet.getMaxRows();
+        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
     }
 
     // static method

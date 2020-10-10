@@ -1,9 +1,12 @@
+const MAIN_MENU_NAME = "QNET";
+
+
 export class UiService {
     private static readonly confirmMessage: string = "Confirm to proceed";
 
     public addBusinessMenu(): void {
         SpreadsheetApp.getUi()
-            .createMenu('QNET')
+            .createMenu(MAIN_MENU_NAME)
             .addSubMenu(this.getCreateMenu())
             .addSubMenu(this.getUpdateMenu())
             .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')

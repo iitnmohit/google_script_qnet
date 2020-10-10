@@ -61,7 +61,21 @@ export class ThemeService {
         return this.setCommonTheme(this.lovSchema);
     }
     private setNameListSheetsTheme(): ThemeService {
-        return this.setCommonTheme(this.nameSchema);
+        this.setCommonTheme(this.nameSchema);
+        // conditional formatting
+        let sheet = this.nameSchema.getCurrentSheet();
+        let range = sheet.getRange(2, 1, this.nameSchema.NUM_OF_ROWS - 1, this.nameSchema.NUM_OF_COLUMNS);
+        let rule = SpreadsheetApp.newConditionalFormatRule()
+            .whenFormulaSatisfied("=$A2=true")
+            .setBackground(this.currentTheme.nameSheetSelectBgColor)
+            .setFontColor(this.currentTheme.nameSheetSelectFontColor)
+            .setRanges([range])
+            .build();
+        let rules = sheet.getConditionalFormatRules();
+        rules.push(rule);
+        sheet.setConditionalFormatRules(rules);
+
+        return this;
     }
     private setOverViewSheetsTheme(): ThemeService {
         return this.setCommonTheme(this.overviewSchema);

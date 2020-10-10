@@ -1,4 +1,7 @@
+import { ISheet } from "./ISheet";
+
 export interface ISchema {
+    ISHEET: ISheet,
     NUM_OF_ROWS: number;
     NUM_OF_COLUMNS: number;
 

@@ -5,6 +5,7 @@ import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { ThemeUtil } from "../util/ThemeUtil";
+import { ISheet } from "../interface/ISheet";
 
 export class CitySheetSchema implements ISchema {
     // static variable
@@ -19,8 +20,9 @@ export class CitySheetSchema implements ISchema {
     public readonly countColIndex: number = -1;
 
     // public abstract variable
-    public NUM_OF_ROWS: number = Sheets.CITY.NUM_OF.ROWS;
-    public NUM_OF_COLUMNS: number = Sheets.CITY.NUM_OF.COLUMNS;
+    public ISHEET: ISheet = Sheets.CITY;
+    public NUM_OF_ROWS: number = 1;
+    public NUM_OF_COLUMNS: number = 1;
 
     public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderFontColor;
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderColor;
@@ -49,6 +51,8 @@ export class CitySheetSchema implements ISchema {
                     break;
             }
         }
+        this.NUM_OF_ROWS = sheet.getMaxRows();
+        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
     }
 
     // static method

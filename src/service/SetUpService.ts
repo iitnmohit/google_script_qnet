@@ -214,7 +214,19 @@ export class SetUpService {
             sheet = this.spreadsheet.insertSheet(sheetName);
         } else {
             sheet.clear();
-            sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).removeCheckboxes();
+            sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).removeCheckboxes()
+                .clear({
+                    commentsOnly: true,
+                    contentsOnly: true,
+                    formatOnly: true,
+                    validationsOnly: true,
+                    skipFilteredRows: false
+                })
+                .clearDataValidations()
+                .clearNote()
+                .clear();
+            sheet.clearConditionalFormatRules();
+            sheet.clearNotes();
         }
         return sheet;
     }
