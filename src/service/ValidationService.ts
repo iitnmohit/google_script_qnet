@@ -63,7 +63,7 @@ export class ValidationService {
         targetColIndex: number
     ): ValidationService {
         let nameListSheet = this.nameSchema.getCurrentSheet();
-        let cellRange = nameListSheet.getRange(2, targetColIndex, nameListSheet.getMaxRows() - 1, 1);
+        let cellRange = nameListSheet.getRange(2, targetColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
         let dataValidation = SpreadsheetApp.newDataValidation()
             .requireValueInRange(lovSheet.getRange(2, lovColIndex, lovSheet.getMaxRows() - 1, 1), true)
             .setAllowInvalid(false)

@@ -74,7 +74,7 @@ export class TaskService {
         if (Predicates.IS_NOT_NULL.test(this.getTaskList(false))) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
-                this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).clearNote();
+                this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
             } catch (error) {
                 throw new ServerException(Msg.TASK.DELETE.SERVER_ERROR);
             }
@@ -82,7 +82,7 @@ export class TaskService {
     }
 
     public clearAllCheckbox(): void {
-        this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getMaxRows() - 1, 1).uncheck();
+        this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
     public addAllTask(count: number = Task.MAX_TASK_CREATE): void {

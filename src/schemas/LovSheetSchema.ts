@@ -80,7 +80,7 @@ export class LovSheetSchema implements ISchema {
             }
         }
         this.NUM_OF_ROWS = sheet.getMaxRows();
-        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+        this.NUM_OF_COLUMNS = columnLength;
     }
 
     // static method

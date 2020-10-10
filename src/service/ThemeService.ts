@@ -1,3 +1,4 @@
+import { Lov } from "../constants/Lov";
 import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { ITheme } from "../interface/ITheme";
@@ -6,6 +7,7 @@ import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { OverViewSheetSchema } from "../schemas/OverViewSheetSchema";
+import { Util } from "../util/Util";
 
 const WITH_HEADDER: true = true;
 const WITHOUT_HEADDER: false = false;
@@ -22,7 +24,7 @@ export class ThemeService {
     private readonly spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
     private readonly citySchema: ISchema;
     private readonly lovSchema: ISchema;
-    private readonly nameSchema: ISchema;
+    private readonly nameSchema: NameListSheetSchema;
     private readonly overviewSchema: ISchema;
     private currentTheme: ITheme;
 
@@ -64,17 +66,44 @@ export class ThemeService {
         this.setCommonTheme(this.nameSchema);
         // conditional formatting
         let sheet = this.nameSchema.getCurrentSheet();
-        let range = sheet.getRange(2, 1, this.nameSchema.NUM_OF_ROWS - 1, this.nameSchema.NUM_OF_COLUMNS);
-        let rule = SpreadsheetApp.newConditionalFormatRule()
-            .whenFormulaSatisfied("=$A2=true")
+        let rangeAll = sheet.getRange(2, 1, this.nameSchema.NUM_OF_ROWS - 1, this.nameSchema.NUM_OF_COLUMNS);
+        let rangeNames = sheet.getRange(2, this.nameSchema.nameColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
+
+        let rules = sheet.getConditionalFormatRules();
+
+
+        let _list_col_char = Util.getColumnLetter(this.nameSchema.listColIndex);
+        let _select_col_char = Util.getColumnLetter(this.nameSchema.selectColIndex);
+        // or conditions for list strike through
+        let orConditionsForStrikeThrough = new Array<string>();
+        for (let item of Lov._LIST_STRIKE_THROUGH) {
+            orConditionsForStrikeThrough.push(`EQ($${_list_col_char}2,"${item}")`);
+        }
+        let formulaForStrikeThrough = `OR(${orConditionsForStrikeThrough.join(",")})`;
+        let formulaForSelect = `$${_select_col_char}2=true`;
+
+        rules.push(SpreadsheetApp.newConditionalFormatRule()
+            .whenFormulaSatisfied(`=AND(${formulaForSelect},${formulaForStrikeThrough})`)
             .setBackground(this.currentTheme.nameSheetSelectBgColor)
             .setFontColor(this.currentTheme.nameSheetSelectFontColor)
-            .setRanges([range])
-            .build();
-        let rules = sheet.getConditionalFormatRules();
-        rules.push(rule);
-        sheet.setConditionalFormatRules(rules);
+            .setStrikethrough(true)
+            .setRanges([rangeNames])
+            .build());
 
+        rules.push(SpreadsheetApp.newConditionalFormatRule()
+            .whenFormulaSatisfied(`=${formulaForSelect}`)
+            .setBackground(this.currentTheme.nameSheetSelectBgColor)
+            .setFontColor(this.currentTheme.nameSheetSelectFontColor)
+            .setRanges([rangeAll])
+            .build());
+
+        rules.push(SpreadsheetApp.newConditionalFormatRule()
+            .whenFormulaSatisfied(`=${formulaForStrikeThrough}`)
+            .setStrikethrough(true)
+            .setRanges([rangeNames])
+            .build());
+
+        sheet.setConditionalFormatRules(rules);
         return this;
     }
     private setOverViewSheetsTheme(): ThemeService {
@@ -83,7 +112,7 @@ export class ThemeService {
 
     private setCommonTheme(schema: ISchema): ThemeService {
         let sheet = schema.getCurrentSheet();
-        this.setRowsHeight(sheet, this.currentTheme.rowHeight)
+        this.setRowsHeight(schema, this.currentTheme.rowHeight)
             .setTabColor(schema.HEADDER_ROW_COLOR)
 
             // apply sheet border and banding color
@@ -112,11 +141,12 @@ export class ThemeService {
         return this;
     }
 
-    private setRowsHeight(sheet: GoogleAppsScript.Spreadsheet.Sheet, height: number): GoogleAppsScript.Spreadsheet.Sheet {
+    private setRowsHeight(schema: ISchema, height: number): GoogleAppsScript.Spreadsheet.Sheet {
         Preconditions.checkNotNull(height);
         Preconditions.checkArgument(height >= Sheets.MIN_ROW_HEIGHT);
+        let sheet = schema.getCurrentSheet();
         try {
-            return sheet.setRowHeights(1, sheet.getMaxRows(), height);
+            return sheet.setRowHeights(1, schema.NUM_OF_ROWS, height);
         } catch (error) {
         }
         return sheet;

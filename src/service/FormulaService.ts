@@ -29,7 +29,7 @@ export class FormulaService {
 
     private applyFormulaToCitySheets(): FormulaService {
         let citySheet = this.citySchema.getCurrentSheet();
-        let countColRange = citySheet.getRange(2, this.citySchema.countColIndex, citySheet.getMaxRows() - 1, 1);
+        let countColRange = citySheet.getRange(2, this.citySchema.countColIndex, this.citySchema.NUM_OF_ROWS - 1, 1);
         let formula = FormulaBuilder.newBuilder()
             .COUNTIF(
                 Util.getColumnA1Notation(this.nameSchema.locationColIndex, 1, this.nameSchema.getSheetName())

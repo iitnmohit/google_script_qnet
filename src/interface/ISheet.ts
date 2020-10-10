@@ -70,8 +70,6 @@ export interface INameListSheet extends ISheet {
         SELECT: string,
         SL_NO: string,
         NAME: string,
-        ADD_LOG: string,
-        UPDATED: string,
         LIST: string,
         LOCATION: string,
         ZONE: string,
@@ -85,14 +83,14 @@ export interface INameListSheet extends ISheet {
         CAST: string,
         UPDATED_ON: string,
         LINK: string,
-        TASK: string;
+        ADD_LOG: string,
+        UPDATED: string,
+        TASK: string,
     },
     MIN_WIDTH: {
         SELECT: number,
         SL_NO: number,
         NAME: number,
-        ADD_LOG: number,
-        UPDATED: number,
         LIST: number,
         LOCATION: number,
         ZONE: number,
@@ -106,14 +104,14 @@ export interface INameListSheet extends ISheet {
         CAST: number,
         UPDATED_ON: number,
         LINK: number,
+        ADD_LOG: number,
+        UPDATED: number,
         TASK: number;
     },
     MAX_WIDTH: {
         SELECT: number,
         SL_NO: number,
         NAME: number,
-        ADD_LOG: number,
-        UPDATED: number,
         LIST: number,
         LOCATION: number,
         ZONE: number,
@@ -127,6 +125,8 @@ export interface INameListSheet extends ISheet {
         CAST: number,
         UPDATED_ON: number,
         LINK: number,
+        ADD_LOG: number,
+        UPDATED: number,
         TASK: number;
     };
 }

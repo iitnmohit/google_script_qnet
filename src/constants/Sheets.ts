@@ -102,8 +102,6 @@ export class Sheets {
             SELECT: "X",
             SL_NO: "Sl No",
             NAME: "NAME",
-            ADD_LOG: "ADD LOG",
-            UPDATED: "UPDATED",
             LIST: "LIST",
             LOCATION: "LOCATION",
             ZONE: "ZONE",
@@ -117,14 +115,14 @@ export class Sheets {
             CAST: "CAST",
             UPDATED_ON: "UPDATED ON",
             LINK: "LINK",
+            ADD_LOG: "ADD LOG",
+            UPDATED: "UPDATED",
             TASK: "TASK"
         },
         MIN_WIDTH: {
             SELECT: null,
             SL_NO: null,
             NAME: 275,
-            ADD_LOG: null,
-            UPDATED: null,
             LIST: 170,
             LOCATION: 155,
             ZONE: 100,
@@ -138,14 +136,14 @@ export class Sheets {
             CAST: 85,
             UPDATED_ON: null,
             LINK: 70,
+            ADD_LOG: null,
+            UPDATED: null,
             TASK: null
         },
         MAX_WIDTH: {
             SELECT: 30,
             SL_NO: null,
             NAME: null,
-            ADD_LOG: null,
-            UPDATED: 30,
             LIST: null,
             LOCATION: null,
             ZONE: null,
@@ -159,6 +157,8 @@ export class Sheets {
             CAST: null,
             UPDATED_ON: null,
             LINK: null,
+            ADD_LOG: null,
+            UPDATED: 30,
             TASK: null
         }
     } as INameListSheet;

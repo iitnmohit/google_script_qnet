@@ -1,4 +1,12 @@
 export class Lov {
+    public static readonly _LIST_STRIKE_THROUGH: Array<string> = [
+        "CLOSED",
+        "NOT PICKING CALL",
+        "NO REPLY",
+        "BLOCKED",
+        "NEXT",
+        "ALREADY SIGNED UP"
+    ];
     public static readonly LIST: Array<string> = [
         "CLOSED",
         "WORKING NOW",
@@ -18,7 +26,7 @@ export class Lov {
         "FAMILY",
         "RELATIVE",
         "SCHOOL",
-        "COLLAGE",
+        "COLLEGE",
         "OFFICE",
         "NEIGHBOUR",
         "DOCTOR",
@@ -111,6 +119,6 @@ export class Lov {
         "HINDU",
         "MUSLIM",
         "PUNJABI",
-        "CHRISTAN"
+        "CHRISTIAN"
     ];
 }

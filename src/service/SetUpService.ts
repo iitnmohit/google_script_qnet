@@ -61,10 +61,10 @@ export class SetUpService {
     private createNameListSheets(): SetUpService {
         var nameListSheet = this.startSetUpOfSheet(Sheets.NAMELIST);
         let schema = NameListSheetSchema.getValidSchema(nameListSheet);
-        return this.fillNumbers(schema.slNoColIndex, nameListSheet)
-            .fillCheckBox(schema.taskColIndex, nameListSheet)
-            .fillCheckBox(schema.selectColIndex, nameListSheet)
-            .fillCheckBox(schema.updateColIndex, nameListSheet)
+        return this.fillNumbers(schema.slNoColIndex, schema)
+            .fillCheckBox(schema.taskColIndex, schema)
+            .fillCheckBox(schema.selectColIndex, schema)
+            .fillCheckBox(schema.updateColIndex, schema)
             .endSetUpOfSheet(schema);
     }
 
@@ -90,11 +90,12 @@ export class SetUpService {
             .endSetUpOfSheet(schema);
     }
 
-    private fillNumbers(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): SetUpService {
+    private fillNumbers(colIndex: number, schema: ISchema): SetUpService {
         try {
+            let sheet = schema.getCurrentSheet();
             let sourceRange = sheet.getRange(2, colIndex, 2, 1);
             sourceRange.setValues([[1], [2]]);
-            let destRange = sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1);
+            let destRange = sheet.getRange(2, colIndex, schema.NUM_OF_ROWS - 1, 1);
             sourceRange.autoFill(destRange, SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
             destRange.setHorizontalAlignment("left");
         } catch (error) {
@@ -103,9 +104,11 @@ export class SetUpService {
         return this;
     }
 
-    private fillCheckBox(colIndex: number, sheet: GoogleAppsScript.Spreadsheet.Sheet): SetUpService {
+    private fillCheckBox(colIndex: number, schema: ISchema): SetUpService {
         try {
-            sheet.getRange(2, colIndex, sheet.getMaxRows() - 1, 1).insertCheckboxes();
+            schema.getCurrentSheet()
+                .getRange(2, colIndex, schema.NUM_OF_COLUMNS - 1, 1)
+                .insertCheckboxes();
         } catch (error) {
             throw new ServerException(error);
         }
@@ -131,9 +134,8 @@ export class SetUpService {
         Preconditions.checkNotNull(schema);
         try {
             let sheet = schema.getCurrentSheet();
-            let numOfCols = sheet.getMaxColumns();
-            sheet.autoResizeColumns(1, numOfCols);
-            for (let i = 1; i <= numOfCols; i++) {
+            sheet.autoResizeColumns(1, schema.NUM_OF_COLUMNS);
+            for (let i = 1; i <= schema.NUM_OF_COLUMNS; i++) {
                 let colWidth = sheet.getColumnWidth(i);
                 colWidth = colWidth + ThemeUtil.getCurrentTheme().colWidthOffset;
                 let maxColWidth = schema.getMaxColWidth(i);
@@ -227,6 +229,8 @@ export class SetUpService {
                 .clear();
             sheet.clearConditionalFormatRules();
             sheet.clearNotes();
+            sheet.setFrozenRows(0);
+            sheet.setFrozenColumns(0);
         }
         return sheet;
     }

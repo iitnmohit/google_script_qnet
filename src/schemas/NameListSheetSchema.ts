@@ -15,8 +15,6 @@ export class NameListSheetSchema implements ISchema {
     public static readonly COL_SELECT: string = Sheets.NAMELIST.COLUMN.SELECT;
     public static readonly COL_SL_NO: string = Sheets.NAMELIST.COLUMN.SL_NO;
     public static readonly COL_NAME: string = Sheets.NAMELIST.COLUMN.NAME;
-    public static readonly COL_ADD_LOG: string = Sheets.NAMELIST.COLUMN.ADD_LOG;
-    public static readonly COL_UPDATED: string = Sheets.NAMELIST.COLUMN.UPDATED;
     public static readonly COL_LIST: string = Sheets.NAMELIST.COLUMN.LIST;
     public static readonly COL_LOCATION: string = Sheets.NAMELIST.COLUMN.LOCATION;
     public static readonly COL_ZONE: string = Sheets.NAMELIST.COLUMN.ZONE;
@@ -30,14 +28,14 @@ export class NameListSheetSchema implements ISchema {
     public static readonly COL_CAST: string = Sheets.NAMELIST.COLUMN.CAST;
     public static readonly COL_UPDATED_ON: string = Sheets.NAMELIST.COLUMN.UPDATED_ON;
     public static readonly COL_LINK: string = Sheets.NAMELIST.COLUMN.LINK;
+    public static readonly COL_ADD_LOG: string = Sheets.NAMELIST.COLUMN.ADD_LOG;
+    public static readonly COL_UPDATED: string = Sheets.NAMELIST.COLUMN.UPDATED;
     public static readonly COL_TASK: string = Sheets.NAMELIST.COLUMN.TASK;
 
     // public local variable
     public readonly selectColIndex: number = -1;
     public readonly slNoColIndex: number = -1;
     public readonly nameColIndex: number = -1;
-    public readonly addLogColIndex: number = -1;
-    public readonly updateColIndex: number = -1;
     public readonly listColIndex: number = -1;
     public readonly locationColIndex: number = -1;
     public readonly zoneColIndex: number = -1;
@@ -51,6 +49,8 @@ export class NameListSheetSchema implements ISchema {
     public readonly castColIndex: number = -1;
     public readonly updateOnColIndex: number = -1;
     public readonly linkColIndex: number = -1;
+    public readonly addLogColIndex: number = -1;
+    public readonly updateColIndex: number = -1;
     public readonly taskColIndex: number = -1;
 
     // public abstract variable
@@ -83,10 +83,6 @@ export class NameListSheetSchema implements ISchema {
                     break;
                 case NameListSheetSchema.COL_NAME: this.nameColIndex = i + 1;
                     break;
-                case NameListSheetSchema.COL_ADD_LOG: this.addLogColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_UPDATED: this.updateColIndex = i + 1;
-                    break;
                 case NameListSheetSchema.COL_LIST: this.listColIndex = i + 1;
                     break;
                 case NameListSheetSchema.COL_LOCATION: this.locationColIndex = i + 1;
@@ -113,6 +109,10 @@ export class NameListSheetSchema implements ISchema {
                     break;
                 case NameListSheetSchema.COL_LINK: this.linkColIndex = i + 1;
                     break;
+                case NameListSheetSchema.COL_ADD_LOG: this.addLogColIndex = i + 1;
+                    break;
+                case NameListSheetSchema.COL_UPDATED: this.updateColIndex = i + 1;
+                    break;
                 case NameListSheetSchema.COL_TASK: this.taskColIndex = i + 1;
                     break;
                 default:
@@ -120,7 +120,7 @@ export class NameListSheetSchema implements ISchema {
             }
         }
         this.NUM_OF_ROWS = sheet.getMaxRows();
-        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+        this.NUM_OF_COLUMNS = columnLength;
     }
 
     // static method
@@ -151,8 +151,6 @@ export class NameListSheetSchema implements ISchema {
             case this.selectColIndex: return Sheets.NAMELIST.MIN_WIDTH.SELECT;
             case this.slNoColIndex: return Sheets.NAMELIST.MIN_WIDTH.SL_NO;
             case this.nameColIndex: return Sheets.NAMELIST.MIN_WIDTH.NAME;
-            case this.addLogColIndex: return Sheets.NAMELIST.MIN_WIDTH.ADD_LOG;
-            case this.updateColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED;
             case this.listColIndex: return Sheets.NAMELIST.MIN_WIDTH.LIST;
             case this.locationColIndex: return Sheets.NAMELIST.MIN_WIDTH.LOCATION;
             case this.zoneColIndex: return Sheets.NAMELIST.MIN_WIDTH.ZONE;
@@ -166,6 +164,8 @@ export class NameListSheetSchema implements ISchema {
             case this.castColIndex: return Sheets.NAMELIST.MIN_WIDTH.CAST;
             case this.updateOnColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED_ON;
             case this.linkColIndex: return Sheets.NAMELIST.MIN_WIDTH.LINK;
+            case this.addLogColIndex: return Sheets.NAMELIST.MIN_WIDTH.ADD_LOG;
+            case this.updateColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED;
             case this.taskColIndex: return Sheets.NAMELIST.MIN_WIDTH.TASK;
             default: return null;
         }
@@ -176,8 +176,6 @@ export class NameListSheetSchema implements ISchema {
             case this.selectColIndex: return Sheets.NAMELIST.MAX_WIDTH.SELECT;
             case this.slNoColIndex: return Sheets.NAMELIST.MAX_WIDTH.SL_NO;
             case this.nameColIndex: return Sheets.NAMELIST.MAX_WIDTH.NAME;
-            case this.addLogColIndex: return Sheets.NAMELIST.MAX_WIDTH.ADD_LOG;
-            case this.updateColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED;
             case this.listColIndex: return Sheets.NAMELIST.MAX_WIDTH.LIST;
             case this.locationColIndex: return Sheets.NAMELIST.MAX_WIDTH.LOCATION;
             case this.zoneColIndex: return Sheets.NAMELIST.MAX_WIDTH.ZONE;
@@ -191,6 +189,8 @@ export class NameListSheetSchema implements ISchema {
             case this.castColIndex: return Sheets.NAMELIST.MAX_WIDTH.CAST;
             case this.updateOnColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED_ON;
             case this.linkColIndex: return Sheets.NAMELIST.MAX_WIDTH.LINK;
+            case this.addLogColIndex: return Sheets.NAMELIST.MAX_WIDTH.ADD_LOG;
+            case this.updateColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED;
             case this.taskColIndex: return Sheets.NAMELIST.MAX_WIDTH.TASK;
             default: return null;
         }
@@ -208,8 +208,6 @@ export class NameListSheetSchema implements ISchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.selectColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.slNoColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.nameColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.addLogColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.updateColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.listColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.locationColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.zoneColIndex)) return false;
@@ -223,6 +221,8 @@ export class NameListSheetSchema implements ISchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.castColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.updateOnColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.linkColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.addLogColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.updateColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.taskColIndex)) return false;
         this.isThisSchemaValid = true;
         return true;
