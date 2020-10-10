@@ -1,17 +1,12 @@
 import { runSafely } from './Code';
-import { TriggerService } from './service/TriggerService';
+import { UiService } from './service/UiService';
 
 function onOpen(event: GoogleAppsScript.Events.SheetsOnOpen): void {
   runSafely((): void => {
-    new TriggerService().onOpen(event);
+    new UiService().addBusinessMenu();
   });
 }
 
-function onEdit(event: GoogleAppsScript.Events.SheetsOnEdit) {
-  runSafely((): void => {
-    new TriggerService().onEdit(event);
-  });
-}
 function onInstall(event: any) {
   onOpen(event);
 }

@@ -9,7 +9,7 @@ export class UiService {
             .createMenu(MAIN_MENU_NAME)
             .addSubMenu(this.getCreateMenu())
             .addSubMenu(this.getUpdateMenu())
-            .addItem('Clear Task CheckBoxes', 'taskClearAllCheckBox')
+            .addItem('Clear Do CheckBoxes', 'taskClearAllCheckBox')
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addItem('Set Up Sheet', 'setUpSheet')
@@ -43,6 +43,9 @@ export class UiService {
         return SpreadsheetApp.getUi()
             .createMenu("Update")
             .addItem('1 Tasks', 'taskUpdateOneLog')
-            .addItem('10 Tasks', 'taskUpdateSelectedLog');
+            .addItem('10 Tasks', 'taskUpdateSelectedLog')
+            .addItem('1 Log', 'logUpdateOne')
+            .addItem('10 Logs', 'logUpdateTen')
+            .addItem('20 Logs', 'logUpdateTwenty');
     }
 }

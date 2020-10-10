@@ -65,7 +65,6 @@ export class SetUpService {
         return this.fillNumbers(schema.slNoColIndex, schema)
             .fillCheckBox(schema.doColIndex, schema)
             .fillCheckBox(schema.selectColIndex, schema)
-            .fillCheckBox(schema.updateColIndex, schema)
             .endSetUpOfSheet(schema);
     }
 

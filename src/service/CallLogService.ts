@@ -1,30 +1,32 @@
+import { Log } from "../constants/Log";
 import { Msg } from "../constants/Message";
-import { Sheets } from "../constants/Sheets";
-import { ServerException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
+import { BaseService } from "./BaseService";
 
-export class CallLogService {
-    public addLog(range: GoogleAppsScript.Spreadsheet.Range): void {
-        Preconditions.checkNotNull(range);
-        let sheet = range.getSheet();
-        let nameListSchema = NameListSheetSchema.getValidSchema(sheet);
+export class CallLogService extends BaseService {
+    private readonly nameListSchema: NameListSheetSchema;
 
-        // verify column edited
-        if (range.getColumn() !== nameListSchema.updateColIndex) {
-            return;
-        }
+    public constructor () {
+        super();
+        this.nameListSchema = NameListSheetSchema
+            .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
+    }
 
-        let rowIndex = range.getRow();
-        if (range.isChecked()) {
-            this.appendLog(nameListSchema, rowIndex);
-            sheet.getRange(rowIndex, nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
-        } else {
-            this.clearContent(sheet, rowIndex, nameListSchema.addLogColIndex);
-            this.clearContent(sheet, rowIndex, nameListSchema.updateOnColIndex);
-        }
+    public addSelectedLog(count: number = Log.MAX_LOG_UPDATE): void {
+        Preconditions.checkPositive(count, Msg.LOG.UPDATE.COUNT);
+        Preconditions.checkArgument(count <= Log.MAX_LOG_UPDATE, Msg.LOG.UPDATE.COUNT);
+
+        this.operateOnSelectedRows(count, this.nameListSchema,
+            (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
+                schema: NameListSheetSchema,
+                row: number) => {
+                this.appendLog(schema, row);
+                schema.getCurrentSheet()
+                    .getRange(row, schema.updateOnColIndex).setValue(Util.formatTodayDate());
+            });
     }
 
     private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
@@ -49,16 +51,6 @@ export class CallLogService {
         nameCell.setNote(updatedLog);
 
         //clear log cell
-        logCell.setValue(Sheets.VALUE_DISPLAY_AFTER_LOG_ADDED);
-    }
-
-    private clearContent(sheet: GoogleAppsScript.Spreadsheet.Sheet,
-        rowIndex: number,
-        colIndex: number): void {
-        try {
-            sheet.getRange(rowIndex, colIndex).clear({ contentsOnly: true });
-        } catch (error) {
-            throw new ServerException(Msg.SHEET.SERVER_ERROR);
-        }
+        logCell.clearContent();
     }
 }

@@ -95,7 +95,7 @@ export class Sheets {
         INDEX: 2,
         NUM_OF: {
             ROWS: 1000,
-            COLUMNS: 19
+            COLUMNS: 18
         },
         FREEZE: {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
@@ -119,7 +119,6 @@ export class Sheets {
             UPDATED_ON: "UPDATED ON",
             LINK: "LINK",
             ADD_LOG: "ADD LOG",
-            UPDATED: "UPDATED",
             DO: "DO"
         },
         MIN_WIDTH: {
@@ -128,19 +127,18 @@ export class Sheets {
             NAME: 275,
             LIST: 170,
             LOCATION: 155,
-            ZONE: 100,
-            CONNECT_UP: 130,
-            INFO: 70,
-            EDIFY: 130,
-            INVITE: 130,
-            PLAN: 170,
+            ZONE: 120,
+            CONNECT_UP: 145,
+            INFO: 110,
+            EDIFY: 145,
+            INVITE: 140,
+            PLAN: 175,
             PLAN_DATE: null,
             CLOSING: 200,
-            CAST: 85,
+            CAST: 105,
             UPDATED_ON: null,
             LINK: 70,
             ADD_LOG: null,
-            UPDATED: null,
             DO: null
         },
         MAX_WIDTH: {
@@ -161,8 +159,7 @@ export class Sheets {
             UPDATED_ON: null,
             LINK: null,
             ADD_LOG: null,
-            UPDATED: 30,
-            DO: null
+            DO: 30
         }
     } as INameListSheet;
 

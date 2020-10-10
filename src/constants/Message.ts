@@ -22,6 +22,12 @@ export class Msg {
         }
     };
 
+    public static readonly LOG = {
+        UPDATE: {
+            COUNT: "Num of Log must be from 0 to 50."
+        },
+    };
+
     public static readonly UI = {
         MSG_DELETE_ALERT: "Confirm to delete all task, This action cannot be undone."
     };

@@ -7,12 +7,14 @@ import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
+import { BaseService } from "./BaseService";
 
-export class TaskService {
+export class TaskService extends BaseService {
     private readonly nameListSchema: NameListSheetSchema;
     private myTaskList: GoogleAppsScript.Tasks.Schema.TaskList;
 
     public constructor () {
+        super();
         this.nameListSchema = NameListSheetSchema
             .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
     }
@@ -21,53 +23,33 @@ export class TaskService {
         Preconditions.checkPositive(count, Msg.TASK.UPDATE.COUNT);
         Preconditions.checkArgument(count <= Task.MAX_TASK_UPDATE, Msg.TASK.UPDATE.COUNT);
 
-        let numOfTaskUpdated = 0;
-        let doColValues = this.nameListSchema.getCurrentSheet()
-            .getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
-            .getValues();
-        for (let i = 0; i < doColValues.length; i++) {
-            if (Predicates.IS_FLASE.test(doColValues[i][0])) {
-                continue;
-            }
+        this.operateOnSelectedRows(count, this.nameListSchema,
+            (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
+                schema: NameListSheetSchema,
+                row: number) => {
+                let nameSheet = schema.getCurrentSheet();
+                // get task
+                let taskId = checkBoxCell.getNote().trim();
+                let _task = this.getTaskById(taskId);
+                if (Predicates.IS_NOT_NULL.test(_task)) {
+                    //update task
+                    let logDate: string = "today";
+                    if (Predicates.IS_NOT_NULL.test(_task.completed)) {
+                        logDate = _task.completed;
+                    } else if (Predicates.IS_NOT_NULL.test(_task.updated)) {
+                        logDate = _task.updated;
+                    }
+                    let callLog = Util.formatUpdateLog(_task.notes, logDate);
+                    nameSheet.getRange(row, this.nameListSchema.nameColIndex).setNote(callLog);
+                    nameSheet.getRange(row, this.nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
 
-            let row = i + 2;
-            let checkBoxCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.doColIndex);
-            //skip if not checked
-            if (!checkBoxCell.isChecked()) {
-                continue;
-            }
+                    //delete task
+                    this.deleteTaskById(_task.id);
 
-            // get task
-            let taskId = checkBoxCell.getNote().trim();
-            let _task = this.getTaskById(taskId);
-            if (Predicates.IS_NULL.test(_task)) {
-                continue;
-            }
-
-            //update task
-            let todayDate: string = "today";
-            if (Predicates.IS_NOT_NULL.test(_task.completed)) {
-                todayDate = _task.completed;
-            } else if (Predicates.IS_NOT_NULL.test(_task.updated)) {
-                todayDate = _task.updated;
-            }
-            let callLog = Util.formatUpdateLog(_task.notes, todayDate);
-            this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.nameColIndex).setNote(callLog);
-            this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
-            this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.updateColIndex).check();
-
-            //delete task
-            this.deleteTaskById(_task.id);
-
-            //at last uncheck
-            checkBoxCell.clearNote();
-            checkBoxCell.uncheck();
-
-            numOfTaskUpdated++;
-            if (count != null && count == numOfTaskUpdated) {
-                break;
-            }
-        }
+                    //at last uncheck
+                    checkBoxCell.clearNote();
+                }
+            });
     }
 
     public deleteAllTasks(): void {
@@ -89,36 +71,17 @@ export class TaskService {
         Preconditions.checkPositive(count, Msg.TASK.CREATE.COUNT);
         Preconditions.checkArgument(count <= Task.MAX_TASK_CREATE, Msg.TASK.CREATE.COUNT);
 
-        let numOfTaskAdded: number = 0;
-        let doColValues = this.nameListSchema.getCurrentSheet()
-            .getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
-            .getValues();
-
-        for (let i = 0; i < doColValues.length; i++) {
-            if (Predicates.IS_FLASE.test(doColValues[i][0])) {
-                continue;
-            }
-            let row = i + 2;
-
-            let checkBoxRange = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.doColIndex);
-            //skip if not checked
-            if (!checkBoxRange.isChecked()) {
-                continue;
-            }
-
-            //add one task
-            let taskAdded = this.addNewTask(row);
-            checkBoxRange.setNote(taskAdded.id);
-
-            numOfTaskAdded++;
-
-            //at last uncheck
-            checkBoxRange.uncheck();
-
-            if (count != null && count == numOfTaskAdded) {
-                break;
-            }
-        }
+        this.operateOnSelectedRows(count, this.nameListSchema,
+            (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
+                schema: NameListSheetSchema,
+                row: number) => {
+                let taskId = checkBoxCell.getNote().trim();
+                if (Predicates.IS_BLANK.test(taskId)) {
+                    //add one task
+                    let taskAdded = this.addNewTask(schema, row);
+                    checkBoxCell.setNote(taskAdded.id);
+                }
+            });
     }
 
     private deleteTaskById(taskId: string): void {
@@ -143,17 +106,16 @@ export class TaskService {
         return null;
     }
 
-    private addNewTask(row: number): GoogleAppsScript.Tasks.Schema.Task {
+    private addNewTask(schema: NameListSheetSchema, row: number): GoogleAppsScript.Tasks.Schema.Task {
+        let sheet = schema.getCurrentSheet();
         // break if no name
-        let nameCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.nameColIndex);
+        let nameCell = sheet.getRange(row, schema.nameColIndex);
         Preconditions.checkFalse(nameCell.isBlank(), Msg.SHEET.NAME_NOT_PRESENT, row);
 
-        let nameCellValue = nameCell.getValue();
-        Preconditions.checkTypeOfString(nameCell.getValue(), Msg.SHEET.MSG_INVALID_NAME_CELL_FORMAT);
-
+        let nameCellValue = nameCell.getDisplayValue();
         let taskTitle: string = nameCellValue.trim()
             + " ("
-            + this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.slNoColIndex).getDisplayValue()
+            + sheet.getRange(row, this.nameListSchema.slNoColIndex).getDisplayValue()
             + ")";
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)

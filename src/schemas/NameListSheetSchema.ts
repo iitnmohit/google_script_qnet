@@ -29,7 +29,6 @@ export class NameListSheetSchema implements ISchema {
     public static readonly COL_UPDATED_ON: string = Sheets.NAMELIST.COLUMN.UPDATED_ON;
     public static readonly COL_LINK: string = Sheets.NAMELIST.COLUMN.LINK;
     public static readonly COL_ADD_LOG: string = Sheets.NAMELIST.COLUMN.ADD_LOG;
-    public static readonly COL_UPDATED: string = Sheets.NAMELIST.COLUMN.UPDATED;
     public static readonly COL_DO: string = Sheets.NAMELIST.COLUMN.DO;
 
     // public local variable
@@ -50,7 +49,6 @@ export class NameListSheetSchema implements ISchema {
     public readonly updateOnColIndex: number = -1;
     public readonly linkColIndex: number = -1;
     public readonly addLogColIndex: number = -1;
-    public readonly updateColIndex: number = -1;
     public readonly doColIndex: number = -1;
 
     // public abstract variable
@@ -111,8 +109,6 @@ export class NameListSheetSchema implements ISchema {
                     break;
                 case NameListSheetSchema.COL_ADD_LOG: this.addLogColIndex = i + 1;
                     break;
-                case NameListSheetSchema.COL_UPDATED: this.updateColIndex = i + 1;
-                    break;
                 case NameListSheetSchema.COL_DO: this.doColIndex = i + 1;
                     break;
                 default:
@@ -165,7 +161,6 @@ export class NameListSheetSchema implements ISchema {
             case this.updateOnColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED_ON;
             case this.linkColIndex: return Sheets.NAMELIST.MIN_WIDTH.LINK;
             case this.addLogColIndex: return Sheets.NAMELIST.MIN_WIDTH.ADD_LOG;
-            case this.updateColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED;
             case this.doColIndex: return Sheets.NAMELIST.MIN_WIDTH.DO;
             default: return null;
         }
@@ -190,7 +185,6 @@ export class NameListSheetSchema implements ISchema {
             case this.updateOnColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED_ON;
             case this.linkColIndex: return Sheets.NAMELIST.MAX_WIDTH.LINK;
             case this.addLogColIndex: return Sheets.NAMELIST.MAX_WIDTH.ADD_LOG;
-            case this.updateColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED;
             case this.doColIndex: return Sheets.NAMELIST.MAX_WIDTH.DO;
             default: return null;
         }
@@ -222,7 +216,6 @@ export class NameListSheetSchema implements ISchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.updateOnColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.linkColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.addLogColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.updateColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.doColIndex)) return false;
         this.isThisSchemaValid = true;
         return true;
