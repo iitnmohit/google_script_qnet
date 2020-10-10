@@ -120,7 +120,7 @@ export class Sheets {
             LINK: "LINK",
             ADD_LOG: "ADD LOG",
             UPDATED: "UPDATED",
-            TASK: "TASK"
+            DO: "DO"
         },
         MIN_WIDTH: {
             SELECT: null,
@@ -141,7 +141,7 @@ export class Sheets {
             LINK: 70,
             ADD_LOG: null,
             UPDATED: null,
-            TASK: null
+            DO: null
         },
         MAX_WIDTH: {
             SELECT: 30,
@@ -162,7 +162,7 @@ export class Sheets {
             LINK: null,
             ADD_LOG: null,
             UPDATED: 30,
-            TASK: null
+            DO: null
         }
     } as INameListSheet;
 

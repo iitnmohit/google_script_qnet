@@ -63,7 +63,7 @@ export class SetUpService {
         var nameListSheet = this.startSetUpOfSheet(Sheets.NAMELIST);
         let schema = NameListSheetSchema.getValidSchema(nameListSheet);
         return this.fillNumbers(schema.slNoColIndex, schema)
-            .fillCheckBox(schema.taskColIndex, schema)
+            .fillCheckBox(schema.doColIndex, schema)
             .fillCheckBox(schema.selectColIndex, schema)
             .fillCheckBox(schema.updateColIndex, schema)
             .endSetUpOfSheet(schema);

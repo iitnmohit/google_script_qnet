@@ -1,12 +1,4 @@
 export class Lov {
-    public static readonly _LIST_STRIKE_THROUGH: Array<string> = [
-        "CLOSED",
-        "NOT PICKING CALL",
-        "NO REPLY",
-        "BLOCKED",
-        "NEXT",
-        "ALREADY SIGNED UP"
-    ];
     public static readonly LIST: Array<string> = [
         "CLOSED",
         "WORKING NOW",

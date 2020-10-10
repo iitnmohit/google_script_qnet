@@ -30,7 +30,7 @@ export class NameListSheetSchema implements ISchema {
     public static readonly COL_LINK: string = Sheets.NAMELIST.COLUMN.LINK;
     public static readonly COL_ADD_LOG: string = Sheets.NAMELIST.COLUMN.ADD_LOG;
     public static readonly COL_UPDATED: string = Sheets.NAMELIST.COLUMN.UPDATED;
-    public static readonly COL_TASK: string = Sheets.NAMELIST.COLUMN.TASK;
+    public static readonly COL_DO: string = Sheets.NAMELIST.COLUMN.DO;
 
     // public local variable
     public readonly selectColIndex: number = -1;
@@ -51,7 +51,7 @@ export class NameListSheetSchema implements ISchema {
     public readonly linkColIndex: number = -1;
     public readonly addLogColIndex: number = -1;
     public readonly updateColIndex: number = -1;
-    public readonly taskColIndex: number = -1;
+    public readonly doColIndex: number = -1;
 
     // public abstract variable
     public ISHEET: ISheet = Sheets.NAMELIST;
@@ -113,7 +113,7 @@ export class NameListSheetSchema implements ISchema {
                     break;
                 case NameListSheetSchema.COL_UPDATED: this.updateColIndex = i + 1;
                     break;
-                case NameListSheetSchema.COL_TASK: this.taskColIndex = i + 1;
+                case NameListSheetSchema.COL_DO: this.doColIndex = i + 1;
                     break;
                 default:
                     break;
@@ -166,7 +166,7 @@ export class NameListSheetSchema implements ISchema {
             case this.linkColIndex: return Sheets.NAMELIST.MIN_WIDTH.LINK;
             case this.addLogColIndex: return Sheets.NAMELIST.MIN_WIDTH.ADD_LOG;
             case this.updateColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED;
-            case this.taskColIndex: return Sheets.NAMELIST.MIN_WIDTH.TASK;
+            case this.doColIndex: return Sheets.NAMELIST.MIN_WIDTH.DO;
             default: return null;
         }
     }
@@ -191,7 +191,7 @@ export class NameListSheetSchema implements ISchema {
             case this.linkColIndex: return Sheets.NAMELIST.MAX_WIDTH.LINK;
             case this.addLogColIndex: return Sheets.NAMELIST.MAX_WIDTH.ADD_LOG;
             case this.updateColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED;
-            case this.taskColIndex: return Sheets.NAMELIST.MAX_WIDTH.TASK;
+            case this.doColIndex: return Sheets.NAMELIST.MAX_WIDTH.DO;
             default: return null;
         }
     }
@@ -223,7 +223,7 @@ export class NameListSheetSchema implements ISchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.linkColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.addLogColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.updateColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.taskColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.doColIndex)) return false;
         this.isThisSchemaValid = true;
         return true;
     }

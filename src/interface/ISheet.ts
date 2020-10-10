@@ -88,7 +88,7 @@ export interface INameListSheet extends ISheet {
         LINK: string,
         ADD_LOG: string,
         UPDATED: string,
-        TASK: string,
+        DO: string,
     },
     MIN_WIDTH: {
         SELECT: number,
@@ -109,7 +109,7 @@ export interface INameListSheet extends ISheet {
         LINK: number,
         ADD_LOG: number,
         UPDATED: number,
-        TASK: number;
+        DO: number;
     },
     MAX_WIDTH: {
         SELECT: number,
@@ -130,6 +130,6 @@ export interface INameListSheet extends ISheet {
         LINK: number,
         ADD_LOG: number,
         UPDATED: number,
-        TASK: number;
+        DO: number;
     };
 }

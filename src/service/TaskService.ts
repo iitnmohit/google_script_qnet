@@ -22,16 +22,16 @@ export class TaskService {
         Preconditions.checkArgument(count <= Task.MAX_TASK_UPDATE, Msg.TASK.UPDATE.COUNT);
 
         let numOfTaskUpdated = 0;
-        let taskColValues = this.nameListSchema.getCurrentSheet()
-            .getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
+        let doColValues = this.nameListSchema.getCurrentSheet()
+            .getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
             .getValues();
-        for (let i = 0; i < taskColValues.length; i++) {
-            if (Predicates.IS_FLASE.test(taskColValues[i][0])) {
+        for (let i = 0; i < doColValues.length; i++) {
+            if (Predicates.IS_FLASE.test(doColValues[i][0])) {
                 continue;
             }
 
             let row = i + 2;
-            let checkBoxCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.taskColIndex);
+            let checkBoxCell = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.doColIndex);
             //skip if not checked
             if (!checkBoxCell.isChecked()) {
                 continue;
@@ -74,7 +74,7 @@ export class TaskService {
         if (Predicates.IS_NOT_NULL.test(this.getTaskList(false))) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
-                this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
+                this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
             } catch (error) {
                 throw new ServerException(Msg.TASK.DELETE.SERVER_ERROR);
             }
@@ -82,7 +82,7 @@ export class TaskService {
     }
 
     public clearAllCheckbox(): void {
-        this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
+        this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
     public addAllTask(count: number = Task.MAX_TASK_CREATE): void {
@@ -90,17 +90,17 @@ export class TaskService {
         Preconditions.checkArgument(count <= Task.MAX_TASK_CREATE, Msg.TASK.CREATE.COUNT);
 
         let numOfTaskAdded: number = 0;
-        let taskColValues = this.nameListSchema.getCurrentSheet()
-            .getRange(2, this.nameListSchema.taskColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
+        let doColValues = this.nameListSchema.getCurrentSheet()
+            .getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.getCurrentSheet().getLastRow() - 1, 1)
             .getValues();
 
-        for (let i = 0; i < taskColValues.length; i++) {
-            if (Predicates.IS_FLASE.test(taskColValues[i][0])) {
+        for (let i = 0; i < doColValues.length; i++) {
+            if (Predicates.IS_FLASE.test(doColValues[i][0])) {
                 continue;
             }
             let row = i + 2;
 
-            let checkBoxRange = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.taskColIndex);
+            let checkBoxRange = this.nameListSchema.getCurrentSheet().getRange(row, this.nameListSchema.doColIndex);
             //skip if not checked
             if (!checkBoxRange.isChecked()) {
                 continue;

@@ -81,11 +81,19 @@ export class ThemeService {
 
         let selectColChar = Util.getColumnLetter(this.nameSchema.selectColIndex);
         let cfFormulaForSelectRow = `$${selectColChar}2=true`;
+        let doColChar = Util.getColumnLetter(this.nameSchema.doColIndex);
+        let cfFormulaForTaskRow = `$${doColChar}2=true`;
         let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
+
+        this.applyConditionalForatting(sheet, `AND(${cfFormulaForTaskRow},${cfFormulaForStrikeThrough})`,
+            rangeNames, true, this.currentTheme.nameSheetDoSelectBgColor,
+            this.currentTheme.nameSheetDoSelectFontColor);
+        this.applyConditionalForatting(sheet, cfFormulaForTaskRow, rangeAll, false,
+            this.currentTheme.nameSheetDoSelectBgColor, this.currentTheme.nameSheetDoSelectFontColor);
         this.applyConditionalForatting(sheet, `AND(${cfFormulaForSelectRow},${cfFormulaForStrikeThrough})`,
-            rangeNames, true, false, this.currentTheme.nameSheetSelectBgColor,
+            rangeNames, true, this.currentTheme.nameSheetSelectBgColor,
             this.currentTheme.nameSheetSelectFontColor);
-        this.applyConditionalForatting(sheet, cfFormulaForSelectRow, rangeAll, false, false,
+        this.applyConditionalForatting(sheet, cfFormulaForSelectRow, rangeAll, false,
             this.currentTheme.nameSheetSelectBgColor, this.currentTheme.nameSheetSelectFontColor);
         this.applyConditionalForatting(sheet, cfFormulaForStrikeThrough, rangeNames, true);
         return this;
@@ -103,7 +111,6 @@ export class ThemeService {
         condition: string,
         range: GoogleAppsScript.Spreadsheet.Range,
         isStrikeThrough: boolean = false,
-        isBold: boolean = false,
         bgColor: string = null,
         fontColor = null
     ): void {
@@ -112,9 +119,6 @@ export class ThemeService {
             .setRanges([range]);
         if (isStrikeThrough) {
             builder.setStrikethrough(true);
-        }
-        if (isBold) {
-            builder.setBold(true);
         }
         if (Predicates.IS_NOT_BLANK.test(bgColor)) {
             builder.setBackground(bgColor);

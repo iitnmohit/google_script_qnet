@@ -28,6 +28,8 @@ export interface ITheme {
     nameTableSecondRowColor: string,
     nameSheetSelectBgColor: string,
     nameSheetSelectFontColor: string,
+    nameSheetDoSelectBgColor: string,
+    nameSheetDoSelectFontColor: string,
 
     overviewTableHeadderFontColor: string,
     overviewTableHeadderColor: string,

@@ -29,6 +29,8 @@ export class Themes {
         nameTableSecondRowColor: "#ffffff",
         nameSheetSelectBgColor: "#d1c7eb",
         nameSheetSelectFontColor: "#2c1763",
+        nameSheetDoSelectBgColor: "#ff862c",
+        nameSheetDoSelectFontColor: "#592f10",
 
         overviewTableHeadderFontColor: "#ff0000",
         overviewTableHeadderColor: "#ffd966",
