@@ -32,6 +32,7 @@ export interface ICitySheet extends ISheet {
 export interface ILovSheet extends ISheet {
     COLUMN: {
         LIST: string,
+        STRIKE_THROUGH: string,
         CONNECT_UP: string,
         INFO: string,
         EDIFY: string,
@@ -43,6 +44,7 @@ export interface ILovSheet extends ISheet {
     },
     MIN_WIDTH: {
         LIST: number,
+        STRIKE_THROUGH: number,
         CONNECT_UP: number,
         INFO: number,
         EDIFY: number,
@@ -54,6 +56,7 @@ export interface ILovSheet extends ISheet {
     },
     MAX_WIDTH: {
         LIST: number,
+        STRIKE_THROUGH: number,
         CONNECT_UP: number,
         INFO: number,
         EDIFY: number,

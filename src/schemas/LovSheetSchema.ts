@@ -13,6 +13,7 @@ export class LovSheetSchema implements ISchema {
     public static readonly SHEET_INDEX: number = Sheets.LOV.INDEX;
 
     public static readonly COL_LIST: string = Sheets.LOV.COLUMN.LIST;
+    public static readonly COL_STRIKE_THORUGH: string = Sheets.LOV.COLUMN.STRIKE_THROUGH;
     public static readonly COL_CONNECT_UP: string = Sheets.LOV.COLUMN.CONNECT_UP;
     public static readonly COL_INFO: string = Sheets.LOV.COLUMN.INFO;
     public static readonly COL_EDIFY: string = Sheets.LOV.COLUMN.EDIFY;
@@ -24,6 +25,7 @@ export class LovSheetSchema implements ISchema {
 
     // public local variable
     public readonly listColIndex: number = -1;
+    public readonly strikeThroughColIndex: number = -1;
     public readonly connectUpColIndex: number = -1;
     public readonly infoColIndex: number = -1;
     public readonly edifyColIndex: number = -1;
@@ -58,6 +60,8 @@ export class LovSheetSchema implements ISchema {
         for (let i = 0; i < columnLength; i++) {
             switch (firstRowRangeValues[0][i]) {
                 case LovSheetSchema.COL_LIST: this.listColIndex = i + 1;
+                    break;
+                case LovSheetSchema.COL_STRIKE_THORUGH: this.strikeThroughColIndex = i + 1;
                     break;
                 case LovSheetSchema.COL_CONNECT_UP: this.connectUpColIndex = i + 1;
                     break;
@@ -109,6 +113,7 @@ export class LovSheetSchema implements ISchema {
     public getMinColWidth(index: number): number {
         switch (index) {
             case this.listColIndex: return Sheets.LOV.MIN_WIDTH.LIST;
+            case this.strikeThroughColIndex: return Sheets.LOV.MIN_WIDTH.STRIKE_THROUGH;
             case this.connectUpColIndex: return Sheets.LOV.MIN_WIDTH.CONNECT_UP;
             case this.infoColIndex: return Sheets.LOV.MIN_WIDTH.INFO;
             case this.edifyColIndex: return Sheets.LOV.MIN_WIDTH.EDIFY;
@@ -124,6 +129,7 @@ export class LovSheetSchema implements ISchema {
     public getMaxColWidth(index: number): number {
         switch (index) {
             case this.listColIndex: return Sheets.LOV.MAX_WIDTH.LIST;
+            case this.strikeThroughColIndex: return Sheets.LOV.MAX_WIDTH.STRIKE_THROUGH;
             case this.connectUpColIndex: return Sheets.LOV.MAX_WIDTH.CONNECT_UP;
             case this.infoColIndex: return Sheets.LOV.MAX_WIDTH.INFO;
             case this.edifyColIndex: return Sheets.LOV.MAX_WIDTH.EDIFY;
@@ -146,6 +152,7 @@ export class LovSheetSchema implements ISchema {
     // private local method
     private isSchemaValid(): boolean {
         if (Predicates.IS_NOT_POSITIVE.test(this.listColIndex)) return false;
+        if (Predicates.IS_NOT_POSITIVE.test(this.strikeThroughColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.connectUpColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.infoColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.edifyColIndex)) return false;

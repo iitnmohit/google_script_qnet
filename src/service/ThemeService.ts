@@ -3,6 +3,7 @@ import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { ITheme } from "../interface/ITheme";
 import { Preconditions } from "../library/Preconditions";
+import { Predicates } from "../library/Predicates";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -23,7 +24,7 @@ const HORIZENTAL: true = true;
 export class ThemeService {
     private readonly spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
     private readonly citySchema: ISchema;
-    private readonly lovSchema: ISchema;
+    private readonly lovSchema: LovSheetSchema;
     private readonly nameSchema: NameListSheetSchema;
     private readonly overviewSchema: ISchema;
     private currentTheme: ITheme;
@@ -60,7 +61,16 @@ export class ThemeService {
         return this.setCommonTheme(this.citySchema);
     }
     private setLovSheetsTheme(): ThemeService {
-        return this.setCommonTheme(this.lovSchema);
+        this.setCommonTheme(this.lovSchema);
+
+        //conditional formatting
+        let sheet = this.lovSchema.getCurrentSheet();
+        let selectColChar = Util.getColumnLetter(this.lovSchema.strikeThroughColIndex);
+        let conditionForStrikeThrough = `$${selectColChar}2=true`;
+        let rangeLists = sheet.getRange(2, this.lovSchema.listColIndex, this.lovSchema.NUM_OF_ROWS - 1, 1);
+
+        this.applyConditionalForatting(sheet, conditionForStrikeThrough, rangeLists, true);
+        return this;
     }
     private setNameListSheetsTheme(): ThemeService {
         this.setCommonTheme(this.nameSchema);
@@ -69,43 +79,54 @@ export class ThemeService {
         let rangeAll = sheet.getRange(2, 1, this.nameSchema.NUM_OF_ROWS - 1, this.nameSchema.NUM_OF_COLUMNS);
         let rangeNames = sheet.getRange(2, this.nameSchema.nameColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
 
-        let rules = sheet.getConditionalFormatRules();
-
-
-        let _list_col_char = Util.getColumnLetter(this.nameSchema.listColIndex);
-        let _select_col_char = Util.getColumnLetter(this.nameSchema.selectColIndex);
-        // or conditions for list strike through
-        let orConditionsForStrikeThrough = new Array<string>();
-        for (let item of Lov._LIST_STRIKE_THROUGH) {
-            orConditionsForStrikeThrough.push(`EQ($${_list_col_char}2,"${item}")`);
-        }
-        let formulaForStrikeThrough = `OR(${orConditionsForStrikeThrough.join(",")})`;
-        let formulaForSelect = `$${_select_col_char}2=true`;
-
-        rules.push(SpreadsheetApp.newConditionalFormatRule()
-            .whenFormulaSatisfied(`=AND(${formulaForSelect},${formulaForStrikeThrough})`)
-            .setBackground(this.currentTheme.nameSheetSelectBgColor)
-            .setFontColor(this.currentTheme.nameSheetSelectFontColor)
-            .setStrikethrough(true)
-            .setRanges([rangeNames])
-            .build());
-
-        rules.push(SpreadsheetApp.newConditionalFormatRule()
-            .whenFormulaSatisfied(`=${formulaForSelect}`)
-            .setBackground(this.currentTheme.nameSheetSelectBgColor)
-            .setFontColor(this.currentTheme.nameSheetSelectFontColor)
-            .setRanges([rangeAll])
-            .build());
-
-        rules.push(SpreadsheetApp.newConditionalFormatRule()
-            .whenFormulaSatisfied(`=${formulaForStrikeThrough}`)
-            .setStrikethrough(true)
-            .setRanges([rangeNames])
-            .build());
-
-        sheet.setConditionalFormatRules(rules);
+        let selectColChar = Util.getColumnLetter(this.nameSchema.selectColIndex);
+        let cfFormulaForSelectRow = `$${selectColChar}2=true`;
+        let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
+        this.applyConditionalForatting(sheet, `AND(${cfFormulaForSelectRow},${cfFormulaForStrikeThrough})`,
+            rangeNames, true, false, this.currentTheme.nameSheetSelectBgColor,
+            this.currentTheme.nameSheetSelectFontColor);
+        this.applyConditionalForatting(sheet, cfFormulaForSelectRow, rangeAll, false, false,
+            this.currentTheme.nameSheetSelectBgColor, this.currentTheme.nameSheetSelectFontColor);
+        this.applyConditionalForatting(sheet, cfFormulaForStrikeThrough, rangeNames, true);
         return this;
     }
+
+    private getCfFormulaForStrikeThrough(): string {
+        let lovListCol = Util.getColumnA1Notation(this.lovSchema.listColIndex, 2, this.lovSchema.getSheetName());//Lists!A2:A
+        let lovSelectCol = Util.getColumnA1Notation(this.lovSchema.strikeThroughColIndex, 2, this.lovSchema.getSheetName());//Lists!B2:B
+        let nameListColChar = Util.getColumnLetter(this.nameSchema.listColIndex);
+        return `EQ(IFERROR(FILTER(INDIRECT("${lovSelectCol}"),INDIRECT("${lovListCol}")=${nameListColChar}2),FALSE),TRUE)`;
+    }
+
+    private applyConditionalForatting(
+        sheet: GoogleAppsScript.Spreadsheet.Sheet,
+        condition: string,
+        range: GoogleAppsScript.Spreadsheet.Range,
+        isStrikeThrough: boolean = false,
+        isBold: boolean = false,
+        bgColor: string = null,
+        fontColor = null
+    ): void {
+        let builder = SpreadsheetApp.newConditionalFormatRule()
+            .whenFormulaSatisfied(`=${condition}`)
+            .setRanges([range]);
+        if (isStrikeThrough) {
+            builder.setStrikethrough(true);
+        }
+        if (isBold) {
+            builder.setBold(true);
+        }
+        if (Predicates.IS_NOT_BLANK.test(bgColor)) {
+            builder.setBackground(bgColor);
+        }
+        if (Predicates.IS_NOT_BLANK.test(fontColor)) {
+            builder.setFontColor(fontColor);
+        }
+        let rules = sheet.getConditionalFormatRules();
+        rules.push(builder.build());
+        sheet.setConditionalFormatRules(rules);
+    }
+
     private setOverViewSheetsTheme(): ThemeService {
         return this.setCommonTheme(this.overviewSchema);
     }
@@ -117,6 +138,7 @@ export class ThemeService {
 
             // apply sheet border and banding color
             .getRange(1, 1, schema.NUM_OF_ROWS, schema.NUM_OF_COLUMNS)
+            .setVerticalAlignment(this.currentTheme.fontVerticalAlignment)
             .setBorder(TOP, LEFT, BOTTOM, RIGHT, VERTICAL, HORIZENTAL, this.currentTheme.borderColor, null)
             .applyRowBanding(this.currentTheme.bandingTheme, WITH_HEADDER, WITHOUT_FOOTER)
             .setHeaderRowColor(schema.HEADDER_ROW_COLOR)
@@ -128,10 +150,6 @@ export class ThemeService {
             .setFontSize(this.currentTheme.headderFontSize)
             .setFontWeight(this.currentTheme.headderFontWeight)
             .setHorizontalAlignment(this.currentTheme.headderFontAlignment);
-
-        // vertical alignment
-        sheet.getRange(1, 1, schema.NUM_OF_ROWS, schema.NUM_OF_COLUMNS)
-            .setVerticalAlignment(this.currentTheme.fontVerticalAlignment);
 
         //freeze
         sheet.setFrozenRows(schema.FREEZE_ROW);

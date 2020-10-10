@@ -23,7 +23,8 @@ export class SetUpService {
 
     public createAllSheets(): GoogleAppsScript.Spreadsheet.Spreadsheet {
         this.spreadsheet.resetSpreadsheetTheme();
-        this.createOverViewSheets()
+        this.clearNameRange()
+            .createOverViewSheets()
             .createNameListSheets()
             .createLovSheets()
             .createCitySheets();
@@ -72,6 +73,7 @@ export class SetUpService {
         var lovSheet = this.startSetUpOfSheet(Sheets.LOV);
         let schema = LovSheetSchema.getValidSchema(lovSheet);
         return this.fillColValue(Lov.LIST, schema.listColIndex, lovSheet)
+            .fillCheckBox(schema.strikeThroughColIndex, schema)
             .fillColValue(Lov.CONNECT_UP, schema.connectUpColIndex, lovSheet)
             .fillColValue(Lov.INFO, schema.infoColIndex, lovSheet)
             .fillColValue(Lov.EDIFY, schema.edifyColIndex, lovSheet)
@@ -107,7 +109,7 @@ export class SetUpService {
     private fillCheckBox(colIndex: number, schema: ISchema): SetUpService {
         try {
             schema.getCurrentSheet()
-                .getRange(2, colIndex, schema.NUM_OF_COLUMNS - 1, 1)
+                .getRange(2, colIndex, schema.NUM_OF_ROWS - 1, 1)
                 .insertCheckboxes();
         } catch (error) {
             throw new ServerException(error);
@@ -233,5 +235,13 @@ export class SetUpService {
             sheet.setFrozenColumns(0);
         }
         return sheet;
+    }
+
+    private clearNameRange(): SetUpService {
+        let namedRanges = this.spreadsheet.getNamedRanges();
+        for (let namerange of namedRanges) {
+            namerange.remove();
+        }
+        return this;
     }
 }

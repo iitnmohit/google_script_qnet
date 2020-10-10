@@ -45,7 +45,7 @@ export class Sheets {
         INDEX: 3,
         NUM_OF: {
             ROWS: 100,
-            COLUMNS: 9
+            COLUMNS: 10
         },
         FREEZE: {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
@@ -53,6 +53,7 @@ export class Sheets {
         },
         COLUMN: {
             LIST: "LIST",
+            STRIKE_THROUGH: "X",
             CONNECT_UP: "CONNECT UP",
             INFO: "INFO",
             EDIFY: "EDIFY",
@@ -64,6 +65,7 @@ export class Sheets {
         },
         MIN_WIDTH: {
             LIST: null,
+            STRIKE_THROUGH: null,
             CONNECT_UP: null,
             INFO: null,
             EDIFY: null,
@@ -75,6 +77,7 @@ export class Sheets {
         },
         MAX_WIDTH: {
             LIST: null,
+            STRIKE_THROUGH: 30,
             CONNECT_UP: null,
             INFO: null,
             EDIFY: null,
