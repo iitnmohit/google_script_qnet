@@ -1,9 +1,6 @@
 import { ICitySheet, ILovSheet, INameListSheet, IOverViewSheet, ISheet } from "../interface/ISheet";
 
 export class Sheets {
-    // public 
-    public static readonly VALUE_DISPLAY_AFTER_LOG_ADDED: string = "Updated!";
-
     // common public
     public static readonly MIN_ROW_HEIGHT: number = 5;
     public static readonly DEFAULT_NUM_OF_ROWS: number = 1000;
@@ -168,7 +165,7 @@ export class Sheets {
         NAME: "OVERVIEW",
         INDEX: 1,
         NUM_OF: {
-            ROWS: 10,
+            ROWS: 9,
             COLUMNS: 10
         },
         FREEZE: {

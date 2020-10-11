@@ -13,15 +13,12 @@ export class UiService {
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addItem('Set Up Sheet', 'setUpSheet')
-            .addSeparator()
-            .addItem('Export Logs To Doc', 'updateLogToDoc')
-            .addSeparator()
-            .addItem('Settings', 'settingsFunction')
             .addToUi();
     }
 
     public static showErrorMessage(message: string): void {
-        SpreadsheetApp.getUi().alert(message);
+        let ui = SpreadsheetApp.getUi();
+        ui.alert("Error!", message, ui.ButtonSet.OK);
     }
 
     public static doesUserReConfirmedAction(message: string = UiService.confirmMessage): boolean {

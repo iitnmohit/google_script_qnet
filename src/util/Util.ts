@@ -1,3 +1,6 @@
+import { Preconditions } from "../library/Preconditions";
+import { Predicates } from "../library/Predicates";
+
 export class Util {
     private static readonly monthArray: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -8,7 +11,7 @@ export class Util {
     }
 
     public static formatUpdateLog(log: string, todayDate?: string): string {
-        if (!(log != null && log.trim().length > 0)) {
+        if (Predicates.IS_BLANK.test(log)) {
             return "";
         }
         let formatedLog: string = "";
@@ -16,7 +19,7 @@ export class Util {
 
         for (let i = 0; i < lines.length; i++) {
             let eachLine = lines[i].replace("•", "").replace("-", "").trim();
-            if (eachLine.length == 0) {
+            if (Predicates.IS_BLANK.test(eachLine)) {
                 continue;
             }
 
@@ -64,15 +67,14 @@ export class Util {
     public static getColumnA1Notation(colIndex: number, beginRow: number): string;
     public static getColumnA1Notation(colIndex: number, beginRow: number, sheetName: string): string;
     public static getColumnA1Notation(colIndex: number, beginRow?: number, sheetName?: string): string {
-        if (colIndex == null || colIndex < 1) {
-            throw new Error("col index invalid");
-        }
+        Preconditions.checkPositive(colIndex, "col index invalid");
+
         let colLetter = Util.getColumnLetter(colIndex);
         let beginRowNum = "";
         if (beginRow > 1) {
             beginRowNum += beginRow;
         }
-        if (sheetName == null) {
+        if (Predicates.IS_NULL.test(sheetName)) {
             return `${colLetter}${beginRowNum}:${colLetter}`;
         } else {
             return `'${sheetName}'!${colLetter}${beginRowNum}:${colLetter}`;
@@ -82,10 +84,8 @@ export class Util {
     public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range): string;
     public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range, sheetName: string): string;
     public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range, sheetName?: string): string {
-        if (range == null) {
-            throw new Error("Invalid Range");
-        }
-        if (sheetName == null) {
+        Preconditions.checkNotNull(range, "Invalid Range");
+        if (Predicates.IS_NULL.test(sheetName)) {
             return range.getA1Notation();
         } else {
             return sheetName + "!" + range.getA1Notation();
@@ -136,7 +136,7 @@ export class Util {
     }
 
     private static getMonthName(number: number): string {
-        if (null == number) {
+        if (Predicates.IS_NULL.test(number)) {
             return "";
         }
         if (number < 0 || number > 11) {

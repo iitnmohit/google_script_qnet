@@ -17,11 +17,3 @@ function handleError(error: unknown) {
     UiService.showErrorMessage(ee.message);
     Logger.log("Error" + ee.message + ee.stack);
 }
-
-function settingsFunction() {
-    var htmlOutput = HtmlService
-        .createHtmlOutput('<p>A change of speed, a change of style...</p>')
-        .setTitle('My add-on');
-    SpreadsheetApp.getUi().showSidebar(htmlOutput);
-}
-
