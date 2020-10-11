@@ -1,4 +1,3 @@
-import { Lov } from "../constants/Lov";
 import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { ITheme } from "../interface/ITheme";
@@ -11,8 +10,6 @@ import { OverViewSheetSchema } from "../schemas/OverViewSheetSchema";
 import { Util } from "../util/Util";
 
 const WITH_HEADDER: true = true;
-const WITHOUT_HEADDER: false = false;
-const WITH_FOOTER: true = true;
 const WITHOUT_FOOTER: false = false;
 const TOP: true = true;
 const LEFT: true = true;
