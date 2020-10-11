@@ -1,4 +1,4 @@
-import { ICitySheet, ILovSheet, INameListSheet, ISheet } from "../interface/ISheet";
+import { ICitySheet, ILovSheet, INameListSheet, IOverViewSheet, ISheet } from "../interface/ISheet";
 
 export class Sheets {
     // public 
@@ -175,5 +175,5 @@ export class Sheets {
             ROW: 0,
             COLUMN: 0
         }
-    } as ISheet;
+    } as IOverViewSheet;
 }

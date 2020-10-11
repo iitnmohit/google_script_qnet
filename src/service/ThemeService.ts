@@ -132,7 +132,20 @@ export class ThemeService {
     }
 
     private setOverViewSheetsTheme(): ThemeService {
-        return this.setCommonTheme(this.overviewSchema);
+        let sheet = this.overviewSchema.getCurrentSheet();
+        this.setRowsHeight(this.overviewSchema, this.currentTheme.rowHeight)
+            .setTabColor(this.overviewSchema.HEADDER_ROW_COLOR)
+
+            // apply sheet border and banding color
+            .getRange(1, 1, this.overviewSchema.NUM_OF_ROWS, this.overviewSchema.NUM_OF_COLUMNS)
+            .setVerticalAlignment(this.currentTheme.fontVerticalAlignment);
+
+        //freeze
+        sheet.setFrozenRows(this.overviewSchema.FREEZE_ROW);
+        sheet.setFrozenColumns(this.overviewSchema.FREEZE_COLUMN);
+
+        sheet.setActiveSelection("A1");
+        return this;
     }
 
     private setCommonTheme(schema: ISchema): ThemeService {

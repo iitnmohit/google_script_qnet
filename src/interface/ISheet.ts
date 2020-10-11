@@ -14,6 +14,10 @@ export interface ISheet {
     MAX_WIDTH?: {};
 }
 
+export interface IOverViewSheet extends ISheet {
+
+}
+
 export interface ICitySheet extends ISheet {
     COLUMN: {
         LOCATION: string,

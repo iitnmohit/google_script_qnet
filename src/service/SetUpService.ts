@@ -56,7 +56,7 @@ export class SetUpService {
     private createOverViewSheets(): SetUpService {
         var overviewSheet = this.startSetUpOfSheet(Sheets.OVERVIEW);
         let schema = OverViewSheetSchema.getValidSchema(overviewSheet);
-        return this.endSetUpOfSheet(schema);
+        return this.setupColWidth(schema);
     }
 
     private createNameListSheets(): SetUpService {
@@ -65,7 +65,7 @@ export class SetUpService {
         return this.fillNumbers(schema.slNoColIndex, schema)
             .fillCheckBox(schema.doColIndex, schema)
             .fillCheckBox(schema.selectColIndex, schema)
-            .endSetUpOfSheet(schema);
+            .setupColWidth(schema);
     }
 
     private createLovSheets(): SetUpService {
@@ -81,14 +81,14 @@ export class SetUpService {
             .fillColValue(Lov.CLOSING, schema.closingColIndex, lovSheet)
             .fillColValue(Lov.ZONE, schema.zoneColIndex, lovSheet)
             .fillColValue(Lov.CAST, schema.castColIndex, lovSheet)
-            .endSetUpOfSheet(schema);
+            .setupColWidth(schema);
     }
 
     private createCitySheets(): SetUpService {
         var citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
         return this.fillColValue(Cities.LIST, schema.locationColIndex, citySheet)
-            .endSetUpOfSheet(schema);
+            .setupColWidth(schema);
     }
 
     private fillNumbers(colIndex: number, schema: ISchema): SetUpService {
@@ -131,7 +131,7 @@ export class SetUpService {
         return this;
     }
 
-    private endSetUpOfSheet(schema: ISchema): SetUpService {
+    private setupColWidth(schema: ISchema): SetUpService {
         Preconditions.checkNotNull(schema);
         try {
             let sheet = schema.getCurrentSheet();

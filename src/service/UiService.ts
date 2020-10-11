@@ -13,8 +13,10 @@ export class UiService {
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addItem('Set Up Sheet', 'setUpSheet')
-            //.addItem('Update Logs To Doc', 'updateLogToDoc')
-            //.addSeparator()
+            .addSeparator()
+            .addItem('Export Logs To Doc', 'updateLogToDoc')
+            .addSeparator()
+            .addItem('Settings', 'settingsFunction')
             .addToUi();
     }
 

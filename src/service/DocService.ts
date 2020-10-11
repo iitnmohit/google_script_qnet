@@ -2,8 +2,6 @@ import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { Util } from "../util/Util";
 // to do
 export class DocService {
-    private static readonly docId: string = "19OQQFLwN4eYqsPr59bu0hx6n4MV82STntQHfbufhcWE";
-
     public updateAllLogs(): void {
         let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NameListSheetSchema.SHEET_NAME);
         if (null == sheet) {
@@ -11,11 +9,8 @@ export class DocService {
         }
         let nameListSchema = NameListSheetSchema.getValidSchema(sheet);
 
-        if (nameListSchema.nameColIndex < 1 || nameListSchema.slNoColIndex < 1) {
-            return;
-        }
 
-        let logDocument = DocumentApp.openById(DocService.docId);
+        let logDocument = DocumentApp.create("logs");
         if (logDocument == null) {
             return;
         }
@@ -49,6 +44,8 @@ export class DocService {
                 logTitle = logTitle + " (" + slValue + ")";
             }
             noteValue = Util.formatUpdateLog(noteValue);
+            textEdit.appendText("\n\n\n" + logTitle)
+                .appendText("\n" + noteValue);
         }
 
     }
