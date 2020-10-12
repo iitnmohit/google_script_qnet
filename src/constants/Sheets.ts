@@ -171,6 +171,60 @@ export class Sheets {
         FREEZE: {
             ROW: 0,
             COLUMN: 0
+        },
+        TABLES: {
+            TABLE_OVERALL: {
+                NAME: "",
+                TOP_OFFESET: 2,
+                LEFT_OFFSET: 1,
+                APPEND: "col",
+                WIDTH: 2,
+                HEIGHT: 5,
+                HEADDER: {
+                    TOP: {
+                        VALUES: null
+                    },
+                    LEFT: {
+                        VALUES: [
+                            "NAME",
+                            "INFO",
+                            "INVITE",
+                            "PLAN",
+                            "CLOSING"
+                        ]
+                    }
+                }
+            },
+            TABLE_LIST_WISE: {
+                NAME: "",
+                TOP_OFFESET: 1,
+                LEFT_OFFSET: 1,
+                APPEND: "row",
+                WIDTH: 5,
+                HEIGHT: 7,
+                HEADDER: {
+                    TOP: {
+                        VALUES: [
+                            "",
+                            "",
+                            "INFO",
+                            "INVITE",
+                            "PLAN"
+                        ]
+                    },
+                    LEFT: {
+                        VALUES: [
+                            "",
+                            "WORKING NOW",
+                            "KEEP IN TOUCH",
+                            "ONCE IN A WHILE",
+                            "PENDING CLOSING",
+                            "ON HOLD",
+                            "NO CONTACT"
+                        ]
+                    }
+                }
+            }
         }
     } as IOverViewSheet;
 }

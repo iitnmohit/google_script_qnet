@@ -11,11 +11,32 @@ export interface ISheet {
     },
     COLUMN?: {},
     MIN_WIDTH?: {},
-    MAX_WIDTH?: {};
+    MAX_WIDTH?: {},
+    TABLES?: {};
+}
+
+export interface ITable {
+    NAME: string,
+    TOP_OFFESET: number,
+    LEFT_OFFSET: number,
+    APPEND: "row" | "col",
+    WIDTH: number,
+    HEIGHT: number,
+    HEADDER: {
+        TOP: {
+            VALUES: Array<string>;
+        },
+        LEFT: {
+            VALUES: Array<string>;
+        };
+    };
 }
 
 export interface IOverViewSheet extends ISheet {
-
+    TABLES: {
+        TABLE_OVERALL: ITable,
+        TABLE_LIST_WISE: ITable;
+    };
 }
 
 export interface ICitySheet extends ISheet {

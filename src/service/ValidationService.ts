@@ -1,3 +1,4 @@
+import { ISchema } from "../interface/ISchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -32,40 +33,38 @@ export class ValidationService {
     }
 
     private applyValidationToNameSheets(): ValidationService {
-        let lovSheet = this.lovSchema.getCurrentSheet();
-        let citySheet = this.citySchema.getCurrentSheet();
-
-        return this.applyToNamelistSheetCol(lovSheet, this.lovSchema.listColIndex
+        return this.applyToNamelistSheetCol(this.lovSchema, this.lovSchema.listColIndex
             , NameListSheetSchema.COL_LIST, this.nameSchema.listColIndex)
-            .applyToNamelistSheetCol(citySheet, this.citySchema.locationColIndex,
+            .applyToNamelistSheetCol(this.citySchema, this.citySchema.locationColIndex,
                 NameListSheetSchema.COL_LOCATION, this.nameSchema.locationColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.zoneColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.zoneColIndex
                 , NameListSheetSchema.COL_ZONE, this.nameSchema.zoneColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.connectUpColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.connectUpColIndex
                 , NameListSheetSchema.COL_CONNECT_UP, this.nameSchema.connectUpColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.infoColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.infoColIndex
                 , NameListSheetSchema.COL_INFO, this.nameSchema.infoColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.edifyColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.edifyColIndex
                 , NameListSheetSchema.COL_EDIFY, this.nameSchema.edifyColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.inviteColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.inviteColIndex
                 , NameListSheetSchema.COL_INVITE, this.nameSchema.inviteColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.planColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.planColIndex
                 , NameListSheetSchema.COL_PLAN, this.nameSchema.planColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.closingColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.closingColIndex
                 , NameListSheetSchema.COL_CLOSING, this.nameSchema.closingColIndex)
-            .applyToNamelistSheetCol(lovSheet, this.lovSchema.castColIndex
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.castColIndex
                 , NameListSheetSchema.COL_CAST, this.nameSchema.castColIndex);
     }
 
-    private applyToNamelistSheetCol(lovSheet: GoogleAppsScript.Spreadsheet.Sheet,
+    private applyToNamelistSheetCol(schema: ISchema,
         lovColIndex: number,
         targetColName: string,
         targetColIndex: number
     ): ValidationService {
+        let lovSheet = schema.getCurrentSheet();
         let nameListSheet = this.nameSchema.getCurrentSheet();
         let cellRange = nameListSheet.getRange(2, targetColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
         let dataValidation = SpreadsheetApp.newDataValidation()
-            .requireValueInRange(lovSheet.getRange(2, lovColIndex, lovSheet.getMaxRows() - 1, 1), true)
+            .requireValueInRange(lovSheet.getRange(2, lovColIndex, schema.NUM_OF_ROWS - 1, 1), true)
             .setAllowInvalid(false)
             .setHelpText("Select " + targetColName.toLowerCase() + " value from dropdown.")
             .build();

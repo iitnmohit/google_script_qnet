@@ -1,3 +1,4 @@
+import { Log } from "./constants/Log";
 import { UiService } from "./service/UiService";
 
 export function runSafely(callback: () => void): void {
@@ -17,3 +18,12 @@ function handleError(error: unknown) {
     UiService.showErrorMessage(ee.message);
     Logger.log("Error" + ee.message + ee.stack);
 }
+
+// function test() {
+//     let app = SpreadsheetApp.getActiveSpreadsheet();
+//     let sheet = app.getSheetByName("sheet1");
+//     Logger.log(sheet.getLastRow());
+//     Logger.log(sheet.getLastColumn());
+//     Logger.log(sheet.getMaxRows());
+//     Logger.log(sheet.getMaxColumns());
+// }

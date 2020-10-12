@@ -40,7 +40,7 @@ export class CitySheetSchema implements ISchema {
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         this.currentSheet = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET_NAME);
         let columnLength = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getRange(1, 1, 1, columnLength).getValues();
+        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, columnLength);
         for (let i = 0; i < columnLength; i++) {
             switch (firstRowRangeValues[0][i]) {
                 case CitySheetSchema.COL_LOCATION: this.locationColIndex = i + 1;

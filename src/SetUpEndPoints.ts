@@ -16,13 +16,10 @@ function setUpSheet(): void {
         let spreadsheet = setUpService.createAllSheets();
         setUpService.deleteNonQnetSheets();
 
-        let formulaService = new FormulaService(spreadsheet);
-        formulaService.applyFormulaToAllSheets();
+        new FormulaService(spreadsheet).applyFormulaToAllSheets();
 
-        let validationService = new ValidationService(spreadsheet);
-        validationService.applyValidationToAllSheets();
+        new ValidationService(spreadsheet).applyValidationToAllSheets();
 
-        let themeService = new ThemeService(spreadsheet, ThemeUtil.getCurrentTheme());
-        themeService.setTheme();
+        new ThemeService(spreadsheet, ThemeUtil.getCurrentTheme()).setTheme();
     });
 }

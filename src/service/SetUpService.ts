@@ -3,7 +3,7 @@ import { Lov } from "../constants/Lov";
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
-import { ISheet } from "../interface/ISheet";
+import { ISheet, ITable } from "../interface/ISheet";
 import { InvalidConfigurationException, ServerException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -54,13 +54,30 @@ export class SetUpService {
     }
 
     private createOverViewSheets(): SetUpService {
-        var overviewSheet = this.startSetUpOfSheet(Sheets.OVERVIEW);
+        let overviewSheet = this.startSetUpOfSheet(Sheets.OVERVIEW);
+        this.setupTable(overviewSheet, Sheets.OVERVIEW.TABLES.TABLE_OVERALL)
+            .setupTable(overviewSheet, Sheets.OVERVIEW.TABLES.TABLE_LIST_WISE);
         let schema = OverViewSheetSchema.getValidSchema(overviewSheet);
         return this.setupColWidth(schema);
     }
+    private setupTable(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): SetUpService {
+        Preconditions.checkNotNull(sheet);
+        if (Predicates.IS_NULL.test(table)) {
+            return;
+        }
+        if (table.APPEND === "row") {
+            //append in 1st row
+        } else {
+            // append in new row below
+        }
+
+
+
+        return this;
+    }
 
     private createNameListSheets(): SetUpService {
-        var nameListSheet = this.startSetUpOfSheet(Sheets.NAMELIST);
+        let nameListSheet = this.startSetUpOfSheet(Sheets.NAMELIST);
         let schema = NameListSheetSchema.getValidSchema(nameListSheet);
         return this.fillNumbers(schema.slNoColIndex, schema)
             .fillCheckBox(schema.doColIndex, schema)
@@ -69,7 +86,7 @@ export class SetUpService {
     }
 
     private createLovSheets(): SetUpService {
-        var lovSheet = this.startSetUpOfSheet(Sheets.LOV);
+        let lovSheet = this.startSetUpOfSheet(Sheets.LOV);
         let schema = LovSheetSchema.getValidSchema(lovSheet);
         return this.fillColValue(Lov.LIST, schema.listColIndex, lovSheet)
             .fillCheckBox(schema.strikeThroughColIndex, schema)
@@ -85,7 +102,7 @@ export class SetUpService {
     }
 
     private createCitySheets(): SetUpService {
-        var citySheet = this.startSetUpOfSheet(Sheets.CITY);
+        let citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
         return this.fillColValue(Cities.LIST, schema.locationColIndex, citySheet)
             .setupColWidth(schema);

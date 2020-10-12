@@ -13,7 +13,7 @@ export class BaseService {
         Preconditions.checkPositive(count);
         let sheet = schema.getCurrentSheet();
         let numOfTimesOperated = 0;
-        let doColValues = sheet.getRange(2, schema.doColIndex, schema.NUM_OF_ROWS - 1, 1).getValues();
+        let doColValues = sheet.getSheetValues(2, schema.doColIndex, schema.NUM_OF_ROWS - 1, 1);
         for (let i = 0; i < doColValues.length; i++) {
             if (Predicates.IS_TRUE.negate().test(doColValues[i][0])) {
                 continue;
