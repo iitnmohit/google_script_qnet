@@ -20,4 +20,8 @@ export interface ISchema {
     getMinColWidth(index: number): number;
 
     getMaxColWidth(index: number): number | null;
+
+    insertRows(howMany: number): void;
+
+    insertsColumns(howMany: number): void;
 }

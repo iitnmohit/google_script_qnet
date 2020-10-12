@@ -99,6 +99,16 @@ export class CitySheetSchema implements ISchema {
         return this.currentSheet;
     }
 
+    public insertRows(howMany: number): void {
+        this.currentSheet.insertRows(this.NUM_OF_ROWS, howMany);
+        this.NUM_OF_ROWS += howMany;
+    }
+
+    public insertsColumns(howMany: number): void {
+        this.currentSheet.insertColumns(this.NUM_OF_COLUMNS, howMany);
+        this.NUM_OF_COLUMNS += howMany;
+    }
+
     // public local methods
 
     // private local method

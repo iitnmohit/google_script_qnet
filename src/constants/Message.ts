@@ -38,8 +38,8 @@ export class Msg {
         MSG_INVALID_NAME_CELL_FORMAT: "Name is not valid.",
         SERVER_ERROR: "Server error occured.",
         HEADDER_MORE_THAN_COLUMN: "Failed creating schema, for %s sheet, headder count is more than column count.",
-        INVALI_ROW_COUNT: "Invalid Num of row value : %s",
-        INVALI_COL_COUNT: "Invalid Num of col value : %s",
+        INVALID_ROW_COUNT: "Invalid Num of row value : %s",
+        INVALID_COL_COUNT: "Invalid Num of col value : %s",
         INVALID_SHEET_NAME: "Sheet name is not valid!",
         NAME_NOT_PRESENT: "No name present at row %s",
     };

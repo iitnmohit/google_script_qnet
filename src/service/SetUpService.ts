@@ -65,15 +65,51 @@ export class SetUpService {
         if (Predicates.IS_NULL.test(table)) {
             return;
         }
+
+        let tableStartRowIndex = 1 + table.TOP_OFFESET;
+        let tableStartColIndex = 1 + table.LEFT_OFFSET;
+
         if (table.APPEND === "row") {
-            //append in 1st row
+            tableStartColIndex = this.getTableStartColIndex(sheet, table);
         } else {
-            // append in new row below
+            tableStartRowIndex = this.getTableStartRowIndex(sheet, table);
         }
 
+        let dataArray = Util.innitializeEmptyTableArray(table.HEIGHT, table.WIDTH);
 
+        // add 1st row data
+        if (Predicates.IS_LIST_NOT_EMPTY.test(table.HEADDER.TOP.VALUES)) {
+            Preconditions.checkArgument(table.HEADDER.TOP.VALUES.length == table.WIDTH);
+            dataArray[0] = table.HEADDER.TOP.VALUES;
+        }
+        // add 1st column data
+        if (Predicates.IS_LIST_NOT_EMPTY.test(table.HEADDER.LEFT.VALUES)) {
+            Preconditions.checkArgument(table.HEADDER.LEFT.VALUES.length == table.HEIGHT);
+            for (let row = 0; row < table.HEIGHT; row++) {
+                dataArray[row][0] = table.HEADDER.LEFT.VALUES[row];
+            }
+        }
 
+        // fill value in last cell
+        sheet.getRange(tableStartRowIndex, tableStartColIndex, table.HEIGHT, table.WIDTH)
+            .setValues(Util.validateAndFillDummyData(dataArray, table.HEIGHT, table.WIDTH));
         return this;
+    }
+
+    private getTableStartRowIndex(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): number {
+        let maxRow = sheet.getMaxRows();
+        let lastRowHasValue = sheet.getLastRow();
+        Preconditions.checkArgument((lastRowHasValue + table.HEIGHT + table.TOP_OFFESET) <= maxRow,
+            Msg.SHEET.INVALID_ROW_COUNT, lastRowHasValue + table.HEIGHT + table.TOP_OFFESET);
+        return lastRowHasValue + 1 + table.TOP_OFFESET;
+    }
+
+    private getTableStartColIndex(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): number {
+        let maxCol = sheet.getMaxColumns();
+        let lastColumnHasValue = sheet.getLastColumn();
+        Preconditions.checkArgument((lastColumnHasValue + table.WIDTH + table.LEFT_OFFSET) <= maxCol,
+            Msg.SHEET.INVALID_COL_COUNT, lastColumnHasValue + table.WIDTH + table.LEFT_OFFSET);
+        return lastColumnHasValue + 1 + table.LEFT_OFFSET;
     }
 
     private createNameListSheets(): SetUpService {
@@ -198,7 +234,7 @@ export class SetUpService {
 
     private ensureRowsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfRows: number = Sheets.DEFAULT_NUM_OF_ROWS): SetUpService {
         Preconditions.checkNotNull(sheet, Msg.SHEET.INVALID_SHEET);
-        Preconditions.checkPositive(requiredNumOfRows, Msg.SHEET.INVALI_ROW_COUNT, requiredNumOfRows);
+        Preconditions.checkPositive(requiredNumOfRows, Msg.SHEET.INVALID_ROW_COUNT, requiredNumOfRows);
 
         let existingRow: number = sheet.getMaxRows();
         if (existingRow == requiredNumOfRows) {
@@ -214,7 +250,7 @@ export class SetUpService {
 
     private ensureColsCount(sheet: GoogleAppsScript.Spreadsheet.Sheet, requiredNumOfCols: number = Sheets.DEFAULT_NUM_OF_COLS): SetUpService {
         Preconditions.checkNotNull(sheet, Msg.SHEET.INVALID_SHEET);
-        Preconditions.checkPositive(requiredNumOfCols, Msg.SHEET.INVALI_COL_COUNT, requiredNumOfCols);
+        Preconditions.checkPositive(requiredNumOfCols, Msg.SHEET.INVALID_COL_COUNT, requiredNumOfCols);
         let existingCol: number = sheet.getMaxColumns();
         if (existingCol == requiredNumOfCols) {
         } else if (existingCol > requiredNumOfCols) {

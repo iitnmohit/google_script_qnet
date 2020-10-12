@@ -124,6 +124,65 @@ export class Util {
         }
     }
 
+    public static innitializeEmptyTableArray(height: number, width: number): any[][] {
+        Preconditions.checkPositive(height);
+        Preconditions.checkPositive(width);
+
+        let _dataArray = [];
+        for (let _i = 0; _i < height; _i++) {
+            let _tempArray = [];
+            for (let _j = 0; _j < width; _j++) {
+                _tempArray.push("");
+            }
+            _dataArray.push(_tempArray);
+        }
+        return _dataArray;
+    }
+
+    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number): any[][];
+    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number, data: any): any[][];
+    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number, data: any, everyWhere: boolean): any[][];
+    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number, data: any = "NA", everyWhere: boolean = false): any[][] {
+        Preconditions.checkNotNull(twoDarray);
+        Preconditions.checkNotBlank(data);
+        Preconditions.checkNotNull(everyWhere);
+        Preconditions.checkArgument(twoDarray.length == height);
+
+        let _isLastRowEmpty = true;
+        let _isLastColEmpty = true;
+        for (let _rowInd_ = 0; _rowInd_ < height; _rowInd_++) {
+            // current row
+            let _row = twoDarray[_rowInd_];
+            Preconditions.checkArgument(_row.length == width);
+            for (let _colInd_ = 0; _colInd_ < width; _colInd_++) {
+                let _val = _row[_colInd_];
+                // fill value everywhere
+                if (everyWhere) {
+                    if (Predicates.IS_BLANK.test(_val)) {
+                        twoDarray[_rowInd_][_colInd_] = data;
+                    }
+                    continue;
+                }
+                // check for last column empty
+                if (_isLastColEmpty && _colInd_ == (width - 1)) {
+                    if (Predicates.IS_NOT_BLANK.test(_val)) {
+                        _isLastColEmpty = false;
+                    }
+                }
+                //check for last row empty
+                if (_isLastRowEmpty && _rowInd_ == (height - 1)) {
+                    if (Predicates.IS_NOT_BLANK.test(_val)) {
+                        _isLastRowEmpty = false;
+                    }
+                }
+            }
+        }
+        if ((_isLastColEmpty || _isLastRowEmpty) && !everyWhere) {
+            twoDarray[height - 1][width - 1] = data;
+        }
+        return twoDarray;
+    }
+
     private static dateString(dateObj: Date) {
         let month = Util.getMonthName(dateObj.getMonth());
         let day = String(dateObj.getDate());
