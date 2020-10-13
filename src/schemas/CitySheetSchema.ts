@@ -39,9 +39,9 @@ export class CitySheetSchema implements ISchema {
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         this.currentSheet = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET_NAME);
-        let columnLength = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, columnLength);
-        for (let i = 0; i < columnLength; i++) {
+        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
             switch (firstRowRangeValues[0][i]) {
                 case CitySheetSchema.COL_LOCATION: this.locationColIndex = i + 1;
                     break;
@@ -52,7 +52,6 @@ export class CitySheetSchema implements ISchema {
             }
         }
         this.NUM_OF_ROWS = sheet.getMaxRows();
-        this.NUM_OF_COLUMNS = columnLength;
     }
 
     // static method

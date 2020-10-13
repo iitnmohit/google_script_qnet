@@ -71,9 +71,9 @@ export class NameListSheetSchema implements ISchema {
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         this.currentSheet = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET_NAME);
-        let columnLength = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, columnLength);
-        for (let i = 0; i < columnLength; i++) {
+        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
             switch (firstRowRangeValues[0][i]) {
                 case NameListSheetSchema.COL_SELECT: this.selectColIndex = i + 1;
                     break;
@@ -116,7 +116,6 @@ export class NameListSheetSchema implements ISchema {
             }
         }
         this.NUM_OF_ROWS = sheet.getMaxRows();
-        this.NUM_OF_COLUMNS = columnLength;
     }
 
     // static method
@@ -206,6 +205,29 @@ export class NameListSheetSchema implements ISchema {
     }
 
     // public local methods
+    public getColIndexByName(colName: string): number {
+        switch (colName.toLocaleUpperCase()) {
+            case NameListSheetSchema.COL_SELECT: return this.selectColIndex;
+            case NameListSheetSchema.COL_SL_NO: return this.slNoColIndex;
+            case NameListSheetSchema.COL_NAME: return this.nameColIndex;
+            case NameListSheetSchema.COL_LIST: return this.listColIndex;
+            case NameListSheetSchema.COL_LOCATION: return this.locationColIndex;
+            case NameListSheetSchema.COL_ZONE: return this.zoneColIndex;
+            case NameListSheetSchema.COL_CONNECT_UP: return this.connectUpColIndex;
+            case NameListSheetSchema.COL_INFO: return this.infoColIndex;
+            case NameListSheetSchema.COL_EDIFY: return this.edifyColIndex;
+            case NameListSheetSchema.COL_INVITE: return this.inviteColIndex;
+            case NameListSheetSchema.COL_PLAN: return this.planColIndex;
+            case NameListSheetSchema.COL_PLAN_DATE: return this.planDateColIndex;
+            case NameListSheetSchema.COL_CLOSING: return this.closingColIndex;
+            case NameListSheetSchema.COL_CAST: return this.castColIndex;
+            case NameListSheetSchema.COL_UPDATED_ON: return this.updateOnColIndex;
+            case NameListSheetSchema.COL_LINK: return this.linkColIndex;
+            case NameListSheetSchema.COL_ADD_LOG: return this.addLogColIndex;
+            case NameListSheetSchema.COL_DO: return this.doColIndex;
+            default: return null;
+        }
+    }
 
     // private local method
     private isSchemaValid(): boolean {

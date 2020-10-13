@@ -174,7 +174,7 @@ export class Sheets {
         },
         TABLES: {
             TABLE_OVERALL: {
-                NAME: "",
+                NAME: "OVERALL",
                 TOP_OFFESET: 2,
                 LEFT_OFFSET: 1,
                 APPEND: "col",
@@ -196,7 +196,7 @@ export class Sheets {
                 }
             },
             TABLE_LIST_WISE: {
-                NAME: "",
+                NAME: "LIST_WISE",
                 TOP_OFFESET: 1,
                 LEFT_OFFSET: 1,
                 APPEND: "row",

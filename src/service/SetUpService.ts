@@ -5,6 +5,7 @@ import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { ISheet, ITable } from "../interface/ISheet";
 import { InvalidConfigurationException, ServerException } from "../library/Exceptions";
+import { Index } from "../library/Index";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
@@ -55,61 +56,8 @@ export class SetUpService {
 
     private createOverViewSheets(): SetUpService {
         let overviewSheet = this.startSetUpOfSheet(Sheets.OVERVIEW);
-        this.setupTable(overviewSheet, Sheets.OVERVIEW.TABLES.TABLE_OVERALL)
-            .setupTable(overviewSheet, Sheets.OVERVIEW.TABLES.TABLE_LIST_WISE);
         let schema = OverViewSheetSchema.getValidSchema(overviewSheet);
         return this.setupColWidth(schema);
-    }
-    private setupTable(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): SetUpService {
-        Preconditions.checkNotNull(sheet);
-        if (Predicates.IS_NULL.test(table)) {
-            return;
-        }
-
-        let tableStartRowIndex = 1 + table.TOP_OFFESET;
-        let tableStartColIndex = 1 + table.LEFT_OFFSET;
-
-        if (table.APPEND === "row") {
-            tableStartColIndex = this.getTableStartColIndex(sheet, table);
-        } else {
-            tableStartRowIndex = this.getTableStartRowIndex(sheet, table);
-        }
-
-        let dataArray = Util.innitializeEmptyTableArray(table.HEIGHT, table.WIDTH);
-
-        // add 1st row data
-        if (Predicates.IS_LIST_NOT_EMPTY.test(table.HEADDER.TOP.VALUES)) {
-            Preconditions.checkArgument(table.HEADDER.TOP.VALUES.length == table.WIDTH);
-            dataArray[0] = table.HEADDER.TOP.VALUES;
-        }
-        // add 1st column data
-        if (Predicates.IS_LIST_NOT_EMPTY.test(table.HEADDER.LEFT.VALUES)) {
-            Preconditions.checkArgument(table.HEADDER.LEFT.VALUES.length == table.HEIGHT);
-            for (let row = 0; row < table.HEIGHT; row++) {
-                dataArray[row][0] = table.HEADDER.LEFT.VALUES[row];
-            }
-        }
-
-        // fill value in last cell
-        sheet.getRange(tableStartRowIndex, tableStartColIndex, table.HEIGHT, table.WIDTH)
-            .setValues(Util.validateAndFillDummyData(dataArray, table.HEIGHT, table.WIDTH));
-        return this;
-    }
-
-    private getTableStartRowIndex(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): number {
-        let maxRow = sheet.getMaxRows();
-        let lastRowHasValue = sheet.getLastRow();
-        Preconditions.checkArgument((lastRowHasValue + table.HEIGHT + table.TOP_OFFESET) <= maxRow,
-            Msg.SHEET.INVALID_ROW_COUNT, lastRowHasValue + table.HEIGHT + table.TOP_OFFESET);
-        return lastRowHasValue + 1 + table.TOP_OFFESET;
-    }
-
-    private getTableStartColIndex(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): number {
-        let maxCol = sheet.getMaxColumns();
-        let lastColumnHasValue = sheet.getLastColumn();
-        Preconditions.checkArgument((lastColumnHasValue + table.WIDTH + table.LEFT_OFFSET) <= maxCol,
-            Msg.SHEET.INVALID_COL_COUNT, lastColumnHasValue + table.WIDTH + table.LEFT_OFFSET);
-        return lastColumnHasValue + 1 + table.LEFT_OFFSET;
     }
 
     private createNameListSheets(): SetUpService {
@@ -228,6 +176,13 @@ export class SetUpService {
                     .setValues([headderArray]);
             }
         }
+        // set table
+        if (Predicates.IS_NOT_NULL.test(iSheet.TABLES)) {
+            let tableArray = Object.values<ITable>(iSheet.TABLES);
+            for (let eachTable of tableArray) {
+                this.setupTable(sheet, eachTable);
+            }
+        }
         sheet.setActiveSelection("A1");
         return sheet;
     }
@@ -294,6 +249,34 @@ export class SetUpService {
         for (let namerange of namedRanges) {
             namerange.remove();
         }
+        return this;
+    }
+
+    private setupTable(sheet: GoogleAppsScript.Spreadsheet.Sheet, table: ITable): SetUpService {
+        Preconditions.checkNotNull(sheet);
+        if (Predicates.IS_NULL.test(table)) {
+            return;
+        }
+
+        let dataArray = Util.innitializeEmptyTableArray(table.HEIGHT, table.WIDTH);
+
+        // add 1st row data
+        if (Predicates.IS_LIST_NOT_EMPTY.test(table.HEADDER.TOP.VALUES)) {
+            Preconditions.checkArgument(table.HEADDER.TOP.VALUES.length == table.WIDTH);
+            dataArray[0] = table.HEADDER.TOP.VALUES;
+        }
+        // add 1st column data
+        if (Predicates.IS_LIST_NOT_EMPTY.test(table.HEADDER.LEFT.VALUES)) {
+            Preconditions.checkArgument(table.HEADDER.LEFT.VALUES.length == table.HEIGHT);
+            for (let row = 0; row < table.HEIGHT; row++) {
+                dataArray[row][0] = table.HEADDER.LEFT.VALUES[row];
+            }
+        }
+
+        // fill value in last cell
+        let tableIndex = Util.getTableIndex(new Index(sheet.getLastRow(), sheet.getLastColumn()), table);
+        sheet.getRange(tableIndex.row, tableIndex.col, table.HEIGHT, table.WIDTH)
+            .setValues(Util.validateAndFillDummyData(dataArray, table.HEIGHT, table.WIDTH));
         return this;
     }
 }

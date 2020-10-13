@@ -1,3 +1,5 @@
+import { Index } from "../library/Index";
+import { ITable } from "../interface/ISheet";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 
@@ -181,6 +183,23 @@ export class Util {
             twoDarray[height - 1][width - 1] = data;
         }
         return twoDarray;
+    }
+
+    public static getTableIndex(lastValuedCellIndex: Index, table: ITable): Index {
+        Preconditions.checkNotNull(lastValuedCellIndex);
+        Preconditions.checkNotNull(table);
+        Preconditions.checkNotNull(table.TOP_OFFESET);
+        Preconditions.checkNotNull(table.LEFT_OFFSET);
+
+        let tableStartRowIndex = 1 + table.TOP_OFFESET;
+        let tableStartColIndex = 1 + table.LEFT_OFFSET;
+
+        if (table.APPEND === "row") {
+            tableStartColIndex += lastValuedCellIndex.col;
+        } else {
+            tableStartRowIndex += lastValuedCellIndex.row;
+        }
+        return new Index(tableStartRowIndex, tableStartColIndex);
     }
 
     private static dateString(dateObj: Date) {
