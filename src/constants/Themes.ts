@@ -32,9 +32,9 @@ export class Themes {
         nameSheetDoSelectBgColor: "#e6a7a7",
         nameSheetDoSelectFontColor: "#6d4141",
 
-        overviewTableHeadderFontColor: "#ff0000",
-        overviewTableHeadderColor: "#ffd966",
-        overviewTableFirstRowColor: "#ffffff",
-        overviewTableSecondRowColor: "#ffffff",
+        overviewTableHeadderFontColor: "#351c75",
+        overviewTableHeadderColor: "#b4a7d6",
+        overviewTableFirstRowColor: "#fff2cc",
+        overviewTableSecondRowColor: "#e8e7fc",
     } as ITheme;
 }

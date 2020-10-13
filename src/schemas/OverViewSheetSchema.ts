@@ -45,13 +45,15 @@ export class OverViewSheetSchema implements ISchema {
         let sheetValues = sheet.getSheetValues(1, 1, this.NUM_OF_ROWS, this.NUM_OF_COLUMNS);
         let overAllTableBeginIndex = this.validateTable(Sheets.OVERVIEW.TABLES.TABLE_OVERALL,
             sheetValues, new Index(0, 0));
+        this.ISHEET.TABLES.TABLE_OVERALL.INDEX = overAllTableBeginIndex;
+
         let overAllTableEndIndex = new Index(overAllTableBeginIndex.row + Sheets.OVERVIEW.TABLES.TABLE_OVERALL.HEIGHT - 1,
             overAllTableBeginIndex.col + Sheets.OVERVIEW.TABLES.TABLE_OVERALL.WIDTH - 1);
 
         let listWiseTableBeginIndex = this.validateTable(Sheets.OVERVIEW.TABLES.TABLE_LIST_WISE,
             sheetValues, overAllTableEndIndex);
-        let listWiseTableEndIndex = new Index(listWiseTableBeginIndex.row + Sheets.OVERVIEW.TABLES.TABLE_LIST_WISE.HEIGHT - 1,
-            listWiseTableBeginIndex.col + Sheets.OVERVIEW.TABLES.TABLE_LIST_WISE.WIDTH - 1);
+        this.ISHEET.TABLES.TABLE_LIST_WISE.INDEX = listWiseTableBeginIndex;
+
         this.tableOverallRowIndex = overAllTableBeginIndex.row;
         this.tableOverallColIndex = overAllTableBeginIndex.col;
         this.tableListWiseRowIndex = listWiseTableBeginIndex.row;
@@ -82,10 +84,34 @@ export class OverViewSheetSchema implements ISchema {
     }
 
     public getMinColWidth(index: number): number {
-        return null;
+        switch (index) {
+            case 1: return Sheets.OVERVIEW.MIN_WIDTH.COLA;
+            case 2: return Sheets.OVERVIEW.MIN_WIDTH.COLB;
+            case 3: return Sheets.OVERVIEW.MIN_WIDTH.COLC;
+            case 4: return Sheets.OVERVIEW.MIN_WIDTH.COLD;
+            case 5: return Sheets.OVERVIEW.MIN_WIDTH.COLE;
+            case 6: return Sheets.OVERVIEW.MIN_WIDTH.COLF;
+            case 7: return Sheets.OVERVIEW.MIN_WIDTH.COLG;
+            case 8: return Sheets.OVERVIEW.MIN_WIDTH.COLH;
+            case 9: return Sheets.OVERVIEW.MIN_WIDTH.COLI;
+            case 10: return Sheets.OVERVIEW.MIN_WIDTH.COLJ;
+            default: return null;
+        }
     }
     public getMaxColWidth(index: number): number {
-        return null;
+        switch (index) {
+            case 1: return Sheets.OVERVIEW.MAX_WIDTH.COLA;
+            case 2: return Sheets.OVERVIEW.MAX_WIDTH.COLB;
+            case 3: return Sheets.OVERVIEW.MAX_WIDTH.COLC;
+            case 4: return Sheets.OVERVIEW.MAX_WIDTH.COLD;
+            case 5: return Sheets.OVERVIEW.MAX_WIDTH.COLE;
+            case 6: return Sheets.OVERVIEW.MAX_WIDTH.COLF;
+            case 7: return Sheets.OVERVIEW.MAX_WIDTH.COLG;
+            case 8: return Sheets.OVERVIEW.MAX_WIDTH.COLH;
+            case 9: return Sheets.OVERVIEW.MAX_WIDTH.COLI;
+            case 10: return Sheets.OVERVIEW.MAX_WIDTH.COLJ;
+            default: return null;
+        }
     }
 
     public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {

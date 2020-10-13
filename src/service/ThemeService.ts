@@ -1,5 +1,6 @@
 import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
+import { ITable } from "../interface/ISheet";
 import { ITheme } from "../interface/ITheme";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -96,6 +97,10 @@ export class ThemeService {
         return this;
     }
 
+    private setOverViewSheetsTheme(): ThemeService {
+        return this.setCommonTheme(this.overviewSchema, true);
+    }
+
     private getCfFormulaForStrikeThrough(): string {
         let lovListCol = Util.getColumnA1Notation(this.lovSchema.listColIndex, 2, this.lovSchema.getSheetName());//Lists!A2:A
         let lovSelectCol = Util.getColumnA1Notation(this.lovSchema.strikeThroughColIndex, 2, this.lovSchema.getSheetName());//Lists!B2:B
@@ -128,42 +133,60 @@ export class ThemeService {
         sheet.setConditionalFormatRules(rules);
     }
 
-    private setOverViewSheetsTheme(): ThemeService {
-        let sheet = this.overviewSchema.getCurrentSheet();
-        this.setRowsHeight(this.overviewSchema, this.currentTheme.rowHeight)
-            .setTabColor(this.overviewSchema.HEADDER_ROW_COLOR)
-
-            // apply sheet border and banding color
-            .getRange(1, 1, this.overviewSchema.NUM_OF_ROWS, this.overviewSchema.NUM_OF_COLUMNS)
-            .setVerticalAlignment(this.currentTheme.fontVerticalAlignment);
-
-        //freeze
-        sheet.setFrozenRows(this.overviewSchema.FREEZE_ROW);
-        sheet.setFrozenColumns(this.overviewSchema.FREEZE_COLUMN);
-
-        sheet.setActiveSelection("A1");
-        return this;
-    }
-
-    private setCommonTheme(schema: ISchema): ThemeService {
+    private setCommonTheme(schema: ISchema, tableSheet: boolean = false): ThemeService {
         let sheet = schema.getCurrentSheet();
-        this.setRowsHeight(schema, this.currentTheme.rowHeight)
+        let fullSheetRange = this.setRowsHeight(schema, this.currentTheme.rowHeight)
             .setTabColor(schema.HEADDER_ROW_COLOR)
+            .setHiddenGridlines(true)
 
             // apply sheet border and banding color
             .getRange(1, 1, schema.NUM_OF_ROWS, schema.NUM_OF_COLUMNS)
-            .setVerticalAlignment(this.currentTheme.fontVerticalAlignment)
-            .setBorder(TOP, LEFT, BOTTOM, RIGHT, VERTICAL, HORIZENTAL, this.currentTheme.borderColor, null)
-            .applyRowBanding(this.currentTheme.bandingTheme, WITH_HEADDER, WITHOUT_FOOTER)
-            .setHeaderRowColor(schema.HEADDER_ROW_COLOR)
-            .setFirstRowColor(schema.FIRST_ROW_COLOR)
-            .setSecondRowColor(schema.SECOND_ROW_COLOR);
-        //headder
-        sheet.getRange(1, 1, 1, schema.NUM_OF_COLUMNS)
-            .setFontColor(schema.HEADDER_ROW_FONT_COLOR)
-            .setFontSize(this.currentTheme.headderFontSize)
-            .setFontWeight(this.currentTheme.headderFontWeight)
-            .setHorizontalAlignment(this.currentTheme.headderFontAlignment);
+            .setVerticalAlignment(this.currentTheme.fontVerticalAlignment);
+        if (tableSheet) {
+            let tableArray = Object.values<ITable>(schema.ISHEET.TABLES);
+            if (Predicates.IS_LIST_NOT_EMPTY.test(tableArray)) {
+                for (let itable of tableArray) {
+                    let tableRange = sheet.getRange(itable.INDEX.row, itable.INDEX.col, itable.HEIGHT, itable.WIDTH)
+                        .setBorder(TOP, LEFT, BOTTOM, RIGHT, VERTICAL, HORIZENTAL, this.currentTheme.borderColor, null);
+                    // top headder
+                    let tableHasTopHeadder = Predicates.IS_LIST_NOT_EMPTY.test(itable.HEADDER.TOP.VALUES);
+                    tableRange.applyRowBanding(this.currentTheme.bandingTheme, tableHasTopHeadder, WITHOUT_FOOTER)
+                        .setFirstRowColor(schema.FIRST_ROW_COLOR)
+                        .setSecondRowColor(schema.SECOND_ROW_COLOR);
+                    if (tableHasTopHeadder) {
+                        sheet.getRange(itable.INDEX.row, itable.INDEX.col, 1, itable.WIDTH)
+                            .setBackground(schema.HEADDER_ROW_COLOR)
+                            .setFontColor(schema.HEADDER_ROW_FONT_COLOR)
+                            .setFontSize(this.currentTheme.headderFontSize)
+                            .setFontWeight(this.currentTheme.headderFontWeight)
+                            .setHorizontalAlignment(this.currentTheme.headderFontAlignment);
+                    }
+                    // left headder
+                    let tableHasLeftHeadder = Predicates.IS_LIST_NOT_EMPTY.test(itable.HEADDER.LEFT.VALUES);
+                    if (tableHasLeftHeadder) {
+                        sheet.getRange(itable.INDEX.row, itable.INDEX.col, itable.HEIGHT, 1)
+                            .setBackground(schema.HEADDER_ROW_COLOR)
+                            .setFontColor(schema.HEADDER_ROW_FONT_COLOR)
+                            .setFontSize(this.currentTheme.headderFontSize)
+                            .setFontWeight(this.currentTheme.headderFontWeight)
+                            .setHorizontalAlignment("left");
+                    }
+
+                }
+            }
+        } else {
+            fullSheetRange.setBorder(TOP, LEFT, BOTTOM, RIGHT, VERTICAL, HORIZENTAL, this.currentTheme.borderColor, null)
+                .applyRowBanding(this.currentTheme.bandingTheme, WITH_HEADDER, WITHOUT_FOOTER)
+                .setHeaderRowColor(schema.HEADDER_ROW_COLOR)
+                .setFirstRowColor(schema.FIRST_ROW_COLOR)
+                .setSecondRowColor(schema.SECOND_ROW_COLOR);
+            //headder
+            sheet.getRange(1, 1, 1, schema.NUM_OF_COLUMNS)
+                .setFontColor(schema.HEADDER_ROW_FONT_COLOR)
+                .setFontSize(this.currentTheme.headderFontSize)
+                .setFontWeight(this.currentTheme.headderFontWeight)
+                .setHorizontalAlignment(this.currentTheme.headderFontAlignment);
+        }
 
         //freeze
         sheet.setFrozenRows(schema.FREEZE_ROW);

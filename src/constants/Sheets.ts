@@ -172,6 +172,30 @@ export class Sheets {
             ROW: 0,
             COLUMN: 0
         },
+        MIN_WIDTH: {
+            COLA: null,
+            COLB: 90,
+            COLC: 95,
+            COLD: null,
+            COLE: 175,
+            COLF: 70,
+            COLG: 80,
+            COLH: 90,
+            COLI: 80,
+            COLJ: null
+        },
+        MAX_WIDTH: {
+            COLA: 30,
+            COLB: null,
+            COLC: null,
+            COLD: 60,
+            COLE: null,
+            COLF: 70,
+            COLG: null,
+            COLH: null,
+            COLI: null,
+            COLJ: 20
+        },
         TABLES: {
             TABLE_OVERALL: {
                 NAME: "OVERALL",

@@ -1,3 +1,5 @@
+import { Index } from "../library/Index";
+
 export interface ISheet {
     NAME: string,
     INDEX: number,
@@ -29,10 +31,35 @@ export interface ITable {
         LEFT: {
             VALUES: Array<string>;
         };
-    };
+    },
+    INDEX: Index;
 }
 
 export interface IOverViewSheet extends ISheet {
+    MIN_WIDTH: {
+        COLA: number,
+        COLB: number,
+        COLC: number,
+        COLD: number,
+        COLE: number,
+        COLF: number,
+        COLG: number,
+        COLH: number,
+        COLI: number,
+        COLJ: number;
+    },
+    MAX_WIDTH: {
+        COLA: number,
+        COLB: number,
+        COLC: number,
+        COLD: number,
+        COLE: number,
+        COLF: number,
+        COLG: number,
+        COLH: number,
+        COLI: number,
+        COLJ: number;
+    },
     TABLES: {
         TABLE_OVERALL: ITable,
         TABLE_LIST_WISE: ITable;
