@@ -1,5 +1,6 @@
 import { runSafely } from "./Code";
 import { FormulaService } from "./service/FormulaService";
+import { SecurityService } from "./service/SecurityService";
 import { SetUpService } from "./service/SetUpService";
 import { ThemeService } from "./service/ThemeService";
 import { UiService } from "./service/UiService";
@@ -21,5 +22,7 @@ function setUpSheet(): void {
         new ValidationService(spreadsheet).applyValidationToAllSheets();
 
         new ThemeService(spreadsheet, ThemeUtil.getCurrentTheme()).setTheme();
+
+        new SecurityService(spreadsheet).protectSpreadSheet();
     });
 }

@@ -34,12 +34,11 @@ export class CallLogService extends BaseService {
         let logCell = sheet.getRange(rowIndex, nameListSchema.addLogColIndex);
         //read new logs
         let newLogs = logCell.getDisplayValue();
-        if (Predicates.IS_BLANK.test(newLogs)) {
-            return;
-        }
+        Preconditions.checkNotBlank(newLogs, "No Log to update at row %s", rowIndex);
         newLogs = Util.formatUpdateLog(newLogs);
 
         let nameCell = sheet.getRange(rowIndex, nameListSchema.nameColIndex);
+        Preconditions.checkNotBlank(nameCell.getDisplayValue(), "No name present at Name Cell at row %s", rowIndex);
         //read old logs
         let oldLogs = nameCell.getNote().trim();
         if (Predicates.IS_NOT_BLANK.test(oldLogs)) {
