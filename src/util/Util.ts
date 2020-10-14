@@ -2,10 +2,10 @@ import { Index } from "../library/Index";
 import { ITable } from "../interface/ISheet";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
+import { Lov } from "../constants/Lov";
+import { Log } from "../constants/Log";
 
 export class Util {
-    private static readonly monthArray: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
     public static arrayOfArray<T>(array: Array<T>): Array<Array<T>> {
         return array.map((t): Array<T> => {
             return [t];
@@ -30,7 +30,7 @@ export class Util {
                 continue;
             }
 
-            if (eachLine.toLocaleLowerCase() === "today") {
+            if (eachLine.toLocaleLowerCase() === Log.TEXT_TO_REPLACE_WITH_TODAYS_DATE) {
                 if (Util.isValidDate(todayDate)) {
                     formatedLog = formatedLog + "\n\n" + Util.formatDate(todayDate);
                 } else {
@@ -220,6 +220,6 @@ export class Util {
         if (number < 0 || number > 11) {
             return "";
         }
-        return Util.monthArray[number];
+        return Lov.MONTHS[number];
     }
 }

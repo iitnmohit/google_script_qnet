@@ -1,4 +1,5 @@
 export class Msg {
+    public static readonly SETUP_MSG = "This will delete all the data and cannot be undone.\nAre you sure to proceed?";
     // TASK
     public static readonly TASK = {
         CREATE: {

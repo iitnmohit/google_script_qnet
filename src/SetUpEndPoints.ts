@@ -1,4 +1,5 @@
 import { runSafely } from "./Code";
+import { Msg } from "./constants/Message";
 import { FormulaService } from "./service/FormulaService";
 import { SecurityService } from "./service/SecurityService";
 import { SetUpService } from "./service/SetUpService";
@@ -8,8 +9,7 @@ import { ValidationService } from "./service/ValidationService";
 import { ThemeUtil } from "./util/ThemeUtil";
 
 function setUpSheet(): void {
-    if (!UiService.doesUserReConfirmedAction(
-        "This will delete all the data and cannot be undone.\nAre you sure to proceed?")) {
+    if (!UiService.doesUserReConfirmedAction(Msg.SETUP_MSG)) {
         return;
     }
     runSafely((): void => {

@@ -1,4 +1,19 @@
 export class Lov {
+    public static readonly MONTHS: Array<string> = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "July",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+    ];
+
     public static readonly LIST: Array<string> = [
         "CLOSED",
         "WORKING NOW",
