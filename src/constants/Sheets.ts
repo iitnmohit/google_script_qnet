@@ -91,7 +91,7 @@ export class Sheets {
         NAME: "NAME LIST",
         INDEX: 2,
         NUM_OF: {
-            ROWS: 1000,
+            ROWS: 5000,
             COLUMNS: 18
         },
         FREEZE: {
