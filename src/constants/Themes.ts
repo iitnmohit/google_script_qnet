@@ -36,5 +36,10 @@ export class Themes {
         overviewTableHeadderColor: "#b4a7d6",
         overviewTableFirstRowColor: "#fff2cc",
         overviewTableSecondRowColor: "#e8e7fc",
+
+        calenderTableHeadderFontColor: "#f3f3f3",
+        calenderTableHeadderColor: "#5791ec",
+        calenderTableFirstRowColor: "#ffffff",
+        calenderTableSecondRowColor: "#ffffff",
     } as ITheme;
 }

@@ -1,11 +1,11 @@
-import { Sheets } from "../constants/Sheets";
 import { Msg } from "../constants/Message";
+import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
+import { ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { ThemeUtil } from "../util/ThemeUtil";
-import { ISheet } from "../interface/ISheet";
 
 export class CitySheetSchema implements ISchema {
     // static variable
@@ -99,13 +99,27 @@ export class CitySheetSchema implements ISchema {
     }
 
     public insertRows(howMany: number): void {
+        if (howMany < 1) {
+            return;
+        }
         this.currentSheet.insertRows(this.NUM_OF_ROWS, howMany);
         this.NUM_OF_ROWS += howMany;
     }
 
     public insertsColumns(howMany: number): void {
+        if (howMany < 1) {
+            return;
+        }
         this.currentSheet.insertColumns(this.NUM_OF_COLUMNS, howMany);
         this.NUM_OF_COLUMNS += howMany;
+    }
+
+    public removeRow(index: number): void {
+        if (index < 1) {
+            return;
+        }
+        this.currentSheet.deleteRow(index);
+        this.NUM_OF_ROWS--;
     }
 
     // public local methods

@@ -182,3 +182,33 @@ export interface INameListSheet extends ISheet {
         DO: number;
     };
 }
+
+export interface ICalenderSheet extends ISheet {
+    COLUMN: {
+        DO: string,
+        CALENDER: string,
+        TITLE: string,
+        DESCRIPTION: string,
+        ALLDAY: string,
+        START_TIME: string,
+        END_TIME: string,
+    },
+    MIN_WIDTH: {
+        DO: number,
+        CALENDER: number,
+        TITLE: number,
+        DESCRIPTION: number,
+        ALLDAY: number,
+        START_TIME: number,
+        END_TIME: number,
+    },
+    MAX_WIDTH: {
+        DO: number,
+        CALENDER: number,
+        TITLE: number,
+        DESCRIPTION: number,
+        ALLDAY: number,
+        START_TIME: number,
+        END_TIME: number,
+    };
+}

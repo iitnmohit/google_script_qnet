@@ -1,5 +1,4 @@
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
-import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { OverViewSheetSchema } from "../schemas/OverViewSheetSchema";
 import { FormulaBuilder } from "../util/FormulaBuilder";
@@ -8,14 +7,12 @@ import { Util } from "../util/Util";
 export class FormulaService {
     private readonly spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
     private readonly citySchema: CitySheetSchema;
-    private readonly lovSchema: LovSheetSchema;
     private readonly nameSchema: NameListSheetSchema;
     private readonly overviewSchema: OverViewSheetSchema;
 
     constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
         this.spreadSheet = spreadsheet;
         this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
-        this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
         this.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
         this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
     }

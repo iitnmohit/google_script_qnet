@@ -24,4 +24,6 @@ export interface ISchema {
     insertRows(howMany: number): void;
 
     insertsColumns(howMany: number): void;
+
+    removeRow(index: number): void;
 }

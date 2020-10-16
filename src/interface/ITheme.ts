@@ -35,4 +35,9 @@ export interface ITheme {
     overviewTableHeadderColor: string,
     overviewTableFirstRowColor: string,
     overviewTableSecondRowColor: string,
+
+    calenderTableHeadderFontColor: string,
+    calenderTableHeadderColor: string,
+    calenderTableFirstRowColor: string,
+    calenderTableSecondRowColor: string,
 }

@@ -9,8 +9,9 @@ export class UiService {
             .createMenu(MAIN_MENU_NAME)
             .addSubMenu(this.getCreateMenu())
             .addSubMenu(this.getUpdateMenu())
+            .addSubMenu(this.getDeleteMenu())
+            .addSubMenu(this.getSyncMenu())
             .addItem('Clear Do CheckBoxes', 'taskClearAllCheckBox')
-            .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addItem('Set Up Sheet', 'setUpSheet')
             .addToUi();
@@ -43,8 +44,23 @@ export class UiService {
             .createMenu("Update")
             .addItem('1 Tasks', 'taskUpdateOneLog')
             .addItem('10 Tasks', 'taskUpdateSelectedLog')
+            .addSeparator()
             .addItem('1 Log', 'logUpdateOne')
             .addItem('10 Logs', 'logUpdateTen')
             .addItem('20 Logs', 'logUpdateTwenty');
+    }
+
+    private getDeleteMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Delete")
+            .addItem('All Tasks', 'taskDeleteAll')
+            .addSeparator()
+            .addItem('50 Events', 'deleteSelectedCalenderEvents');
+    }
+
+    private getSyncMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Sync Events")
+            .addItem('last 30 days', 'sync_before_30days_after_0days_events');
     }
 }

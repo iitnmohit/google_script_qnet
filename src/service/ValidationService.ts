@@ -2,19 +2,16 @@ import { ISchema } from "../interface/ISchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
-import { OverViewSheetSchema } from "../schemas/OverViewSheetSchema";
 
 export class ValidationService {
     private readonly citySchema: CitySheetSchema;
     private readonly lovSchema: LovSheetSchema;
     private readonly nameSchema: NameListSheetSchema;
-    private readonly overviewSchema: OverViewSheetSchema;
 
     constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
         this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
         this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
         this.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
-        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
     }
 
     public applyValidationToAllSheets(): void {

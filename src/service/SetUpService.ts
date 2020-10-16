@@ -8,6 +8,7 @@ import { InvalidConfigurationException, ServerException } from "../library/Excep
 import { Index } from "../library/Index";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
+import { CalenderSheetSchema } from "../schemas/CalenderSheetSchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -28,7 +29,8 @@ export class SetUpService {
             .createOverViewSheets()
             .createNameListSheets()
             .createLovSheets()
-            .createCitySheets();
+            .createCitySheets()
+            .createCalenderSheet();
         return this.spreadsheet;
     }
 
@@ -41,7 +43,8 @@ export class SetUpService {
             if (sheetName === OverViewSheetSchema.SHEET_NAME
                 || sheetName === NameListSheetSchema.SHEET_NAME
                 || sheetName === LovSheetSchema.SHEET_NAME
-                || sheetName === CitySheetSchema.SHEET_NAME) {
+                || sheetName === CitySheetSchema.SHEET_NAME
+                || sheetName === CalenderSheetSchema.SHEET_NAME) {
                 continue;
             }
             if (totalNumOfSheets - numOfSheetDeleted != 1) {
@@ -89,6 +92,13 @@ export class SetUpService {
         let citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
         return this.fillColValue(Cities.LIST, schema.locationColIndex, citySheet)
+            .setupColWidth(schema);
+    }
+
+    private createCalenderSheet(): SetUpService {
+        let calenderSheet = this.startSetUpOfSheet(Sheets.CALENDER);
+        let schema = CalenderSheetSchema.getValidSchema(calenderSheet);
+        return this.fillCheckBox(schema.doColIndex, schema)
             .setupColWidth(schema);
     }
 

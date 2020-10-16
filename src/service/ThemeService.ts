@@ -4,6 +4,7 @@ import { ITable } from "../interface/ISheet";
 import { ITheme } from "../interface/ITheme";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
+import { CalenderSheetSchema } from "../schemas/CalenderSheetSchema";
 import { CitySheetSchema } from "../schemas/CitySheetSchema";
 import { LovSheetSchema } from "../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
@@ -21,6 +22,7 @@ const HORIZENTAL: true = true;
 
 export class ThemeService {
     private readonly spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
+    private readonly calenderSchema: CalenderSheetSchema;
     private readonly citySchema: ISchema;
     private readonly lovSchema: LovSheetSchema;
     private readonly nameSchema: NameListSheetSchema;
@@ -33,6 +35,7 @@ export class ThemeService {
 
         this.spreadsheet = spreadsheet;
         this.currentTheme = currentTheme;
+        this.calenderSchema = CalenderSheetSchema.getValidCalenderSchema(spreadsheet);
         this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
         this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
         this.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
@@ -41,6 +44,7 @@ export class ThemeService {
 
     public setTheme(): void {
         this.setSpreadSheetTheme()
+            .setCalenderSheetTheme()
             .setCitySheetsTheme()
             .setLovSheetsTheme()
             .setNameListSheetsTheme()
@@ -55,6 +59,20 @@ export class ThemeService {
         return this;
     }
 
+    private setCalenderSheetTheme(): ThemeService {
+        this.setCommonTheme(this.calenderSchema);
+
+        //conditional formatting
+        let sheet = this.calenderSchema.getCurrentSheet();
+        let selectColChar = Util.getColumnLetter(this.calenderSchema.doColIndex);
+        let conditionForStrikeThrough = `$${selectColChar}2=true`;
+        let rangeAll = sheet.getRange(2, 1, this.calenderSchema.NUM_OF_ROWS - 1, this.calenderSchema.NUM_OF_COLUMNS);
+        rangeAll.setWrap(true).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+
+        this.applyConditionalForatting(sheet, conditionForStrikeThrough, rangeAll,
+            false, null, null, true, true, false);
+        return this;
+    }
     private setCitySheetsTheme(): ThemeService {
         return this.setCommonTheme(this.citySchema);
     }
@@ -114,13 +132,25 @@ export class ThemeService {
         range: GoogleAppsScript.Spreadsheet.Range,
         isStrikeThrough: boolean = false,
         bgColor: string = null,
-        fontColor = null
+        fontColor = null,
+        isUnderLine: boolean = false,
+        isItalic: boolean = false,
+        isBold: boolean = false
     ): void {
         let builder = SpreadsheetApp.newConditionalFormatRule()
             .whenFormulaSatisfied(`=${condition}`)
             .setRanges([range]);
         if (isStrikeThrough) {
             builder.setStrikethrough(true);
+        }
+        if (isUnderLine) {
+            builder.setUnderline(true);
+        }
+        if (isItalic) {
+            builder.setItalic(true);
+        }
+        if (isBold) {
+            builder.setBold(true);
         }
         if (Predicates.IS_NOT_BLANK.test(bgColor)) {
             builder.setBackground(bgColor);

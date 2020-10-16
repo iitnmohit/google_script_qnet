@@ -1,4 +1,4 @@
-import { ICitySheet, ILovSheet, INameListSheet, IOverViewSheet, ISheet } from "../interface/ISheet";
+import { ICalenderSheet, ICitySheet, ILovSheet, INameListSheet, IOverViewSheet } from "../interface/ISheet";
 
 export class Sheets {
     // common public
@@ -251,4 +251,45 @@ export class Sheets {
             }
         }
     } as IOverViewSheet;
+
+    // calender sheet
+    public static readonly CALENDER = {
+        NAME: "CALENDER",
+        INDEX: 5,
+        NUM_OF: {
+            ROWS: 1000,
+            COLUMNS: 7
+        },
+        FREEZE: {
+            ROW: Sheets.DEFAULT_FREEZE_ROW,
+            COLUMN: Sheets.DEFAULT_FREEZE_COL
+        },
+        COLUMN: {
+            DO: "DO",
+            CALENDER: "CALENDER",
+            TITLE: "TITLE",
+            DESCRIPTION: "DESCRIPTION",
+            ALLDAY: "ALL DAY",
+            START_TIME: "START TIME",
+            END_TIME: "END TIME",
+        },
+        MIN_WIDTH: {
+            DO: null,
+            CALENDER: 100,
+            TITLE: 200,
+            DESCRIPTION: 150,
+            ALLDAY: 100,
+            START_TIME: 100,
+            END_TIME: 100,
+        },
+        MAX_WIDTH: {
+            DO: 30,
+            CALENDER: null,
+            TITLE: null,
+            DESCRIPTION: null,
+            ALLDAY: null,
+            START_TIME: null,
+            END_TIME: null,
+        }
+    } as ICalenderSheet;
 }

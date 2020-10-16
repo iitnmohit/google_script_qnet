@@ -65,6 +65,12 @@ export class Util {
         return Util.dateString(date);
     }
 
+    public static formatDateTime(date: GoogleAppsScript.Base.Date): string {
+        let timestamp = Utilities.formatDate(date, "GMT+5:30", "dd-MMM-yyyy HH:mm:ss");
+        let mydate = new Date(timestamp);
+        return Util.dateTimeString(mydate);
+    }
+
     public static getColumnA1Notation(colIndex: number): string;
     public static getColumnA1Notation(colIndex: number, beginRow: number): string;
     public static getColumnA1Notation(colIndex: number, beginRow: number, sheetName: string): string;
@@ -202,6 +208,20 @@ export class Util {
         return new Index(tableStartRowIndex, tableStartColIndex);
     }
 
+    public static getEodDate(offsetDays: number = 0): Date {
+        let offsetTime = offsetDays * 24 * 60 * 60 * 1000;
+        let now = new Date();
+        now.setHours(23, 59, 59, 999);
+        return new Date(now.getTime() + offsetTime);
+    }
+
+    public static getBeginDate(offsetDays: number = 0): Date {
+        let offsetTime = offsetDays * 24 * 60 * 60 * 1000;
+        let now = new Date();
+        now.setHours(0, 0, 0,);
+        return new Date(now.getTime() + offsetTime);
+    }
+
     private static dateString(dateObj: Date) {
         let month = Util.getMonthName(dateObj.getMonth());
         let day = String(dateObj.getDate());
@@ -211,6 +231,25 @@ export class Util {
             day = '0' + day;
 
         return `${day}/${month}/${year}`;
+    }
+
+    private static dateTimeString(dateObj: Date) {
+        let month = Util.getMonthName(dateObj.getMonth());
+        let day = String(dateObj.getDate());
+        let year = String(dateObj.getFullYear());
+        let hour = dateObj.getHours();
+        let min = String(dateObj.getMinutes());
+        let amPm = "AM";
+
+
+        if (day.length < 2)
+            day = '0' + day;
+        if (hour > 11) {
+            hour = hour - 12;
+            amPm = "PM";
+        }
+
+        return `${day}/${month}/${year} ${hour}:${min} ${amPm}`;
     }
 
     private static getMonthName(number: number): string {
