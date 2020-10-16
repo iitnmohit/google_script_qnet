@@ -6,6 +6,7 @@ import { ServerException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
+import { DateUtil } from "../util/DateUtil";
 import { Util } from "../util/Util";
 import { BaseService } from "./BaseService";
 
@@ -41,7 +42,7 @@ export class TaskService extends BaseService {
                     }
                     let callLog = Util.formatUpdateLog(_task.notes, logDate);
                     nameSheet.getRange(row, this.nameListSchema.nameColIndex).setNote(callLog);
-                    nameSheet.getRange(row, this.nameListSchema.updateOnColIndex).setValue(Util.formatTodayDate());
+                    nameSheet.getRange(row, this.nameListSchema.updateOnColIndex).setValue(DateUtil.formatDate());
 
                     //delete task
                     this.deleteTaskById(_task.id);

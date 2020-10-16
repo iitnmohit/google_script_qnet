@@ -84,7 +84,7 @@ export class CalenderSheetSchema implements ISchema {
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Preconditions.format(Msg.SHEET.INVALID_SHEET, CalenderSheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, CalenderSheetSchema.SHEET_NAME));
     }
 
     public static getValidCalenderSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): CalenderSheetSchema {

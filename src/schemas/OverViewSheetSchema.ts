@@ -70,7 +70,7 @@ export class OverViewSheetSchema implements ISchema {
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Preconditions.format(Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET_NAME));
     }
 
     public static getValidOverViewSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): OverViewSheetSchema {
@@ -162,7 +162,7 @@ export class OverViewSheetSchema implements ISchema {
             for (let index = 0; index < topHeadder.length; index++) {
                 if (sheetValues[tableIndex.row - 1][tableIndex.col + index - 1] != topHeadder[index]) {
                     throw new InvalidSheetException(
-                        Preconditions.format(Msg.SHEET.INVALID_SHEET, this.getSheetName()));
+                        Utilities.formatString(Msg.SHEET.INVALID_SHEET, this.getSheetName()));
                 }
             }
         }
@@ -171,7 +171,7 @@ export class OverViewSheetSchema implements ISchema {
             for (let index = 0; index < leftHeadder.length; index++) {
                 if (sheetValues[tableIndex.row - 1 + index][tableIndex.col - 1] != leftHeadder[index]) {
                     throw new InvalidSheetException(
-                        Preconditions.format(Msg.SHEET.INVALID_SHEET, this.getSheetName()));
+                        Utilities.formatString(Msg.SHEET.INVALID_SHEET, this.getSheetName()));
                 }
             }
         }

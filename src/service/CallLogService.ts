@@ -3,6 +3,7 @@ import { Msg } from "../constants/Message";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
+import { DateUtil } from "../util/DateUtil";
 import { Util } from "../util/Util";
 import { BaseService } from "./BaseService";
 
@@ -25,7 +26,7 @@ export class CallLogService extends BaseService {
                 row: number) => {
                 this.appendLog(schema, row);
                 schema.getCurrentSheet()
-                    .getRange(row, schema.updateOnColIndex).setValue(Util.formatTodayDate());
+                    .getRange(row, schema.updateOnColIndex).setValue(DateUtil.formatDate());
             });
     }
 
@@ -46,7 +47,7 @@ export class CallLogService extends BaseService {
         }
 
         //update LOG
-        let updatedLog = oldLogs + Util.formatTodayDate() + "\n" + newLogs;
+        let updatedLog = oldLogs + DateUtil.formatDate() + "\n" + newLogs;
         nameCell.setNote(updatedLog);
 
         //clear log cell

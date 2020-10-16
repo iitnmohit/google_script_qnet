@@ -1,9 +1,9 @@
-import { Index } from "../library/Index";
+import { Log } from "../constants/Log";
 import { ITable } from "../interface/ISheet";
+import { Index } from "../library/Index";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
-import { Lov } from "../constants/Lov";
-import { Log } from "../constants/Log";
+import { DateUtil } from "./DateUtil";
 
 export class Util {
     public static arrayOfArray<T>(array: Array<T>): Array<Array<T>> {
@@ -25,16 +25,16 @@ export class Util {
                 continue;
             }
 
-            if (Util.isValidDate(eachLine)) {
-                formatedLog = formatedLog + "\n\n" + Util.formatDate(eachLine);
+            if (DateUtil.isValidDate(eachLine)) {
+                formatedLog = formatedLog + "\n\n" + DateUtil.formatDate(eachLine);
                 continue;
             }
 
             if (eachLine.toLocaleLowerCase() === Log.TEXT_TO_REPLACE_WITH_TODAYS_DATE) {
-                if (Util.isValidDate(todayDate)) {
-                    formatedLog = formatedLog + "\n\n" + Util.formatDate(todayDate);
+                if (DateUtil.isValidDate(todayDate)) {
+                    formatedLog = formatedLog + "\n\n" + DateUtil.formatDate(todayDate);
                 } else {
-                    formatedLog = formatedLog + "\n\n" + Util.formatTodayDate();
+                    formatedLog = formatedLog + "\n\n" + DateUtil.formatDate();
                 }
                 continue;
             }
@@ -42,33 +42,6 @@ export class Util {
             formatedLog = formatedLog + "\n" + " • " + eachLine;
         }
         return formatedLog.trim();
-    }
-
-    public static isValidDate(date: string): boolean {
-        let d = Date.parse(date);
-        return !isNaN(d);
-    }
-
-    public static formatDate(date: string): string {
-        let timestamp = Date.parse(date);
-        if (!isNaN(timestamp)) {
-            let dateObj = new Date(timestamp);
-            return Util.dateString(dateObj);
-        } else {
-            return date;
-        }
-    }
-
-    public static formatTodayDate(): string {
-        let timestamp = Utilities.formatDate(new Date(), "GMT+5:30", "dd-MMM-yyyy");
-        let date = new Date(timestamp);
-        return Util.dateString(date);
-    }
-
-    public static formatDateTime(date: GoogleAppsScript.Base.Date): string {
-        let timestamp = Utilities.formatDate(date, "GMT+5:30", "dd-MMM-yyyy HH:mm:ss");
-        let mydate = new Date(timestamp);
-        return Util.dateTimeString(mydate);
     }
 
     public static getColumnA1Notation(colIndex: number): string;
@@ -206,59 +179,5 @@ export class Util {
             tableStartRowIndex += lastValuedCellIndex.row;
         }
         return new Index(tableStartRowIndex, tableStartColIndex);
-    }
-
-    public static getEodDate(offsetDays: number = 0): Date {
-        let offsetTime = offsetDays * 24 * 60 * 60 * 1000;
-        let now = new Date();
-        now.setHours(23, 59, 59, 999);
-        return new Date(now.getTime() + offsetTime);
-    }
-
-    public static getBeginDate(offsetDays: number = 0): Date {
-        let offsetTime = offsetDays * 24 * 60 * 60 * 1000;
-        let now = new Date();
-        now.setHours(0, 0, 0,);
-        return new Date(now.getTime() + offsetTime);
-    }
-
-    private static dateString(dateObj: Date) {
-        let month = Util.getMonthName(dateObj.getMonth());
-        let day = String(dateObj.getDate());
-        let year = String(dateObj.getFullYear());
-
-        if (day.length < 2)
-            day = '0' + day;
-
-        return `${day}/${month}/${year}`;
-    }
-
-    private static dateTimeString(dateObj: Date) {
-        let month = Util.getMonthName(dateObj.getMonth());
-        let day = String(dateObj.getDate());
-        let year = String(dateObj.getFullYear());
-        let hour = dateObj.getHours();
-        let min = String(dateObj.getMinutes());
-        let amPm = "AM";
-
-
-        if (day.length < 2)
-            day = '0' + day;
-        if (hour > 11) {
-            hour = hour - 12;
-            amPm = "PM";
-        }
-
-        return `${day}/${month}/${year} ${hour}:${min} ${amPm}`;
-    }
-
-    private static getMonthName(number: number): string {
-        if (Predicates.IS_NULL.test(number)) {
-            return "";
-        }
-        if (number < 0 || number > 11) {
-            return "";
-        }
-        return Lov.MONTHS[number];
     }
 }

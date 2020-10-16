@@ -178,8 +178,8 @@ export class SetUpService {
         if (Predicates.IS_NOT_NULL.test(iSheet.COLUMN)) {
             let headderArray = Object.values<string>(iSheet.COLUMN);
             if (headderArray.length > iSheet.NUM_OF.COLUMNS) {
-                throw new InvalidConfigurationException(Preconditions
-                    .format(Msg.SHEET.HEADDER_MORE_THAN_COLUMN, iSheet.NAME));
+                throw new InvalidConfigurationException(Utilities
+                    .formatString(Msg.SHEET.HEADDER_MORE_THAN_COLUMN, iSheet.NAME));
             }
             if (Predicates.IS_LIST_NOT_EMPTY.test(headderArray)) {
                 sheet.getRange(1, 1, 1, headderArray.length)

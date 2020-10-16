@@ -128,7 +128,7 @@ export class NameListSheetSchema implements ISchema {
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Preconditions.format(Msg.SHEET.INVALID_SHEET, NameListSheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, NameListSheetSchema.SHEET_NAME));
     }
 
     public static getValidNameListSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): NameListSheetSchema {

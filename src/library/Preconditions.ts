@@ -16,7 +16,7 @@ export class Preconditions {
             if (errorMessage == null) {
                 errorMessage = "";
             } else {
-                errorMessage = Preconditions.format(errorMessage, errorMessageArg1, errorMessageArg2);
+                errorMessage = Utilities.formatString(errorMessage, errorMessageArg1, errorMessageArg2);
             }
             throw new IllegalArgumentException(errorMessage);
         }
@@ -35,7 +35,7 @@ export class Preconditions {
             if (errorMessage == null) {
                 errorMessage = "";
             } else {
-                errorMessage = Preconditions.format(errorMessage, errorMessageArg1, errorMessageArg2);
+                errorMessage = Utilities.formatString(errorMessage, errorMessageArg1, errorMessageArg2);
             }
             throw new NullPointerException(errorMessage);
         }
@@ -134,21 +134,5 @@ export class Preconditions {
         }
         Preconditions.checkArgument(isValid, errorMessage, errorMessageArg1, errorMessageArg2);
         return reference;
-    }
-
-    public static format(template: string, errorMessageArg1: string | number): string;
-    public static format(template: string, errorMessageArg1: string | number, errorMessageArg2: string | number): string;
-    public static format(template: string, errorMessageArg1: string | number, errorMessageArg2?: string | number): string {
-        let message = template;
-        if (template == null || template == undefined) {
-            message = "null";
-        }
-        if (errorMessageArg1 != null && errorMessageArg1 != undefined) {
-            message = message.replace("%s", errorMessageArg1.toString());
-            if (errorMessageArg2 != null && errorMessageArg2 != undefined) {
-                message = message.replace("%s", errorMessageArg2.toString());
-            }
-        }
-        return message;
     }
 }
