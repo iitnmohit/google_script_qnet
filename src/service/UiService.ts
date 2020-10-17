@@ -57,6 +57,7 @@ export class UiService {
             .createMenu("Calender")
             .addItem('Sync today', 'sync_todays_events')
             .addItem('Sync current week', 'sync_currentWeek_events')
+            .addItem('Sync current(+/-1) week', 'sync_current_prev_next_Week_events')
             .addItem('Sync current month', 'sync_current_month_events')
             .addItem('Sync past 30 days', 'sync_before_30days_events')
             .addItem('Sync past 90 days', 'sync_before_90days_events');

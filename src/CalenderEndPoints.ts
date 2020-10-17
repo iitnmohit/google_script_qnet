@@ -22,6 +22,14 @@ function sync_currentWeek_events(): void {
     });
 }
 
+function sync_current_prev_next_Week_events(): void {
+    runSafely((): void => {
+        let date = new Date();
+        let weekDay = date.getDay();
+        new CalenderService().syncEvent(0 - weekDay - 7, 6 - weekDay + 7);
+    });
+}
+
 function sync_current_month_events(): void {
     runSafely((): void => {
         let date = new Date();
