@@ -25,5 +25,5 @@ export interface ISchema {
 
     insertsColumns(howMany: number): void;
 
-    removeRow(index: number): void;
+    removeRow(index: number, howmany?: number): void;
 }

@@ -43,13 +43,40 @@ export class BaseService {
         }
     }
 
+    // array in decending order
     private deleteRows(rowArray: Array<number>, schema: ISchema): void {
+        let bufferArray: Array<number> = [];
+        let bufferArrayLastValue: number = 0;
         while (true) {
-            let _r_index = rowArray.pop();
-            if (Predicates.IS_NULL.test(_r_index)) {
+            let valueEach = rowArray.pop();
+            if (Predicates.IS_NULL.test(valueEach)) {
                 break;
             }
-            schema.removeRow(_r_index);
+            // innitialize array in begning
+            if (bufferArrayLastValue < 1) {
+                bufferArray = new Array<number>();
+                bufferArray.push(valueEach);
+                bufferArrayLastValue = valueEach;
+                continue;
+            }
+            // if value is part of series then push
+            if (bufferArrayLastValue - valueEach == 1) {
+                bufferArray.push(valueEach);
+                bufferArrayLastValue = valueEach;
+                continue;
+            }
+            // when new series started
+            // remove array
+            let removeRowIndex = bufferArray.pop();
+            schema.removeRow(removeRowIndex, bufferArray.length + 1);
+            //clear and continue fresh
+            bufferArray = new Array<number>();
+            bufferArray.push(valueEach);
+            bufferArrayLastValue = valueEach;
+        }
+        if (bufferArray.length > 0) {
+            let removeRowIndex = bufferArray.pop();
+            schema.removeRow(removeRowIndex, bufferArray.length + 1);
         }
     }
 }

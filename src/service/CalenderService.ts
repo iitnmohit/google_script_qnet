@@ -175,24 +175,16 @@ export class CalenderService extends BaseService {
     }
 
     private getEventById(eventId: string, calenderId: string, eventStartDate: string): GoogleAppsScript.Calendar.CalendarEvent {
-        Logger.log("event id : " + eventId);
-        Logger.log("calender id : " + calenderId);
-        Logger.log("start date : " + eventStartDate);
         if (!this.eventCache.has(calenderId)) {
             Logger.log("no cal id ");
             this.fillEventsInCache(calenderId, eventStartDate);
         }
         let eventDateMap = this.eventCache.get(calenderId);
         if (!eventDateMap.has(eventStartDate)) {
-            Logger.log("no event date id ");
             this.fillEventsInCache(calenderId, eventStartDate);
         }
-        Logger.log("eventDateMap : " + eventDateMap);
         let eventArray = eventDateMap.get(eventStartDate);
-        Logger.log("eventArray : " + eventArray);
         let indexOfEvent = this.findIndexOfEvent(eventArray, eventId);
-        Logger.log("indexOfEvent" + indexOfEvent);
-        Logger.log("cache" + this.eventCache);
         if (indexOfEvent >= 0) {
             return eventArray.splice(indexOfEvent, 1)[0];
         }
@@ -202,25 +194,18 @@ export class CalenderService extends BaseService {
     private fillEventsInCache(calenderId: string, eventStartDate: string): void {
         let events = this.getCalendarById(calenderId)
             .getEvents(DateUtil.getStartWeekTime(eventStartDate), DateUtil.getEndWeekTime(eventStartDate));
-        Logger.log("events retrived : " + events + events.length);
         if (!this.eventCache.has(calenderId)) {
-            Logger.log("adding cal id to map");
             this.eventCache.set(calenderId, new Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>());
         }
         let dateEventMap = this.eventCache.get(calenderId);
-        Logger.log("_dateEventMap : " + dateEventMap);
         for (let _event of events) {
             let eventStartDate = DateUtil.formatDate(_event.getStartTime());
-            Logger.log("__eventStartDate : " + eventStartDate);
             if (!dateEventMap.has(eventStartDate)) {
-                Logger.log("adding event date to map");
                 dateEventMap.set(eventStartDate, new Array<GoogleAppsScript.Calendar.CalendarEvent>());
             }
             let eventArray = dateEventMap.get(eventStartDate);
-            Logger.log("__eventArray__" + eventArray);
             eventArray.push(_event);
         }
-        Logger.log("testtt" + dateEventMap.size);
     }
 
     private getCalendarById(calenderId: string): GoogleAppsScript.Calendar.Calendar {

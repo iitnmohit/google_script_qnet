@@ -210,12 +210,17 @@ export class NameListSheetSchema implements ISchema {
         this.NUM_OF_COLUMNS += howMany;
     }
 
-    public removeRow(index: number): void {
+    public removeRow(index: number, howmany?: number): void {
         if (index < 1) {
             return;
         }
-        this.currentSheet.deleteRow(index);
-        this.NUM_OF_ROWS--;
+        if (Predicates.IS_NOT_POSITIVE.test(howmany)) {
+            this.currentSheet.deleteRow(index);
+            this.NUM_OF_ROWS--;
+        } else {
+            this.currentSheet.deleteRows(index, howmany);
+            this.NUM_OF_ROWS -= howmany;
+        }
     }
 
     // public local methods
