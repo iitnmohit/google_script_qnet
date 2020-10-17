@@ -36,7 +36,7 @@ function sync_current_prev_next_Week_events(): void {
 
 function sync_current_month_events(): void {
     runSafely((): void => {
-        let date = new Date();
+        let date = DateUtil.localDate();
         let dateOfMonth = date.getDate();
         let totaldaysInMOnth = DateUtil.getNumberOfDaysInMonth(date.getMonth());
         new CalenderService().syncEvent(1 - dateOfMonth, totaldaysInMOnth - dateOfMonth);

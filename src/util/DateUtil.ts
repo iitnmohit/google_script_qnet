@@ -67,9 +67,9 @@ export class DateUtil {
         let _timestamp = Date.parse(dateString);
         if (!isNaN(_timestamp)) {
             //string & valid date
-            return new Date(_timestamp);
+            return DateUtil.localDate(new Date(_timestamp));
         }
-        return new Date();
+        return DateUtil.localDate();
     }
 
     /**
@@ -77,7 +77,7 @@ export class DateUtil {
      * @param offsetDays num of days after(+) or before(-) today
      * @returns Date (today +- offsetDays with start day time)
      */
-    public static getBeginDayDate(offsetDays: number = 0, todayDate: Date = new Date()): GoogleAppsScript.Base.Date {
+    public static getBeginDayDate(offsetDays: number = 0, todayDate: Date = DateUtil.localDate()): GoogleAppsScript.Base.Date {
         let offsetTime = offsetDays * MILLISECONDS_IN_ONE_DAY;
         todayDate.setHours(0, 0, 0, 0);
         return new Date(todayDate.getTime() + offsetTime);
@@ -88,7 +88,7 @@ export class DateUtil {
      * @param offsetDays num of days after(+) or before(-) today
      * @returns Date (today +- offsetDays with end day time)
      */
-    public static getEndDayDate(offsetDays: number = 0, todayDate: Date = new Date()): Date {
+    public static getEndDayDate(offsetDays: number = 0, todayDate: Date = DateUtil.localDate()): Date {
         let offsetTime = offsetDays * MILLISECONDS_IN_ONE_DAY;
         todayDate.setHours(23, 59, 59, 999);
         return new Date(todayDate.getTime() + offsetTime);
@@ -124,7 +124,7 @@ export class DateUtil {
      * @param month month from 0 to 11
      */
     public static getNumberOfDaysInMonth(month?: number, year?: number): number {
-        let newDate = new Date();
+        let newDate = DateUtil.localDate();
         if (Predicates.IS_NULL.test(month)) {
             month = newDate.getMonth();
         }
@@ -186,9 +186,9 @@ export class DateUtil {
     }
 
     /**
-     * 
+     * use this in stead of new Date()
      * @param refDate 
-     * @returns date as per calender property
+     * @returns new date as per calender property
      */
     public static localDate(refDate: Date | GoogleAppsScript.Base.Date = new Date()) {
         let refTime = refDate.getTime();
