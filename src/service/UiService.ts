@@ -1,3 +1,5 @@
+import { Preconditions } from "../library/Preconditions";
+
 const MAIN_MENU_NAME = "QNET";
 
 
@@ -12,10 +14,11 @@ export class UiService {
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addSubMenu(this.getCalenderMenu())
-            .addItem('Remove 50 Events', 'deleteSelectedCalenderEvents')
+            .addItem('Schedule Invite', 'scheduleInvite')
+            .addItem('Delete Events', 'deleteSelectedCalenderEvents')
             .addSeparator()
             .addItem('Clear Do CheckBoxes', 'commonClearAllCheckBox')
-            .addItem('Set Up Sheet', 'setUpSheet')
+            .addSubMenu(this.getSettingsMenu())
             .addToUi();
     }
 
@@ -31,6 +34,25 @@ export class UiService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 
+     * @param message display message to input box
+     * @returns response text or null if user press cancel
+     */
+    public static getInputFromUser(message: string, isRetry: boolean = false): string {
+        let title = "Heads Up!";
+        if (isRetry) {
+            title = "* Below information is required to proceed";
+        }
+        Preconditions.checkNotBlank(message);
+        let ui = SpreadsheetApp.getUi();
+        let promptResponse = ui.prompt(title, message, ui.ButtonSet.OK_CANCEL);
+        if (promptResponse.getSelectedButton() === ui.Button.OK) {
+            return promptResponse.getResponseText();
+        }
+        return null;
     }
 
     private getCreateMenu(): GoogleAppsScript.Base.Menu {
@@ -61,5 +83,11 @@ export class UiService {
             .addItem('Sync current month', 'sync_current_month_events')
             .addItem('Sync past 30 days', 'sync_before_30days_events')
             .addItem('Sync past 90 days', 'sync_before_90days_events');
+    }
+
+    private getSettingsMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Settings")
+            .addItem('Set Up Sheet', 'setUpSheet');
     }
 }

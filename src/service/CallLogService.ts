@@ -26,7 +26,7 @@ export class CallLogService extends BaseService {
                 row: number) => {
                 this.appendLog(schema, row);
                 schema.getCurrentSheet()
-                    .getRange(row, schema.updateOnColIndex).setValue(DateUtil.formatDate());
+                    .getRange(row, schema.updateOnColIndex).setValue(DateUtil.format());
             });
     }
 
@@ -47,7 +47,7 @@ export class CallLogService extends BaseService {
         }
 
         //update LOG
-        let updatedLog = oldLogs + DateUtil.formatDate() + "\n" + newLogs;
+        let updatedLog = oldLogs + DateUtil.format() + "\n" + newLogs;
         nameCell.setNote(updatedLog);
 
         //clear log cell

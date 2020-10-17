@@ -1,9 +1,14 @@
 {
     "editor.rulers": [
-        80
+        100
     ],
     "javascript.format.semicolons": "insert",
     "typescript.format.insertSpaceAfterConstructor": true,
     "typescript.format.semicolons": "insert",
-    "typescript.tsdk": ""
+    "typescript.tsdk": "",
+    "[yaml]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced"
+    }
 }

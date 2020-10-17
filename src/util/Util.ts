@@ -25,16 +25,16 @@ export class Util {
                 continue;
             }
 
-            if (DateUtil.isValidDate(eachLine)) {
-                formatedLog = formatedLog + "\n\n" + DateUtil.formatDate(eachLine);
+            if (DateUtil.isValid(eachLine)) {
+                formatedLog = formatedLog + "\n\n" + DateUtil.format(eachLine);
                 continue;
             }
 
             if (eachLine.toLocaleLowerCase() === Log.TEXT_TO_REPLACE_WITH_TODAYS_DATE) {
-                if (DateUtil.isValidDate(todayDate)) {
-                    formatedLog = formatedLog + "\n\n" + DateUtil.formatDate(todayDate);
+                if (DateUtil.isValid(todayDate)) {
+                    formatedLog = formatedLog + "\n\n" + DateUtil.format(todayDate);
                 } else {
-                    formatedLog = formatedLog + "\n\n" + DateUtil.formatDate();
+                    formatedLog = formatedLog + "\n\n" + DateUtil.format();
                 }
                 continue;
             }

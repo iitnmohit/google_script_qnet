@@ -66,10 +66,10 @@ export class CalenderService extends BaseService {
             }
             let _events: Array<GoogleAppsScript.Calendar.CalendarEvent> = [];
             if (startdays == endDays) {
-                _events = calender.getEventsForDay(DateUtil.getBeginDate(startdays));
+                _events = calender.getEventsForDay(DateUtil.getBeginDayDate(startdays));
             } else {
-                _events = calender.getEvents(DateUtil.getBeginDate(startdays),
-                    DateUtil.getEodDate(endDays));
+                _events = calender.getEvents(DateUtil.getBeginDayDate(startdays),
+                    DateUtil.getEndDayDate(endDays));
             }
             for (let _eventEach of _events) {
                 allEvents.push(this.createNewMyEvent(_eventEach, calender));
@@ -91,10 +91,10 @@ export class CalenderService extends BaseService {
             rowArray.push(_my_event.description);
             rowArray.push(_my_event.isAllDayEvent);
             if (_my_event.isAllDayEvent === "NO") {
-                rowArray.push(DateUtil.formatDate(_my_event.startTime, true));
-                rowArray.push(DateUtil.formatDate(_my_event.endTime, true));
+                rowArray.push(DateUtil.format(_my_event.startTime, true));
+                rowArray.push(DateUtil.format(_my_event.endTime, true));
             } else {
-                rowArray.push(DateUtil.formatDate(_my_event.startTime));
+                rowArray.push(DateUtil.format(_my_event.startTime));
                 rowArray.push("");
             }
 
@@ -107,7 +107,7 @@ export class CalenderService extends BaseService {
                 .setFontColor(this.resolveFontColor(_my_event.calenderColor))
                 .setNote(_my_event.calenderId);
             sheet.getRange(row, this.calenderSchema.allDayColIndex, 1, 2)
-                .setNotes([[_my_event.id, DateUtil.formatDate(_my_event.startTime)]]);
+                .setNotes([[_my_event.id, DateUtil.format(_my_event.startTime)]]);
             row++;
         }
     }
@@ -192,7 +192,6 @@ export class CalenderService extends BaseService {
 
     private getEventById(eventId: string, calenderId: string, eventStartDate: string): GoogleAppsScript.Calendar.CalendarEvent {
         if (!this.eventCache.has(calenderId)) {
-            Logger.log("no cal id ");
             this.fillEventsInCache(calenderId, eventStartDate);
         }
         let eventDateMap = this.eventCache.get(calenderId);
@@ -209,13 +208,13 @@ export class CalenderService extends BaseService {
 
     private fillEventsInCache(calenderId: string, eventStartDate: string): void {
         let events = this.getCalendarById(calenderId)
-            .getEvents(DateUtil.getStartWeekTime(eventStartDate), DateUtil.getEndWeekTime(eventStartDate));
+            .getEvents(DateUtil.getBeginWeekDate(eventStartDate), DateUtil.getEndWeekDate(eventStartDate));
         if (!this.eventCache.has(calenderId)) {
             this.eventCache.set(calenderId, new Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>());
         }
         let dateEventMap = this.eventCache.get(calenderId);
         for (let _event of events) {
-            let eventStartDate = DateUtil.formatDate(_event.getStartTime());
+            let eventStartDate = DateUtil.format(_event.getStartTime());
             if (!dateEventMap.has(eventStartDate)) {
                 dateEventMap.set(eventStartDate, new Array<GoogleAppsScript.Calendar.CalendarEvent>());
             }
