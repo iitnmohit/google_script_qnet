@@ -58,7 +58,12 @@ export class CalenderService extends BaseService {
     private fetchAllEvents(startdays: number, endDays: number): Array<MyCalenderEvent> {
         let allEvents = new Array<MyCalenderEvent>();
         let calenders = CalendarApp.getAllCalendars();
-        for (let calender of calenders) {
+        outer: for (let calender of calenders) {
+            for (let skipCalenderName of Calender.SKIP_CALENDER) {
+                if (skipCalenderName === calender.getName()) {
+                    continue outer;
+                }
+            }
             let _events: Array<GoogleAppsScript.Calendar.CalendarEvent> = [];
             if (startdays == endDays) {
                 _events = calender.getEventsForDay(DateUtil.getBeginDate(startdays));
