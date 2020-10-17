@@ -257,7 +257,7 @@ export class Sheets {
         NAME: "CALENDER",
         INDEX: 5,
         NUM_OF: {
-            ROWS: 1000,
+            ROWS: 20,
             COLUMNS: 7
         },
         FREEZE: {

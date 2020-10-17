@@ -148,10 +148,10 @@ export class CalenderSheetSchema implements ISchema {
         if (index < 1) {
             return;
         }
-        if (Predicates.IS_NOT_POSITIVE.test(howmany)) {
+        if (Predicates.IS_NULL.test(howmany)) {
             this.currentSheet.deleteRow(index);
             this.NUM_OF_ROWS--;
-        } else {
+        } else if (Predicates.IS_POSITIVE.test(howmany)) {
             this.currentSheet.deleteRows(index, howmany);
             this.NUM_OF_ROWS -= howmany;
         }

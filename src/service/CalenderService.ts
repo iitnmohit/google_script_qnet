@@ -79,6 +79,7 @@ export class CalenderService extends BaseService {
     }
 
     private fillEventsToSheet(allEvents: MyCalenderEvent[]): void {
+        this.calenderSchema.insertRows(allEvents.length + this.calenderSchema.ISHEET.NUM_OF.ROWS - this.calenderSchema.NUM_OF_ROWS);
         let sortedEvent = allEvents.sort(this.eventArraySortComprator);
         let sheet = this.calenderSchema.getCurrentSheet();
         let row = 2;
@@ -154,6 +155,7 @@ export class CalenderService extends BaseService {
     }
 
     private clearSheet(): CalenderService {
+        this.calenderSchema.removeRow(2, this.calenderSchema.NUM_OF_ROWS - this.calenderSchema.ISHEET.NUM_OF.ROWS);
         this.calenderSchema.getCurrentSheet()
             .getRange(2, 1, this.calenderSchema.NUM_OF_ROWS - 1, this.calenderSchema.NUM_OF_COLUMNS)
             .clearContent()
