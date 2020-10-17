@@ -275,12 +275,12 @@ export class Sheets {
         },
         MIN_WIDTH: {
             DO: null,
-            CALENDER: 100,
-            TITLE: 200,
+            CALENDER: 120,
+            TITLE: 240,
             DESCRIPTION: 150,
-            ALLDAY: 100,
-            START_TIME: 100,
-            END_TIME: 100,
+            ALLDAY: null,
+            START_TIME: 180,
+            END_TIME: 180,
         },
         MAX_WIDTH: {
             DO: 30,
