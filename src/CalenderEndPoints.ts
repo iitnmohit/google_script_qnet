@@ -54,12 +54,3 @@ function sync_before_90days_events(): void {
         new CalenderService().syncEvent(-90, 0);
     });
 }
-
-function scheduleInvite(): void {
-    runSafely((): void => {
-        new CalenderService();
-    });
-}
-
-
-

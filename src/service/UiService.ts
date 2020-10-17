@@ -14,7 +14,6 @@ export class UiService {
             .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addSubMenu(this.getCalenderMenu())
-            .addItem('Schedule Invite', 'scheduleInvite')
             .addItem('Delete Events', 'deleteSelectedCalenderEvents')
             .addSeparator()
             .addItem('Clear Do CheckBoxes', 'commonClearAllCheckBox')
