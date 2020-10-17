@@ -117,4 +117,34 @@ export class DateUtil {
         }
         return Lov.MONTHS[number];
     }
+
+    /**
+     * 
+     * @param month month from 0 to 11
+     */
+    public static getNumberOfDaysInMonth(month?: number, year?: number): number {
+        let newDate = new Date();
+        if (Predicates.IS_NULL.test(month)) {
+            month = newDate.getMonth();
+        }
+        if (Predicates.IS_NULL.test(year)) {
+            year = newDate.getFullYear();
+        }
+        let isLeapYear: boolean = (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
+        switch (month + 1) {
+            case 1: return 31;//jan
+            case 2: return isLeapYear ? 29 : 28;//feb
+            case 3: return 31;//march
+            case 4: return 30;//april
+            case 5: return 31;//may
+            case 6: return 30;//june
+            case 7: return 31;//july
+            case 8: return 31;//aug
+            case 9: return 30;//sep
+            case 10: return 31;//oct
+            case 11: return 30;//nov
+            case 12: return 31;//dec
+            default: return 30;
+        }
+    }
 }

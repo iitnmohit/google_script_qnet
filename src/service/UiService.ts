@@ -9,10 +9,12 @@ export class UiService {
             .createMenu(MAIN_MENU_NAME)
             .addSubMenu(this.getCreateMenu())
             .addSubMenu(this.getUpdateMenu())
-            .addSubMenu(this.getDeleteMenu())
-            .addSubMenu(this.getSyncMenu())
-            .addItem('Clear Do CheckBoxes', 'taskClearAllCheckBox')
+            .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
+            .addSubMenu(this.getCalenderMenu())
+            .addItem('Remove 50 Events', 'deleteSelectedCalenderEvents')
+            .addSeparator()
+            .addItem('Clear Do CheckBoxes', 'commonClearAllCheckBox')
             .addItem('Set Up Sheet', 'setUpSheet')
             .addToUi();
     }
@@ -50,17 +52,13 @@ export class UiService {
             .addItem('20 Logs', 'logUpdateTwenty');
     }
 
-    private getDeleteMenu(): GoogleAppsScript.Base.Menu {
+    private getCalenderMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
-            .createMenu("Delete")
-            .addItem('All Tasks', 'taskDeleteAll')
-            .addSeparator()
-            .addItem('50 Events', 'deleteSelectedCalenderEvents');
-    }
-
-    private getSyncMenu(): GoogleAppsScript.Base.Menu {
-        return SpreadsheetApp.getUi()
-            .createMenu("Sync Events")
-            .addItem('last 30 days', 'sync_before_30days_after_0days_events');
+            .createMenu("Calender")
+            .addItem('Sync today', 'sync_todays_events')
+            .addItem('Sync current week', 'sync_currentWeek_events')
+            .addItem('Sync current month', 'sync_current_month_events')
+            .addItem('Sync past 30 days', 'sync_before_30days_events')
+            .addItem('Sync past 90 days', 'sync_before_90days_events');
     }
 }

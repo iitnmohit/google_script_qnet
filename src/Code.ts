@@ -1,3 +1,5 @@
+import { CalenderService } from "./service/CalenderService";
+import { TaskService } from "./service/TaskService";
 import { UiService } from "./service/UiService";
 
 export function runSafely(callback: () => void): void {
@@ -16,4 +18,11 @@ function handleError(error: unknown) {
     let ee = error as Error;
     UiService.showErrorMessage(ee.message);
     Logger.log("Error" + ee.message + ee.stack);
+}
+
+function commonClearAllCheckBox(): void {
+    runSafely((): void => {
+        new TaskService().clearAllCheckbox();
+        new CalenderService();
+    });
 }

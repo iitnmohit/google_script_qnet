@@ -51,12 +51,21 @@ export class CalenderService extends BaseService {
         this.fillEventsToSheet(allEvents);
     }
 
-    private fetchAllEvents(startdays: number, endDays: any): Array<MyCalenderEvent> {
+    public clearAllCheckbox(): void {
+        this.calenderSchema.getCurrentSheet().getRange(2, this.calenderSchema.doColIndex, this.calenderSchema.NUM_OF_ROWS - 1, 1).uncheck();
+    }
+
+    private fetchAllEvents(startdays: number, endDays: number): Array<MyCalenderEvent> {
         let allEvents = new Array<MyCalenderEvent>();
         let calenders = CalendarApp.getAllCalendars();
         for (let calender of calenders) {
-            let _events = calender.getEvents(DateUtil.getBeginDate(startdays),
-                DateUtil.getEodDate(endDays));
+            let _events: Array<GoogleAppsScript.Calendar.CalendarEvent> = [];
+            if (startdays == endDays) {
+                _events = calender.getEventsForDay(DateUtil.getBeginDate(startdays));
+            } else {
+                _events = calender.getEvents(DateUtil.getBeginDate(startdays),
+                    DateUtil.getEodDate(endDays));
+            }
             for (let _eventEach of _events) {
                 allEvents.push(this.createNewMyEvent(_eventEach, calender));
             }

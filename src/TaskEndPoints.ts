@@ -3,13 +3,6 @@ import { Msg } from "./constants/Message";
 import { TaskService } from "./service/TaskService";
 import { UiService } from "./service/UiService";
 
-
-function taskClearAllCheckBox(): void {
-  runSafely((): void => {
-    new TaskService().clearAllCheckbox();
-  });
-}
-
 function taskDeleteAll(): void {
   if (UiService.doesUserReConfirmedAction(Msg.UI.MSG_DELETE_ALERT)) {
     runSafely((): void => {
