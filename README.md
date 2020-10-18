@@ -21,7 +21,7 @@
 # Setup Computer for pushing code for mac os (specified person)
 - install node.js from [here](https://nodejs.org/en/download/current/)
 - install clasp globally `npm install @google/clasp -g`
-- clone this reposatory to a folder `git clone https://github.com/iitnmohit/google_script_qnet.git`
+- clone this repository to a folder `git clone https://github.com/iitnmohit/google_script_qnet.git`
 - go to project folder `cd google_script_qnet`
 - login to google account `clasp login`
 - open `.clasp.json` file and replace `scriptid`
