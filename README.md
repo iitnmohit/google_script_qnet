@@ -10,15 +10,15 @@
 - Follow Steps in account X
     - Sign in to Google Drive
     - Create a new spreadsheet
-    - Share as edior to below person
+    - Share as editor to the specified person
     - Go to Tools -> Script Editor -> File -> Project Properties
-    - Copy Script ID and share below person
+    - Copy Script ID and share it with specified person
     - Close the script tab
-    - ask below person to push code
+    - Ask the specified person to setup the spreadsheet
     - Refresh the Spreadsheet.
     - Done!
 
-# Setup Computer for pushing code for mac os
+# Setup Computer for pushing code for mac os (specified person)
 - install node.js from [here](https://nodejs.org/en/download/current/)
 - install clasp globally `npm install @google/clasp -g`
 - clone this reposatory to a folder `git clone https://github.com/iitnmohit/google_script_qnet.git`
