@@ -50,7 +50,6 @@ export class LovSheetSchema extends BaseSchema {
     public FREEZE_COLUMN: number = Sheets.LOV.FREEZE.COLUMN;
 
     // private local variable
-    private isThisSchemaValid: boolean = false;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
@@ -152,7 +151,6 @@ export class LovSheetSchema extends BaseSchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.closingColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.zoneColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.castColIndex)) return false;
-        this.isThisSchemaValid = true;
         return true;
     }
 }

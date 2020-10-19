@@ -34,7 +34,6 @@ export class CitySheetSchema extends BaseSchema {
     public FREEZE_COLUMN: number = Sheets.CITY.FREEZE.COLUMN;
 
     // private local variable
-    private isThisSchemaValid: boolean = false;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
@@ -96,7 +95,6 @@ export class CitySheetSchema extends BaseSchema {
     private isSchemaValid(): boolean {
         if (Predicates.IS_NOT_POSITIVE.test(this.locationColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.countColIndex)) return false;
-        this.isThisSchemaValid = true;
         return true;
     }
 }

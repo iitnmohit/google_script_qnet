@@ -35,7 +35,6 @@ export class OverViewSheetSchema extends BaseSchema {
     public FREEZE_COLUMN: number = Sheets.OVERVIEW.FREEZE.COLUMN;
 
     // private local variable
-    private isThisSchemaValid: boolean = false;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
@@ -119,7 +118,6 @@ export class OverViewSheetSchema extends BaseSchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.tableOverallColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.tableListWiseRowIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.tableListWiseColIndex)) return false;
-        this.isThisSchemaValid = true;
         return true;
     }
 

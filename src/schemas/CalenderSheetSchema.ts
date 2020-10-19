@@ -44,7 +44,6 @@ export class CalenderSheetSchema extends BaseSchema {
     public FREEZE_COLUMN: number = Sheets.CALENDER.FREEZE.COLUMN;
 
     // private local variable
-    private isThisSchemaValid: boolean = false;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
@@ -131,7 +130,6 @@ export class CalenderSheetSchema extends BaseSchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.allDayColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.startTimeColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.endTimeColIndex)) return false;
-        this.isThisSchemaValid = true;
         return true;
     }
 }

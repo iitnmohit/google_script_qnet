@@ -66,7 +66,6 @@ export class NameListSheetSchema extends BaseSchema {
     public FREEZE_COLUMN: number = Sheets.NAMELIST.FREEZE.COLUMN;
 
     // private local variable
-    private isThisSchemaValid: boolean = false;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
@@ -231,7 +230,6 @@ export class NameListSheetSchema extends BaseSchema {
         if (Predicates.IS_NOT_POSITIVE.test(this.linkColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.addLogColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.doColIndex)) return false;
-        this.isThisSchemaValid = true;
         return true;
     }
 }
