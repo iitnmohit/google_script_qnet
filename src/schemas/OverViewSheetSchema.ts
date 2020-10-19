@@ -1,6 +1,5 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ISchema } from "../interface/ISchema";
 import { IOverViewSheet, ITable } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Index } from "../library/Index";
@@ -8,8 +7,9 @@ import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { Util } from "../util/Util";
+import { BaseSchema } from "./BaseSchema";
 
-export class OverViewSheetSchema implements ISchema {
+export class OverViewSheetSchema extends BaseSchema {
     // static variable
     public static readonly SHEET_NAME: string = Sheets.OVERVIEW.NAME;
     public static readonly SHEET_INDEX: number = Sheets.OVERVIEW.INDEX;
@@ -21,6 +21,7 @@ export class OverViewSheetSchema implements ISchema {
     public readonly tableListWiseColIndex: number = -1;
 
     // public abstract variable
+    public CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
     public ISHEET: IOverViewSheet = Sheets.OVERVIEW;
     public NUM_OF_ROWS: number = 1;
     public NUM_OF_COLUMNS: number = 1;
@@ -35,11 +36,11 @@ export class OverViewSheetSchema implements ISchema {
 
     // private local variable
     private isThisSchemaValid: boolean = false;
-    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        this.currentSheet = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET_NAME);
+        super();
+        this.CURRENT_SHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET_NAME);
         this.NUM_OF_ROWS = sheet.getMaxRows();
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
         let sheetValues = sheet.getSheetValues(1, 1, this.NUM_OF_ROWS, this.NUM_OF_COLUMNS);
@@ -79,10 +80,6 @@ export class OverViewSheetSchema implements ISchema {
     }
 
     // public abstract methods 
-    public getSheetName(): string {
-        return OverViewSheetSchema.SHEET_NAME;
-    }
-
     public getMinColWidth(index: number): number {
         switch (index) {
             case 1: return Sheets.OVERVIEW.MIN_WIDTH.COLA;
@@ -114,40 +111,6 @@ export class OverViewSheetSchema implements ISchema {
         }
     }
 
-    public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
-        Preconditions.checkArgument(this.isThisSchemaValid, Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET_NAME);
-        return this.currentSheet;
-    }
-
-    public insertRows(howMany: number): void {
-        if (howMany < 1) {
-            return;
-        }
-        this.currentSheet.insertRows(this.NUM_OF_ROWS, howMany);
-        this.NUM_OF_ROWS += howMany;
-    }
-
-    public insertsColumns(howMany: number): void {
-        if (howMany < 1) {
-            return;
-        }
-        this.currentSheet.insertColumns(this.NUM_OF_COLUMNS, howMany);
-        this.NUM_OF_COLUMNS += howMany;
-    }
-
-    public removeRow(index: number, howmany?: number): void {
-        if (index < 1) {
-            return;
-        }
-        if (Predicates.IS_NULL.test(howmany)) {
-            this.currentSheet.deleteRow(index);
-            this.NUM_OF_ROWS--;
-        } else if (Predicates.IS_POSITIVE.test(howmany)) {
-            this.currentSheet.deleteRows(index, howmany);
-            this.NUM_OF_ROWS -= howmany;
-        }
-    }
-
     // public local methods
 
     // private local method
@@ -167,7 +130,7 @@ export class OverViewSheetSchema implements ISchema {
             for (let index = 0; index < topHeadder.length; index++) {
                 if (sheetValues[tableIndex.row - 1][tableIndex.col + index - 1] != topHeadder[index]) {
                     throw new InvalidSheetException(
-                        Utilities.formatString(Msg.SHEET.INVALID_SHEET, this.getSheetName()));
+                        Utilities.formatString(Msg.SHEET.INVALID_SHEET, this.ISHEET.NAME));
                 }
             }
         }
@@ -176,7 +139,7 @@ export class OverViewSheetSchema implements ISchema {
             for (let index = 0; index < leftHeadder.length; index++) {
                 if (sheetValues[tableIndex.row - 1 + index][tableIndex.col - 1] != leftHeadder[index]) {
                     throw new InvalidSheetException(
-                        Utilities.formatString(Msg.SHEET.INVALID_SHEET, this.getSheetName()));
+                        Utilities.formatString(Msg.SHEET.INVALID_SHEET, this.ISHEET.NAME));
                 }
             }
         }

@@ -25,13 +25,13 @@ export class CallLogService extends BaseService {
                 schema: NameListSheetSchema,
                 row: number) => {
                 this.appendLog(schema, row);
-                schema.getCurrentSheet()
+                schema.CURRENT_SHEET
                     .getRange(row, schema.updateOnColIndex).setValue(DateUtil.format());
             });
     }
 
     private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
-        let sheet = nameListSchema.getCurrentSheet();
+        let sheet = nameListSchema.CURRENT_SHEET;
         let logCell = sheet.getRange(rowIndex, nameListSchema.addLogColIndex);
         //read new logs
         let newLogs = logCell.getDisplayValue();

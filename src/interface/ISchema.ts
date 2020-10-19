@@ -1,6 +1,7 @@
 import { ISheet } from "./ISheet";
 
 export interface ISchema {
+    CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
     ISHEET: ISheet,
     NUM_OF_ROWS: number;
     NUM_OF_COLUMNS: number;
@@ -12,10 +13,6 @@ export interface ISchema {
 
     FREEZE_ROW: number;
     FREEZE_COLUMN: number;
-
-    getSheetName(): string;
-
-    getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet;
 
     getMinColWidth(index: number): number;
 

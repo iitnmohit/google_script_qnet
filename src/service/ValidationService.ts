@@ -57,8 +57,8 @@ export class ValidationService {
         targetColName: string,
         targetColIndex: number
     ): ValidationService {
-        let lovSheet = schema.getCurrentSheet();
-        let nameListSheet = this.nameSchema.getCurrentSheet();
+        let lovSheet = schema.CURRENT_SHEET;
+        let nameListSheet = this.nameSchema.CURRENT_SHEET;
         let cellRange = nameListSheet.getRange(2, targetColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
         let dataValidation = SpreadsheetApp.newDataValidation()
             .requireValueInRange(lovSheet.getRange(2, lovColIndex, schema.NUM_OF_ROWS - 1, 1), true)

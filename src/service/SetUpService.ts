@@ -104,7 +104,7 @@ export class SetUpService {
 
     private fillNumbers(colIndex: number, schema: ISchema): SetUpService {
         try {
-            let sheet = schema.getCurrentSheet();
+            let sheet = schema.CURRENT_SHEET;
             let sourceRange = sheet.getRange(2, colIndex, 2, 1);
             sourceRange.setValues([[1], [2]]);
             let destRange = sheet.getRange(2, colIndex, schema.NUM_OF_ROWS - 1, 1);
@@ -118,7 +118,7 @@ export class SetUpService {
 
     private fillCheckBox(colIndex: number, schema: ISchema): SetUpService {
         try {
-            schema.getCurrentSheet()
+            schema.CURRENT_SHEET
                 .getRange(2, colIndex, schema.NUM_OF_ROWS - 1, 1)
                 .insertCheckboxes();
         } catch (error) {
@@ -145,7 +145,7 @@ export class SetUpService {
     private setupColWidth(schema: ISchema): SetUpService {
         Preconditions.checkNotNull(schema);
         try {
-            let sheet = schema.getCurrentSheet();
+            let sheet = schema.CURRENT_SHEET;
             sheet.autoResizeColumns(1, schema.NUM_OF_COLUMNS);
             for (let i = 1; i <= schema.NUM_OF_COLUMNS; i++) {
                 let colWidth = sheet.getColumnWidth(i);

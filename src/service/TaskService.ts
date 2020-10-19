@@ -28,7 +28,7 @@ export class TaskService extends BaseService {
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
                 schema: NameListSheetSchema,
                 row: number) => {
-                let nameSheet = schema.getCurrentSheet();
+                let nameSheet = schema.CURRENT_SHEET;
                 // get task
                 let taskId = checkBoxCell.getNote().trim();
                 let _task = this.getTaskById(taskId);
@@ -57,7 +57,7 @@ export class TaskService extends BaseService {
         if (Predicates.IS_NOT_NULL.test(this.getTaskList(false))) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
-                this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
+                this.nameListSchema.CURRENT_SHEET.getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
             } catch (error) {
                 throw new ServerException(Msg.TASK.DELETE.SERVER_ERROR);
             }
@@ -65,7 +65,7 @@ export class TaskService extends BaseService {
     }
 
     public clearAllCheckbox(): void {
-        this.nameListSchema.getCurrentSheet().getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
+        this.nameListSchema.CURRENT_SHEET.getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
     public addAllTask(count: number = Task.MAX_TASK_CREATE): void {
@@ -108,7 +108,7 @@ export class TaskService extends BaseService {
     }
 
     private addNewTask(schema: NameListSheetSchema, row: number): GoogleAppsScript.Tasks.Schema.Task {
-        let sheet = schema.getCurrentSheet();
+        let sheet = schema.CURRENT_SHEET;
         // break if no name
         let nameCell = sheet.getRange(row, schema.nameColIndex);
         Preconditions.checkFalse(nameCell.isBlank(), Msg.SHEET.NAME_NOT_PRESENT, row);

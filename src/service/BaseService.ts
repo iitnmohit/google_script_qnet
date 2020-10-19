@@ -14,7 +14,7 @@ export class BaseService {
         deleteRows: boolean = false
     ): void {
         Preconditions.checkPositive(count);
-        let sheet = schema.getCurrentSheet();
+        let sheet = schema.CURRENT_SHEET;
         let numOfTimesOperated = 0;
         let rowArray = new Array<number>();
         let doColValues = sheet.getSheetValues(2, schema.doColIndex, schema.NUM_OF_ROWS - 1, 1);
@@ -39,7 +39,7 @@ export class BaseService {
         if (deleteRows) {
             let numofRows = rowArray.length;
             this.deleteRows(rowArray, schema);
-            schema.insertRows(numofRows);
+            schema.insertRows(schema.ISHEET.NUM_OF.ROWS - schema.NUM_OF_ROWS);
         }
     }
 

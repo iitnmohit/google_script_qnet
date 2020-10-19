@@ -1,13 +1,13 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ISchema } from "../interface/ISchema";
 import { ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { ThemeUtil } from "../util/ThemeUtil";
+import { BaseSchema } from "./BaseSchema";
 
-export class LovSheetSchema implements ISchema {
+export class LovSheetSchema extends BaseSchema {
     // static variable
     public static readonly SHEET_NAME: string = Sheets.LOV.NAME;
     public static readonly SHEET_INDEX: number = Sheets.LOV.INDEX;
@@ -36,6 +36,7 @@ export class LovSheetSchema implements ISchema {
     public readonly castColIndex: number = -1;
 
     // public abstract variable
+    public CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
     public ISHEET: ISheet = Sheets.LOV;
     public NUM_OF_ROWS: number = 1;
     public NUM_OF_COLUMNS: number = 1;
@@ -50,11 +51,11 @@ export class LovSheetSchema implements ISchema {
 
     // private local variable
     private isThisSchemaValid: boolean = false;
-    private currentSheet: GoogleAppsScript.Spreadsheet.Sheet;
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        this.currentSheet = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET_NAME);
+        super();
+        this.CURRENT_SHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET_NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
         for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
@@ -105,10 +106,6 @@ export class LovSheetSchema implements ISchema {
     }
 
     // public abstract methods 
-    public getSheetName(): string {
-        return LovSheetSchema.SHEET_NAME;
-    }
-
     public getMinColWidth(index: number): number {
         switch (index) {
             case this.listColIndex: return Sheets.LOV.MIN_WIDTH.LIST;
@@ -138,40 +135,6 @@ export class LovSheetSchema implements ISchema {
             case this.zoneColIndex: return Sheets.LOV.MAX_WIDTH.ZONE;
             case this.castColIndex: return Sheets.LOV.MAX_WIDTH.CAST;
             default: return null;
-        }
-    }
-
-    public getCurrentSheet(): GoogleAppsScript.Spreadsheet.Sheet {
-        Preconditions.checkArgument(this.isThisSchemaValid, Msg.SHEET.INVALID_SHEET, LovSheetSchema.SHEET_NAME);
-        return this.currentSheet;
-    }
-
-    public insertRows(howMany: number): void {
-        if (howMany < 1) {
-            return;
-        }
-        this.currentSheet.insertRows(this.NUM_OF_ROWS, howMany);
-        this.NUM_OF_ROWS += howMany;
-    }
-
-    public insertsColumns(howMany: number): void {
-        if (howMany < 1) {
-            return;
-        }
-        this.currentSheet.insertColumns(this.NUM_OF_COLUMNS, howMany);
-        this.NUM_OF_COLUMNS += howMany;
-    }
-
-    public removeRow(index: number, howmany?: number): void {
-        if (index < 1) {
-            return;
-        }
-        if (Predicates.IS_NULL.test(howmany)) {
-            this.currentSheet.deleteRow(index);
-            this.NUM_OF_ROWS--;
-        } else if (Predicates.IS_POSITIVE.test(howmany)) {
-            this.currentSheet.deleteRows(index, howmany);
-            this.NUM_OF_ROWS -= howmany;
         }
     }
 
