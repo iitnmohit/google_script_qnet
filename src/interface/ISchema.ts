@@ -1,7 +1,7 @@
 import { ISheet } from "./ISheet";
 
 export interface ISchema {
-    CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
+    SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
     ISHEET: ISheet,
     NUM_OF_ROWS: number;
     NUM_OF_COLUMNS: number;

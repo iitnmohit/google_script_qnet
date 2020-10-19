@@ -14,7 +14,7 @@ export class BaseService {
         deleteRows: boolean = false
     ): void {
         Preconditions.checkPositive(count);
-        let sheet = schema.CURRENT_SHEET;
+        let sheet = schema.SPREADSHEET;
         let numOfTimesOperated = 0;
         let rowArray = new Array<number>();
         let doColValues = sheet.getSheetValues(2, schema.doColIndex, schema.NUM_OF_ROWS - 1, 1);

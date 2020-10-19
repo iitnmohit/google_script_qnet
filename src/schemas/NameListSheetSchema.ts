@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ISheet } from "../interface/ISheet";
+import { INameListSheet, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,27 +9,26 @@ import { BaseSchema } from "./BaseSchema";
 
 export class NameListSheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET_NAME: string = Sheets.NAMELIST.NAME;
-    public static readonly SHEET_INDEX: number = Sheets.NAMELIST.INDEX;
+    public static readonly SHEET: INameListSheet = Sheets.NAMELIST;
 
-    public static readonly COL_SELECT: string = Sheets.NAMELIST.COLUMN.SELECT;
-    public static readonly COL_SL_NO: string = Sheets.NAMELIST.COLUMN.SL_NO;
-    public static readonly COL_NAME: string = Sheets.NAMELIST.COLUMN.NAME;
-    public static readonly COL_LIST: string = Sheets.NAMELIST.COLUMN.LIST;
-    public static readonly COL_LOCATION: string = Sheets.NAMELIST.COLUMN.LOCATION;
-    public static readonly COL_ZONE: string = Sheets.NAMELIST.COLUMN.ZONE;
-    public static readonly COL_CONNECT_UP: string = Sheets.NAMELIST.COLUMN.CONNECT_UP;
-    public static readonly COL_INFO: string = Sheets.NAMELIST.COLUMN.INFO;
-    public static readonly COL_EDIFY: string = Sheets.NAMELIST.COLUMN.EDIFY;
-    public static readonly COL_INVITE: string = Sheets.NAMELIST.COLUMN.INVITE;
-    public static readonly COL_PLAN: string = Sheets.NAMELIST.COLUMN.PLAN;
-    public static readonly COL_PLAN_DATE: string = Sheets.NAMELIST.COLUMN.PLAN_DATE;
-    public static readonly COL_CLOSING: string = Sheets.NAMELIST.COLUMN.CLOSING;
-    public static readonly COL_CAST: string = Sheets.NAMELIST.COLUMN.CAST;
-    public static readonly COL_UPDATED_ON: string = Sheets.NAMELIST.COLUMN.UPDATED_ON;
-    public static readonly COL_LINK: string = Sheets.NAMELIST.COLUMN.LINK;
-    public static readonly COL_ADD_LOG: string = Sheets.NAMELIST.COLUMN.ADD_LOG;
-    public static readonly COL_DO: string = Sheets.NAMELIST.COLUMN.DO;
+    public static readonly COL_SELECT: string = NameListSheetSchema.SHEET.COLUMN.SELECT;
+    public static readonly COL_SL_NO: string = NameListSheetSchema.SHEET.COLUMN.SL_NO;
+    public static readonly COL_NAME: string = NameListSheetSchema.SHEET.COLUMN.NAME;
+    public static readonly COL_LIST: string = NameListSheetSchema.SHEET.COLUMN.LIST;
+    public static readonly COL_LOCATION: string = NameListSheetSchema.SHEET.COLUMN.LOCATION;
+    public static readonly COL_ZONE: string = NameListSheetSchema.SHEET.COLUMN.ZONE;
+    public static readonly COL_CONNECT_UP: string = NameListSheetSchema.SHEET.COLUMN.CONNECT_UP;
+    public static readonly COL_INFO: string = NameListSheetSchema.SHEET.COLUMN.INFO;
+    public static readonly COL_EDIFY: string = NameListSheetSchema.SHEET.COLUMN.EDIFY;
+    public static readonly COL_INVITE: string = NameListSheetSchema.SHEET.COLUMN.INVITE;
+    public static readonly COL_PLAN: string = NameListSheetSchema.SHEET.COLUMN.PLAN;
+    public static readonly COL_PLAN_DATE: string = NameListSheetSchema.SHEET.COLUMN.PLAN_DATE;
+    public static readonly COL_CLOSING: string = NameListSheetSchema.SHEET.COLUMN.CLOSING;
+    public static readonly COL_CAST: string = NameListSheetSchema.SHEET.COLUMN.CAST;
+    public static readonly COL_UPDATED_ON: string = NameListSheetSchema.SHEET.COLUMN.UPDATED_ON;
+    public static readonly COL_LINK: string = NameListSheetSchema.SHEET.COLUMN.LINK;
+    public static readonly COL_ADD_LOG: string = NameListSheetSchema.SHEET.COLUMN.ADD_LOG;
+    public static readonly COL_DO: string = NameListSheetSchema.SHEET.COLUMN.DO;
 
     // public local variable
     public readonly selectColIndex: number = -1;
@@ -52,8 +51,8 @@ export class NameListSheetSchema extends BaseSchema {
     public readonly doColIndex: number = -1;
 
     // public abstract variable
-    public CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
-    public ISHEET: ISheet = Sheets.NAMELIST;
+    public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
+    public ISHEET: ISheet = NameListSheetSchema.SHEET;
     public NUM_OF_ROWS: number = 1;
     public NUM_OF_COLUMNS: number = 1;
 
@@ -62,15 +61,15 @@ export class NameListSheetSchema extends BaseSchema {
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
 
-    public FREEZE_ROW: number = Sheets.NAMELIST.FREEZE.ROW;
-    public FREEZE_COLUMN: number = Sheets.NAMELIST.FREEZE.COLUMN;
+    public FREEZE_ROW: number = NameListSheetSchema.SHEET.FREEZE.ROW;
+    public FREEZE_COLUMN: number = NameListSheetSchema.SHEET.FREEZE.COLUMN;
 
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
-        this.CURRENT_SHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET_NAME);
+        this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
         for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
@@ -120,67 +119,67 @@ export class NameListSheetSchema extends BaseSchema {
 
     // static method
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): NameListSheetSchema {
-        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET_NAME);
-        Preconditions.checkArgument(sheet.getName() === NameListSheetSchema.SHEET_NAME,
-            Msg.SHEET.INVALID_SHEET, NameListSheetSchema.SHEET_NAME);
+        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET.NAME);
+        Preconditions.checkArgument(sheet.getName() === NameListSheetSchema.SHEET.NAME,
+            Msg.SHEET.INVALID_SHEET, NameListSheetSchema.SHEET.NAME);
 
         let newSchema = new NameListSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, NameListSheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, NameListSheetSchema.SHEET.NAME));
     }
 
     public static getValidNameListSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): NameListSheetSchema {
-        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET_NAME);
-        return NameListSheetSchema.getValidSchema(spreadsheet.getSheetByName(NameListSheetSchema.SHEET_NAME));
+        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET.NAME);
+        return NameListSheetSchema.getValidSchema(spreadsheet.getSheetByName(NameListSheetSchema.SHEET.NAME));
     }
 
     // public abstract methods 
     public getMinColWidth(index: number): number {
         switch (index) {
-            case this.selectColIndex: return Sheets.NAMELIST.MIN_WIDTH.SELECT;
-            case this.slNoColIndex: return Sheets.NAMELIST.MIN_WIDTH.SL_NO;
-            case this.nameColIndex: return Sheets.NAMELIST.MIN_WIDTH.NAME;
-            case this.listColIndex: return Sheets.NAMELIST.MIN_WIDTH.LIST;
-            case this.locationColIndex: return Sheets.NAMELIST.MIN_WIDTH.LOCATION;
-            case this.zoneColIndex: return Sheets.NAMELIST.MIN_WIDTH.ZONE;
-            case this.connectUpColIndex: return Sheets.NAMELIST.MIN_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return Sheets.NAMELIST.MIN_WIDTH.INFO;
-            case this.edifyColIndex: return Sheets.NAMELIST.MIN_WIDTH.EDIFY;
-            case this.inviteColIndex: return Sheets.NAMELIST.MIN_WIDTH.INVITE;
-            case this.planColIndex: return Sheets.NAMELIST.MIN_WIDTH.PLAN;
-            case this.planDateColIndex: return Sheets.NAMELIST.MIN_WIDTH.PLAN_DATE;
-            case this.closingColIndex: return Sheets.NAMELIST.MIN_WIDTH.CLOSING;
-            case this.castColIndex: return Sheets.NAMELIST.MIN_WIDTH.CAST;
-            case this.updateOnColIndex: return Sheets.NAMELIST.MIN_WIDTH.UPDATED_ON;
-            case this.linkColIndex: return Sheets.NAMELIST.MIN_WIDTH.LINK;
-            case this.addLogColIndex: return Sheets.NAMELIST.MIN_WIDTH.ADD_LOG;
-            case this.doColIndex: return Sheets.NAMELIST.MIN_WIDTH.DO;
+            case this.selectColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.SELECT;
+            case this.slNoColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.SL_NO;
+            case this.nameColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.NAME;
+            case this.listColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.LIST;
+            case this.locationColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.LOCATION;
+            case this.zoneColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.ZONE;
+            case this.connectUpColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.CONNECT_UP;
+            case this.infoColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.INFO;
+            case this.edifyColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.EDIFY;
+            case this.inviteColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.INVITE;
+            case this.planColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.PLAN;
+            case this.planDateColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.PLAN_DATE;
+            case this.closingColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.CLOSING;
+            case this.castColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.CAST;
+            case this.updateOnColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.UPDATED_ON;
+            case this.linkColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.LINK;
+            case this.addLogColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.ADD_LOG;
+            case this.doColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.DO;
             default: return null;
         }
     }
 
     public getMaxColWidth(index: number): number {
         switch (index) {
-            case this.selectColIndex: return Sheets.NAMELIST.MAX_WIDTH.SELECT;
-            case this.slNoColIndex: return Sheets.NAMELIST.MAX_WIDTH.SL_NO;
-            case this.nameColIndex: return Sheets.NAMELIST.MAX_WIDTH.NAME;
-            case this.listColIndex: return Sheets.NAMELIST.MAX_WIDTH.LIST;
-            case this.locationColIndex: return Sheets.NAMELIST.MAX_WIDTH.LOCATION;
-            case this.zoneColIndex: return Sheets.NAMELIST.MAX_WIDTH.ZONE;
-            case this.connectUpColIndex: return Sheets.NAMELIST.MAX_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return Sheets.NAMELIST.MAX_WIDTH.INFO;
-            case this.edifyColIndex: return Sheets.NAMELIST.MAX_WIDTH.EDIFY;
-            case this.inviteColIndex: return Sheets.NAMELIST.MAX_WIDTH.INVITE;
-            case this.planColIndex: return Sheets.NAMELIST.MAX_WIDTH.PLAN;
-            case this.planDateColIndex: return Sheets.NAMELIST.MAX_WIDTH.PLAN_DATE;
-            case this.closingColIndex: return Sheets.NAMELIST.MAX_WIDTH.CLOSING;
-            case this.castColIndex: return Sheets.NAMELIST.MAX_WIDTH.CAST;
-            case this.updateOnColIndex: return Sheets.NAMELIST.MAX_WIDTH.UPDATED_ON;
-            case this.linkColIndex: return Sheets.NAMELIST.MAX_WIDTH.LINK;
-            case this.addLogColIndex: return Sheets.NAMELIST.MAX_WIDTH.ADD_LOG;
-            case this.doColIndex: return Sheets.NAMELIST.MAX_WIDTH.DO;
+            case this.selectColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.SELECT;
+            case this.slNoColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.SL_NO;
+            case this.nameColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.NAME;
+            case this.listColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.LIST;
+            case this.locationColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.LOCATION;
+            case this.zoneColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.ZONE;
+            case this.connectUpColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.CONNECT_UP;
+            case this.infoColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.INFO;
+            case this.edifyColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.EDIFY;
+            case this.inviteColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.INVITE;
+            case this.planColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.PLAN;
+            case this.planDateColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.PLAN_DATE;
+            case this.closingColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.CLOSING;
+            case this.castColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.CAST;
+            case this.updateOnColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.UPDATED_ON;
+            case this.linkColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.LINK;
+            case this.addLogColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.ADD_LOG;
+            case this.doColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.DO;
             default: return null;
         }
     }

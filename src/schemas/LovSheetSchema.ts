@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ISheet } from "../interface/ISheet";
+import { ILovSheet, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,19 +9,18 @@ import { BaseSchema } from "./BaseSchema";
 
 export class LovSheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET_NAME: string = Sheets.LOV.NAME;
-    public static readonly SHEET_INDEX: number = Sheets.LOV.INDEX;
+    public static readonly SHEET: ILovSheet = Sheets.LOV;
 
-    public static readonly COL_LIST: string = Sheets.LOV.COLUMN.LIST;
-    public static readonly COL_STRIKE_THORUGH: string = Sheets.LOV.COLUMN.STRIKE_THROUGH;
-    public static readonly COL_CONNECT_UP: string = Sheets.LOV.COLUMN.CONNECT_UP;
-    public static readonly COL_INFO: string = Sheets.LOV.COLUMN.INFO;
-    public static readonly COL_EDIFY: string = Sheets.LOV.COLUMN.EDIFY;
-    public static readonly COL_INVITE: string = Sheets.LOV.COLUMN.INVITE;
-    public static readonly COL_PLAN: string = Sheets.LOV.COLUMN.PLAN;
-    public static readonly COL_CLOSING: string = Sheets.LOV.COLUMN.CLOSING;
-    public static readonly COL_ZONE: string = Sheets.LOV.COLUMN.ZONE;
-    public static readonly COL_CAST: string = Sheets.LOV.COLUMN.CAST;
+    public static readonly COL_LIST: string = LovSheetSchema.SHEET.COLUMN.LIST;
+    public static readonly COL_STRIKE_THORUGH: string = LovSheetSchema.SHEET.COLUMN.STRIKE_THROUGH;
+    public static readonly COL_CONNECT_UP: string = LovSheetSchema.SHEET.COLUMN.CONNECT_UP;
+    public static readonly COL_INFO: string = LovSheetSchema.SHEET.COLUMN.INFO;
+    public static readonly COL_EDIFY: string = LovSheetSchema.SHEET.COLUMN.EDIFY;
+    public static readonly COL_INVITE: string = LovSheetSchema.SHEET.COLUMN.INVITE;
+    public static readonly COL_PLAN: string = LovSheetSchema.SHEET.COLUMN.PLAN;
+    public static readonly COL_CLOSING: string = LovSheetSchema.SHEET.COLUMN.CLOSING;
+    public static readonly COL_ZONE: string = LovSheetSchema.SHEET.COLUMN.ZONE;
+    public static readonly COL_CAST: string = LovSheetSchema.SHEET.COLUMN.CAST;
 
     // public local variable
     public readonly listColIndex: number = -1;
@@ -36,8 +35,8 @@ export class LovSheetSchema extends BaseSchema {
     public readonly castColIndex: number = -1;
 
     // public abstract variable
-    public CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
-    public ISHEET: ISheet = Sheets.LOV;
+    public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
+    public ISHEET: ISheet = LovSheetSchema.SHEET;
     public NUM_OF_ROWS: number = 1;
     public NUM_OF_COLUMNS: number = 1;
 
@@ -46,15 +45,15 @@ export class LovSheetSchema extends BaseSchema {
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableSecondRowColor;
 
-    public FREEZE_ROW: number = Sheets.LOV.FREEZE.ROW;
-    public FREEZE_COLUMN: number = Sheets.LOV.FREEZE.COLUMN;
+    public FREEZE_ROW: number = LovSheetSchema.SHEET.FREEZE.ROW;
+    public FREEZE_COLUMN: number = LovSheetSchema.SHEET.FREEZE.COLUMN;
 
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
-        this.CURRENT_SHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET_NAME);
+        this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
         for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
@@ -88,51 +87,51 @@ export class LovSheetSchema extends BaseSchema {
 
     // static method
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): LovSheetSchema {
-        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET_NAME);
-        Preconditions.checkArgument(sheet.getName() === LovSheetSchema.SHEET_NAME,
-            Msg.SHEET.INVALID_SHEET, LovSheetSchema.SHEET_NAME);
+        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET.NAME);
+        Preconditions.checkArgument(sheet.getName() === LovSheetSchema.SHEET.NAME,
+            Msg.SHEET.INVALID_SHEET, LovSheetSchema.SHEET.NAME);
 
         let newSchema = new LovSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, LovSheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, LovSheetSchema.SHEET.NAME));
     }
 
     public static getValidLovSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): LovSheetSchema {
-        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET_NAME);
-        return LovSheetSchema.getValidSchema(spreadsheet.getSheetByName(LovSheetSchema.SHEET_NAME));
+        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET.NAME);
+        return LovSheetSchema.getValidSchema(spreadsheet.getSheetByName(LovSheetSchema.SHEET.NAME));
     }
 
     // public abstract methods 
     public getMinColWidth(index: number): number {
         switch (index) {
-            case this.listColIndex: return Sheets.LOV.MIN_WIDTH.LIST;
-            case this.strikeThroughColIndex: return Sheets.LOV.MIN_WIDTH.STRIKE_THROUGH;
-            case this.connectUpColIndex: return Sheets.LOV.MIN_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return Sheets.LOV.MIN_WIDTH.INFO;
-            case this.edifyColIndex: return Sheets.LOV.MIN_WIDTH.EDIFY;
-            case this.inviteColIndex: return Sheets.LOV.MIN_WIDTH.INVITE;
-            case this.planColIndex: return Sheets.LOV.MIN_WIDTH.PLAN;
-            case this.closingColIndex: return Sheets.LOV.MIN_WIDTH.CLOSING;
-            case this.zoneColIndex: return Sheets.LOV.MIN_WIDTH.ZONE;
-            case this.castColIndex: return Sheets.LOV.MIN_WIDTH.CAST;
+            case this.listColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.LIST;
+            case this.strikeThroughColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.STRIKE_THROUGH;
+            case this.connectUpColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.CONNECT_UP;
+            case this.infoColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.INFO;
+            case this.edifyColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.EDIFY;
+            case this.inviteColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.INVITE;
+            case this.planColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.PLAN;
+            case this.closingColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.CLOSING;
+            case this.zoneColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.ZONE;
+            case this.castColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.CAST;
             default: return null;
         }
     }
 
     public getMaxColWidth(index: number): number {
         switch (index) {
-            case this.listColIndex: return Sheets.LOV.MAX_WIDTH.LIST;
-            case this.strikeThroughColIndex: return Sheets.LOV.MAX_WIDTH.STRIKE_THROUGH;
-            case this.connectUpColIndex: return Sheets.LOV.MAX_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return Sheets.LOV.MAX_WIDTH.INFO;
-            case this.edifyColIndex: return Sheets.LOV.MAX_WIDTH.EDIFY;
-            case this.inviteColIndex: return Sheets.LOV.MAX_WIDTH.INVITE;
-            case this.planColIndex: return Sheets.LOV.MAX_WIDTH.PLAN;
-            case this.closingColIndex: return Sheets.LOV.MAX_WIDTH.CLOSING;
-            case this.zoneColIndex: return Sheets.LOV.MAX_WIDTH.ZONE;
-            case this.castColIndex: return Sheets.LOV.MAX_WIDTH.CAST;
+            case this.listColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.LIST;
+            case this.strikeThroughColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.STRIKE_THROUGH;
+            case this.connectUpColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.CONNECT_UP;
+            case this.infoColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.INFO;
+            case this.edifyColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.EDIFY;
+            case this.inviteColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.INVITE;
+            case this.planColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.PLAN;
+            case this.closingColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.CLOSING;
+            case this.zoneColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.ZONE;
+            case this.castColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.CAST;
             default: return null;
         }
     }

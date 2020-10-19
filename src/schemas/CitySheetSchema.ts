@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ISheet } from "../interface/ISheet";
+import { ICitySheet, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,19 +9,18 @@ import { BaseSchema } from "./BaseSchema";
 
 export class CitySheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET_NAME: string = Sheets.CITY.NAME;
-    public static readonly SHEET_INDEX: number = Sheets.CITY.INDEX;
+    public static readonly SHEET: ICitySheet = Sheets.CITY;
 
-    public static readonly COL_LOCATION: string = Sheets.CITY.COLUMN.LOCATION;
-    public static readonly COL_COUNT: string = Sheets.CITY.COLUMN.COUNT;
+    public static readonly COL_LOCATION: string = CitySheetSchema.SHEET.COLUMN.LOCATION;
+    public static readonly COL_COUNT: string = CitySheetSchema.SHEET.COLUMN.COUNT;
 
     // public local variable
     public readonly locationColIndex: number = -1;
     public readonly countColIndex: number = -1;
 
     // public abstract variable
-    public CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
-    public ISHEET: ISheet = Sheets.CITY;
+    public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
+    public ISHEET: ISheet = CitySheetSchema.SHEET;
     public NUM_OF_ROWS: number = 1;
     public NUM_OF_COLUMNS: number = 1;
 
@@ -30,15 +29,15 @@ export class CitySheetSchema extends BaseSchema {
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableSecondRowColor;
 
-    public FREEZE_ROW: number = Sheets.CITY.FREEZE.ROW;
-    public FREEZE_COLUMN: number = Sheets.CITY.FREEZE.COLUMN;
+    public FREEZE_ROW: number = CitySheetSchema.SHEET.FREEZE.ROW;
+    public FREEZE_COLUMN: number = CitySheetSchema.SHEET.FREEZE.COLUMN;
 
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
-        this.CURRENT_SHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET_NAME);
+        this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
         let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
         for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
@@ -56,35 +55,35 @@ export class CitySheetSchema extends BaseSchema {
 
     // static method
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): CitySheetSchema {
-        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET_NAME);
-        Preconditions.checkArgument(sheet.getName() === CitySheetSchema.SHEET_NAME,
-            Msg.SHEET.INVALID_SHEET, CitySheetSchema.SHEET_NAME);
+        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET.NAME);
+        Preconditions.checkArgument(sheet.getName() === CitySheetSchema.SHEET.NAME,
+            Msg.SHEET.INVALID_SHEET, CitySheetSchema.SHEET.NAME);
 
         let newSchema = new CitySheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, CitySheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, CitySheetSchema.SHEET.NAME));
     }
 
     public static getValidCitySchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): CitySheetSchema {
-        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET_NAME);
-        return CitySheetSchema.getValidSchema(spreadsheet.getSheetByName(CitySheetSchema.SHEET_NAME));
+        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET.NAME);
+        return CitySheetSchema.getValidSchema(spreadsheet.getSheetByName(CitySheetSchema.SHEET.NAME));
     }
 
     // public abstract methods 
     public getMinColWidth(index: number): number {
         switch (index) {
-            case this.locationColIndex: return Sheets.CITY.MIN_WIDTH.LOCATION;
-            case this.countColIndex: return Sheets.CITY.MIN_WIDTH.COUNT;
+            case this.locationColIndex: return CitySheetSchema.SHEET.MIN_WIDTH.LOCATION;
+            case this.countColIndex: return CitySheetSchema.SHEET.MIN_WIDTH.COUNT;
             default: return null;
         }
     }
 
     public getMaxColWidth(index: number): number {
         switch (index) {
-            case this.locationColIndex: return Sheets.CITY.MAX_WIDTH.LOCATION;
-            case this.countColIndex: return Sheets.CITY.MAX_WIDTH.COUNT;
+            case this.locationColIndex: return CitySheetSchema.SHEET.MAX_WIDTH.LOCATION;
+            case this.countColIndex: return CitySheetSchema.SHEET.MAX_WIDTH.COUNT;
             default: return null;
         }
     }

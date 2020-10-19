@@ -40,11 +40,11 @@ export class SetUpService {
         let numOfSheetDeleted = 0;
         for (let sheet of sheets) {
             let sheetName = sheet.getName();
-            if (sheetName === OverViewSheetSchema.SHEET_NAME
-                || sheetName === NameListSheetSchema.SHEET_NAME
-                || sheetName === LovSheetSchema.SHEET_NAME
-                || sheetName === CitySheetSchema.SHEET_NAME
-                || sheetName === CalenderSheetSchema.SHEET_NAME) {
+            if (sheetName === OverViewSheetSchema.SHEET.NAME
+                || sheetName === NameListSheetSchema.SHEET.NAME
+                || sheetName === LovSheetSchema.SHEET.NAME
+                || sheetName === CitySheetSchema.SHEET.NAME
+                || sheetName === CalenderSheetSchema.SHEET.NAME) {
                 continue;
             }
             if (totalNumOfSheets - numOfSheetDeleted != 1) {
@@ -104,7 +104,7 @@ export class SetUpService {
 
     private fillNumbers(colIndex: number, schema: ISchema): SetUpService {
         try {
-            let sheet = schema.CURRENT_SHEET;
+            let sheet = schema.SPREADSHEET;
             let sourceRange = sheet.getRange(2, colIndex, 2, 1);
             sourceRange.setValues([[1], [2]]);
             let destRange = sheet.getRange(2, colIndex, schema.NUM_OF_ROWS - 1, 1);
@@ -118,7 +118,7 @@ export class SetUpService {
 
     private fillCheckBox(colIndex: number, schema: ISchema): SetUpService {
         try {
-            schema.CURRENT_SHEET
+            schema.SPREADSHEET
                 .getRange(2, colIndex, schema.NUM_OF_ROWS - 1, 1)
                 .insertCheckboxes();
         } catch (error) {
@@ -145,7 +145,7 @@ export class SetUpService {
     private setupColWidth(schema: ISchema): SetUpService {
         Preconditions.checkNotNull(schema);
         try {
-            let sheet = schema.CURRENT_SHEET;
+            let sheet = schema.SPREADSHEET;
             sheet.autoResizeColumns(1, schema.NUM_OF_COLUMNS);
             for (let i = 1; i <= schema.NUM_OF_COLUMNS; i++) {
                 let colWidth = sheet.getColumnWidth(i);

@@ -11,8 +11,7 @@ import { BaseSchema } from "./BaseSchema";
 
 export class OverViewSheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET_NAME: string = Sheets.OVERVIEW.NAME;
-    public static readonly SHEET_INDEX: number = Sheets.OVERVIEW.INDEX;
+    public static readonly SHEET: IOverViewSheet = Sheets.OVERVIEW;
 
     // public local variable
     public readonly tableOverallRowIndex: number = -1;
@@ -21,8 +20,8 @@ export class OverViewSheetSchema extends BaseSchema {
     public readonly tableListWiseColIndex: number = -1;
 
     // public abstract variable
-    public CURRENT_SHEET: GoogleAppsScript.Spreadsheet.Sheet;
-    public ISHEET: IOverViewSheet = Sheets.OVERVIEW;
+    public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
+    public ISHEET: IOverViewSheet = OverViewSheetSchema.SHEET;
     public NUM_OF_ROWS: number = 1;
     public NUM_OF_COLUMNS: number = 1;
 
@@ -31,26 +30,26 @@ export class OverViewSheetSchema extends BaseSchema {
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableSecondRowColor;
 
-    public FREEZE_ROW: number = Sheets.OVERVIEW.FREEZE.ROW;
-    public FREEZE_COLUMN: number = Sheets.OVERVIEW.FREEZE.COLUMN;
+    public FREEZE_ROW: number = OverViewSheetSchema.SHEET.FREEZE.ROW;
+    public FREEZE_COLUMN: number = OverViewSheetSchema.SHEET.FREEZE.COLUMN;
 
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
         super();
-        this.CURRENT_SHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET_NAME);
+        this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET.NAME);
         this.NUM_OF_ROWS = sheet.getMaxRows();
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
         let sheetValues = sheet.getSheetValues(1, 1, this.NUM_OF_ROWS, this.NUM_OF_COLUMNS);
-        let overAllTableBeginIndex = this.validateTable(Sheets.OVERVIEW.TABLES.TABLE_OVERALL,
+        let overAllTableBeginIndex = this.validateTable(OverViewSheetSchema.SHEET.TABLES.TABLE_OVERALL,
             sheetValues, new Index(0, 0));
         this.ISHEET.TABLES.TABLE_OVERALL.INDEX = overAllTableBeginIndex;
 
-        let overAllTableEndIndex = new Index(overAllTableBeginIndex.row + Sheets.OVERVIEW.TABLES.TABLE_OVERALL.HEIGHT - 1,
-            overAllTableBeginIndex.col + Sheets.OVERVIEW.TABLES.TABLE_OVERALL.WIDTH - 1);
+        let overAllTableEndIndex = new Index(overAllTableBeginIndex.row + OverViewSheetSchema.SHEET.TABLES.TABLE_OVERALL.HEIGHT - 1,
+            overAllTableBeginIndex.col + OverViewSheetSchema.SHEET.TABLES.TABLE_OVERALL.WIDTH - 1);
 
-        let listWiseTableBeginIndex = this.validateTable(Sheets.OVERVIEW.TABLES.TABLE_LIST_WISE,
+        let listWiseTableBeginIndex = this.validateTable(OverViewSheetSchema.SHEET.TABLES.TABLE_LIST_WISE,
             sheetValues, overAllTableEndIndex);
         this.ISHEET.TABLES.TABLE_LIST_WISE.INDEX = listWiseTableBeginIndex;
 
@@ -62,50 +61,50 @@ export class OverViewSheetSchema extends BaseSchema {
 
     // static method
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): OverViewSheetSchema {
-        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET_NAME);
-        Preconditions.checkArgument(sheet.getName() === OverViewSheetSchema.SHEET_NAME,
-            Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET_NAME);
+        Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET.NAME);
+        Preconditions.checkArgument(sheet.getName() === OverViewSheetSchema.SHEET.NAME,
+            Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET.NAME);
 
         let newSchema = new OverViewSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET_NAME));
+        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, OverViewSheetSchema.SHEET.NAME));
     }
 
     public static getValidOverViewSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): OverViewSheetSchema {
-        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET_NAME);
-        return OverViewSheetSchema.getValidSchema(spreadsheet.getSheetByName(OverViewSheetSchema.SHEET_NAME));
+        Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET.NAME);
+        return OverViewSheetSchema.getValidSchema(spreadsheet.getSheetByName(OverViewSheetSchema.SHEET.NAME));
     }
 
     // public abstract methods 
     public getMinColWidth(index: number): number {
         switch (index) {
-            case 1: return Sheets.OVERVIEW.MIN_WIDTH.COLA;
-            case 2: return Sheets.OVERVIEW.MIN_WIDTH.COLB;
-            case 3: return Sheets.OVERVIEW.MIN_WIDTH.COLC;
-            case 4: return Sheets.OVERVIEW.MIN_WIDTH.COLD;
-            case 5: return Sheets.OVERVIEW.MIN_WIDTH.COLE;
-            case 6: return Sheets.OVERVIEW.MIN_WIDTH.COLF;
-            case 7: return Sheets.OVERVIEW.MIN_WIDTH.COLG;
-            case 8: return Sheets.OVERVIEW.MIN_WIDTH.COLH;
-            case 9: return Sheets.OVERVIEW.MIN_WIDTH.COLI;
-            case 10: return Sheets.OVERVIEW.MIN_WIDTH.COLJ;
+            case 1: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLA;
+            case 2: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLB;
+            case 3: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLC;
+            case 4: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLD;
+            case 5: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLE;
+            case 6: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLF;
+            case 7: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLG;
+            case 8: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLH;
+            case 9: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLI;
+            case 10: return OverViewSheetSchema.SHEET.MIN_WIDTH.COLJ;
             default: return null;
         }
     }
     public getMaxColWidth(index: number): number {
         switch (index) {
-            case 1: return Sheets.OVERVIEW.MAX_WIDTH.COLA;
-            case 2: return Sheets.OVERVIEW.MAX_WIDTH.COLB;
-            case 3: return Sheets.OVERVIEW.MAX_WIDTH.COLC;
-            case 4: return Sheets.OVERVIEW.MAX_WIDTH.COLD;
-            case 5: return Sheets.OVERVIEW.MAX_WIDTH.COLE;
-            case 6: return Sheets.OVERVIEW.MAX_WIDTH.COLF;
-            case 7: return Sheets.OVERVIEW.MAX_WIDTH.COLG;
-            case 8: return Sheets.OVERVIEW.MAX_WIDTH.COLH;
-            case 9: return Sheets.OVERVIEW.MAX_WIDTH.COLI;
-            case 10: return Sheets.OVERVIEW.MAX_WIDTH.COLJ;
+            case 1: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLA;
+            case 2: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLB;
+            case 3: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLC;
+            case 4: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLD;
+            case 5: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLE;
+            case 6: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLF;
+            case 7: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLG;
+            case 8: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLH;
+            case 9: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLI;
+            case 10: return OverViewSheetSchema.SHEET.MAX_WIDTH.COLJ;
             default: return null;
         }
     }

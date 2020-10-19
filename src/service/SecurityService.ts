@@ -24,7 +24,7 @@ export class SecurityService {
     }
 
     private protectOverViewSheet(): SecurityService {
-        return this.setEditWarningToSheet(this.overviewSchema.CURRENT_SHEET);
+        return this.setEditWarningToSheet(this.overviewSchema.SPREADSHEET);
     }
 
     private protectNameSheet(): SecurityService {
@@ -32,11 +32,11 @@ export class SecurityService {
     }
 
     private protectListSheet(): SecurityService {
-        return this.setEditWarningToSheet(this.lovSchema.CURRENT_SHEET);
+        return this.setEditWarningToSheet(this.lovSchema.SPREADSHEET);
     }
 
     private protectCitySheet(): SecurityService {
-        return this.setEditWarningToSheet(this.citySchema.CURRENT_SHEET);
+        return this.setEditWarningToSheet(this.citySchema.SPREADSHEET);
     }
 
     private setEditWarningToSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet): SecurityService {

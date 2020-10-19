@@ -25,7 +25,7 @@ export class FormulaService {
     }
 
     private applyFormulaToCitySheets(): FormulaService {
-        let citySheet = this.citySchema.CURRENT_SHEET;
+        let citySheet = this.citySchema.SPREADSHEET;
         let countColRange = citySheet.getRange(2, this.citySchema.countColIndex, this.citySchema.NUM_OF_ROWS - 1, 1);
         let formula = FormulaBuilder.newBuilder()
             .COUNTIF(
@@ -46,7 +46,7 @@ export class FormulaService {
     }
 
     private applyFormulaToOverviewSheets(): FormulaService {
-        let overViewSheet = this.overviewSchema.CURRENT_SHEET;
+        let overViewSheet = this.overviewSchema.SPREADSHEET;
         this.setFormulaToOverallTable(overViewSheet);
         this.setFormulaToListWiseTable(overViewSheet);
         return this;

@@ -63,7 +63,7 @@ export class ThemeService {
         this.setCommonTheme(this.calenderSchema);
 
         //conditional formatting
-        let sheet = this.calenderSchema.CURRENT_SHEET;
+        let sheet = this.calenderSchema.SPREADSHEET;
         let selectColChar = Util.getColumnLetter(this.calenderSchema.doColIndex);
         let conditionForStrikeThrough = `$${selectColChar}2=true`;
         let rangeAll = sheet.getRange(2, 1, this.calenderSchema.NUM_OF_ROWS - 1, this.calenderSchema.NUM_OF_COLUMNS);
@@ -80,7 +80,7 @@ export class ThemeService {
         this.setCommonTheme(this.lovSchema);
 
         //conditional formatting
-        let sheet = this.lovSchema.CURRENT_SHEET;
+        let sheet = this.lovSchema.SPREADSHEET;
         let selectColChar = Util.getColumnLetter(this.lovSchema.strikeThroughColIndex);
         let conditionForStrikeThrough = `$${selectColChar}2=true`;
         let rangeLists = sheet.getRange(2, this.lovSchema.listColIndex, this.lovSchema.NUM_OF_ROWS - 1, 1);
@@ -91,7 +91,7 @@ export class ThemeService {
     private setNameListSheetsTheme(): ThemeService {
         this.setCommonTheme(this.nameSchema);
         // conditional formatting
-        let sheet = this.nameSchema.CURRENT_SHEET;
+        let sheet = this.nameSchema.SPREADSHEET;
         let rangeAll = sheet.getRange(2, 1, this.nameSchema.NUM_OF_ROWS - 1, this.nameSchema.NUM_OF_COLUMNS);
         let rangeNames = sheet.getRange(2, this.nameSchema.nameColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
 
@@ -164,7 +164,7 @@ export class ThemeService {
     }
 
     private setCommonTheme(schema: ISchema, tableSheet: boolean = false): ThemeService {
-        let sheet = schema.CURRENT_SHEET;
+        let sheet = schema.SPREADSHEET;
         let fullSheetRange = this.setRowsHeight(schema, this.currentTheme.rowHeight)
             .setTabColor(schema.HEADDER_ROW_COLOR)
             .setHiddenGridlines(true)
@@ -229,7 +229,7 @@ export class ThemeService {
     private setRowsHeight(schema: ISchema, height: number): GoogleAppsScript.Spreadsheet.Sheet {
         Preconditions.checkNotNull(height);
         Preconditions.checkArgument(height >= Sheets.MIN_ROW_HEIGHT);
-        let sheet = schema.CURRENT_SHEET;
+        let sheet = schema.SPREADSHEET;
         try {
             return sheet.setRowHeights(1, schema.NUM_OF_ROWS, height);
         } catch (error) {

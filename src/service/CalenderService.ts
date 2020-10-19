@@ -29,7 +29,7 @@ export class CalenderService extends BaseService {
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
                 schema: CalenderSheetSchema,
                 row: number) => {
-                let sheet = schema.CURRENT_SHEET;
+                let sheet = schema.SPREADSHEET;
                 let notes = sheet.getRange(row, 1, 1, schema.NUM_OF_COLUMNS).getNotes();
                 let eventId = notes[0][schema.allDayColIndex - 1];
                 let calenderId = notes[0][schema.calenderColIndex - 1];
@@ -52,7 +52,7 @@ export class CalenderService extends BaseService {
     }
 
     public clearAllCheckbox(): void {
-        this.calenderSchema.CURRENT_SHEET.getRange(2, this.calenderSchema.doColIndex, this.calenderSchema.NUM_OF_ROWS - 1, 1).uncheck();
+        this.calenderSchema.SPREADSHEET.getRange(2, this.calenderSchema.doColIndex, this.calenderSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
     private fetchAllEvents(startdays: number, endDays: number): Array<MyCalenderEvent> {
@@ -81,7 +81,7 @@ export class CalenderService extends BaseService {
     private fillEventsToSheet(allEvents: MyCalenderEvent[]): void {
         this.calenderSchema.insertRows(allEvents.length + this.calenderSchema.ISHEET.NUM_OF.ROWS - this.calenderSchema.NUM_OF_ROWS);
         let sortedEvent = allEvents.sort(this.eventArraySortComprator);
-        let sheet = this.calenderSchema.CURRENT_SHEET;
+        let sheet = this.calenderSchema.SPREADSHEET;
         let row = 2;
         for (let _my_event of sortedEvent) {
             let rowArray = new Array<any>();
@@ -156,12 +156,12 @@ export class CalenderService extends BaseService {
 
     private clearSheet(): CalenderService {
         this.calenderSchema.removeRow(2, this.calenderSchema.NUM_OF_ROWS - this.calenderSchema.ISHEET.NUM_OF.ROWS);
-        this.calenderSchema.CURRENT_SHEET
+        this.calenderSchema.SPREADSHEET
             .getRange(2, 1, this.calenderSchema.NUM_OF_ROWS - 1, this.calenderSchema.NUM_OF_COLUMNS)
             .clearContent()
             .setBackground(ThemeUtil.getCurrentTheme().calenderTableFirstRowColor)
             .clearNote();
-        this.calenderSchema.CURRENT_SHEET.setRowHeights(1, this.calenderSchema.NUM_OF_ROWS, ThemeUtil.getCurrentTheme().rowHeight);
+        this.calenderSchema.SPREADSHEET.setRowHeights(1, this.calenderSchema.NUM_OF_ROWS, ThemeUtil.getCurrentTheme().rowHeight);
         return this;
     }
 
