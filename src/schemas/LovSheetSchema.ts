@@ -34,10 +34,6 @@ export class LovSheetSchema extends BaseSchema {
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableSecondRowColor;
-
-    public FREEZE_ROW: number = LovSheetSchema.SHEET.FREEZE.ROW;
-    public FREEZE_COLUMN: number = LovSheetSchema.SHEET.FREEZE.COLUMN;
-
     // private local variable
 
     //constructor

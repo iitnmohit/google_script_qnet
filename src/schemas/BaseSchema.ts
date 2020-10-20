@@ -13,8 +13,6 @@ export abstract class BaseSchema implements ISchema {
     public abstract HEADDER_ROW_COLOR: string;
     public abstract FIRST_ROW_COLOR: string;
     public abstract SECOND_ROW_COLOR: string;
-    public abstract FREEZE_ROW: number;
-    public abstract FREEZE_COLUMN: number;
 
     // public abstract methods
     public getColIndexByName(colName: string): number {

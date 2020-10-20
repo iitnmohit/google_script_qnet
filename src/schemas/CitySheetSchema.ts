@@ -26,10 +26,6 @@ export class CitySheetSchema extends BaseSchema {
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableSecondRowColor;
-
-    public FREEZE_ROW: number = CitySheetSchema.SHEET.FREEZE.ROW;
-    public FREEZE_COLUMN: number = CitySheetSchema.SHEET.FREEZE.COLUMN;
-
     // private local variable
 
     //constructor

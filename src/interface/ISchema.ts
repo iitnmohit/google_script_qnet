@@ -11,9 +11,6 @@ export interface ISchema {
     FIRST_ROW_COLOR: string;
     SECOND_ROW_COLOR: string;
 
-    FREEZE_ROW: number;
-    FREEZE_COLUMN: number;
-
     getColIndexByName(colName: string): number;
 
     getMinColWidth(index: number): number;

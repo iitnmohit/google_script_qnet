@@ -219,8 +219,8 @@ export class ThemeService {
         }
 
         //freeze
-        sheet.setFrozenRows(schema.FREEZE_ROW);
-        sheet.setFrozenColumns(schema.FREEZE_COLUMN);
+        sheet.setFrozenRows(schema.ISHEET.FREEZE.ROW);
+        sheet.setFrozenColumns(schema.ISHEET.FREEZE.COLUMN);
 
         sheet.setActiveSelection("A1");
         return this;

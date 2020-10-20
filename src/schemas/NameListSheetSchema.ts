@@ -42,10 +42,6 @@ export class NameListSheetSchema extends BaseSchema {
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
-
-    public FREEZE_ROW: number = NameListSheetSchema.SHEET.FREEZE.ROW;
-    public FREEZE_COLUMN: number = NameListSheetSchema.SHEET.FREEZE.COLUMN;
-
     // private local variable
 
     //constructor

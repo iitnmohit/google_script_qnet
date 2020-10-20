@@ -31,10 +31,6 @@ export class CalenderSheetSchema extends BaseSchema {
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableSecondRowColor;
-
-    public FREEZE_ROW: number = CalenderSheetSchema.SHEET.FREEZE.ROW;
-    public FREEZE_COLUMN: number = CalenderSheetSchema.SHEET.FREEZE.COLUMN;
-
     // private local variable
 
     //constructor

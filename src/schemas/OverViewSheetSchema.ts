@@ -29,10 +29,6 @@ export class OverViewSheetSchema extends BaseSchema {
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderColor;
     public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableFirstRowColor;
     public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableSecondRowColor;
-
-    public FREEZE_ROW: number = OverViewSheetSchema.SHEET.FREEZE.ROW;
-    public FREEZE_COLUMN: number = OverViewSheetSchema.SHEET.FREEZE.COLUMN;
-
     // private local variable
 
     //constructor
