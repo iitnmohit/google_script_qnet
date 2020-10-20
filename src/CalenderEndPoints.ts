@@ -1,12 +1,11 @@
 import { runSafely } from "./Code";
+import { Calender } from "./constants/Calender";
 import { CalenderService } from "./service/CalenderService";
 import { UiService } from "./service/UiService";
 import { DateUtil } from "./util/DateUtil";
 
 function deleteSelectedCalenderEvents(): void {
-    if (!UiService.doesUserReConfirmedAction("This will delete the events from calender," +
-        " and can be found in calender trash.\nOnly 50 events will be deleted in one go.\n" +
-        "Proceed to continue.")) {
+    if (!UiService.doesUserReConfirmedAction(Calender.RECONFIRM_FOR_DELETE)) {
         return;
     }
     runSafely((): void => {

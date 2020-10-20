@@ -7,12 +7,17 @@ import { DateUtil } from "./DateUtil";
 
 export class Util {
     public static arrayOfArray<T>(array: Array<T>): Array<Array<T>> {
+        if (Predicates.IS_NULL.test(array)) {
+            return null;
+        }
         return array.map((t): Array<T> => {
             return [t];
         });
     }
 
-    public static formatUpdateLog(log: string, todayDate?: string): string {
+    public static formatUpdateLog(log: string): string;
+    public static formatUpdateLog(log: string, todayDate: string): string;
+    public static formatUpdateLog(log: string, todayDate: string = null): string {
         if (Predicates.IS_BLANK.test(log)) {
             return "";
         }

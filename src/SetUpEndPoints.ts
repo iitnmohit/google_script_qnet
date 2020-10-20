@@ -9,7 +9,7 @@ import { ValidationService } from "./service/ValidationService";
 import { ThemeUtil } from "./util/ThemeUtil";
 
 function setUpSheet(): void {
-    if (!UiService.doesUserReConfirmedAction(Msg.SETUP_MSG)) {
+    if (!UiService.doesUserReConfirmedAction(Msg.SETUP_CONFIRMATION_MSG)) {
         return;
     }
     runSafely((): void => {
