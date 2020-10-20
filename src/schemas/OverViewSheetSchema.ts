@@ -112,7 +112,7 @@ export class OverViewSheetSchema extends BaseSchema {
     // public local methods
 
     // private local method
-    private isSchemaValid(): boolean {
+    protected isSchemaValid(): boolean {
         if (Predicates.IS_NOT_POSITIVE.test(this.tableOverallRowIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.tableOverallColIndex)) return false;
         if (Predicates.IS_NOT_POSITIVE.test(this.tableListWiseRowIndex)) return false;

@@ -1,4 +1,4 @@
-import { ICalenderSheet, ICitySheet, ILovSheet, INameListSheet, IOverViewSheet } from "../interface/ISheet";
+import { ICalenderSheet, ICitySheet, IColumn, ILovSheet, INameListSheet, IOverViewSheet } from "../interface/ISheet";
 
 export class Sheets {
     // common public
@@ -22,17 +22,22 @@ export class Sheets {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
             COLUMN: Sheets.DEFAULT_FREEZE_COL
         },
+        COLUMNS: [
+            {
+                NAME: "LOCATION",
+                MIN_WIDTH: 200,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "COUNT",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn,
+        ],
         COLUMN: {
-            LOCATION: "Location",
-            COUNT: "Count"
-        },
-        MIN_WIDTH: {
-            LOCATION: 200,
-            COUNT: null
-        },
-        MAX_WIDTH: {
-            LOCATION: null,
-            COUNT: null
+            LOCATION: "LOCATION",
+            COUNT: "COUNT"
         }
     } as ICitySheet;
 
@@ -48,6 +53,59 @@ export class Sheets {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
             COLUMN: Sheets.DEFAULT_FREEZE_COL
         },
+        COLUMNS: [
+            {
+                NAME: "LIST",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "X",
+                MIN_WIDTH: null,
+                MAX_WIDTH: 30,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CONNECT UP",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "INFO",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "EDIFY",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "INVITE",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "PLAN",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CLOSING",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "ZONE",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CAST",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn,
+        ],
         COLUMN: {
             LIST: "LIST",
             STRIKE_THROUGH: "X",
@@ -59,30 +117,6 @@ export class Sheets {
             CLOSING: "CLOSING",
             ZONE: "ZONE",
             CAST: "CAST"
-        },
-        MIN_WIDTH: {
-            LIST: null,
-            STRIKE_THROUGH: null,
-            CONNECT_UP: null,
-            INFO: null,
-            EDIFY: null,
-            INVITE: null,
-            PLAN: null,
-            CLOSING: null,
-            ZONE: null,
-            CAST: null
-        },
-        MAX_WIDTH: {
-            LIST: null,
-            STRIKE_THROUGH: 30,
-            CONNECT_UP: null,
-            INFO: null,
-            EDIFY: null,
-            INVITE: null,
-            PLAN: null,
-            CLOSING: null,
-            ZONE: null,
-            CAST: null
         }
     } as ILovSheet;
 
@@ -98,6 +132,99 @@ export class Sheets {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
             COLUMN: 3
         },
+        COLUMNS: [
+            {
+                NAME: "X",
+                MIN_WIDTH: null,
+                MAX_WIDTH: 30,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "Sl No",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "NAME",
+                MIN_WIDTH: 275,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "LIST",
+                MIN_WIDTH: 170,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "LOCATION",
+                MIN_WIDTH: 155,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "ZONE",
+                MIN_WIDTH: 120,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CONNECT UP",
+                MIN_WIDTH: 145,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "INFO",
+                MIN_WIDTH: 110,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "EDIFY",
+                MIN_WIDTH: 145,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "INVITE",
+                MIN_WIDTH: 140,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "PLAN",
+                MIN_WIDTH: 175,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "PLAN DATE",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CLOSING",
+                MIN_WIDTH: 200,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CAST",
+                MIN_WIDTH: 105,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "UPDATED ON",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "LINK",
+                MIN_WIDTH: 70,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "ADD LOG",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "DO",
+                MIN_WIDTH: null,
+                MAX_WIDTH: 30,
+                INDEX: -1
+            } as IColumn
+        ],
         COLUMN: {
             SELECT: "X",
             SL_NO: "Sl No",
@@ -117,46 +244,6 @@ export class Sheets {
             LINK: "LINK",
             ADD_LOG: "ADD LOG",
             DO: "DO"
-        },
-        MIN_WIDTH: {
-            SELECT: null,
-            SL_NO: null,
-            NAME: 275,
-            LIST: 170,
-            LOCATION: 155,
-            ZONE: 120,
-            CONNECT_UP: 145,
-            INFO: 110,
-            EDIFY: 145,
-            INVITE: 140,
-            PLAN: 175,
-            PLAN_DATE: null,
-            CLOSING: 200,
-            CAST: 105,
-            UPDATED_ON: null,
-            LINK: 70,
-            ADD_LOG: null,
-            DO: null
-        },
-        MAX_WIDTH: {
-            SELECT: 30,
-            SL_NO: null,
-            NAME: null,
-            LIST: null,
-            LOCATION: null,
-            ZONE: null,
-            CONNECT_UP: null,
-            INFO: null,
-            EDIFY: null,
-            INVITE: null,
-            PLAN: null,
-            PLAN_DATE: null,
-            CLOSING: null,
-            CAST: null,
-            UPDATED_ON: null,
-            LINK: null,
-            ADD_LOG: null,
-            DO: 30
         }
     } as INameListSheet;
 
@@ -264,6 +351,44 @@ export class Sheets {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
             COLUMN: Sheets.DEFAULT_FREEZE_COL
         },
+        COLUMNS: [
+            {
+                NAME: "DO",
+                MIN_WIDTH: null,
+                MAX_WIDTH: 30,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "CALENDER",
+                MIN_WIDTH: 120,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "TITLE",
+                MIN_WIDTH: 240,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "DESCRIPTION",
+                MIN_WIDTH: 150,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "ALL DAY",
+                MIN_WIDTH: null,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "START TIME",
+                MIN_WIDTH: 180,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: "END TIME",
+                MIN_WIDTH: 180,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn
+        ],
         COLUMN: {
             DO: "DO",
             CALENDER: "CALENDER",
@@ -272,24 +397,6 @@ export class Sheets {
             ALLDAY: "ALL DAY",
             START_TIME: "START TIME",
             END_TIME: "END TIME",
-        },
-        MIN_WIDTH: {
-            DO: null,
-            CALENDER: 120,
-            TITLE: 240,
-            DESCRIPTION: 150,
-            ALLDAY: null,
-            START_TIME: 180,
-            END_TIME: 180,
-        },
-        MAX_WIDTH: {
-            DO: 30,
-            CALENDER: null,
-            TITLE: null,
-            DESCRIPTION: null,
-            ALLDAY: null,
-            START_TIME: null,
-            END_TIME: null,
         }
     } as ICalenderSheet;
 }

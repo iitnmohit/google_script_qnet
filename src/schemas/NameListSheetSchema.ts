@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { INameListSheet, ISheet } from "../interface/ISheet";
+import { IColumn, INameListSheet, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -31,24 +31,6 @@ export class NameListSheetSchema extends BaseSchema {
     public static readonly COL_DO: string = NameListSheetSchema.SHEET.COLUMN.DO;
 
     // public local variable
-    public readonly selectColIndex: number = -1;
-    public readonly slNoColIndex: number = -1;
-    public readonly nameColIndex: number = -1;
-    public readonly listColIndex: number = -1;
-    public readonly locationColIndex: number = -1;
-    public readonly zoneColIndex: number = -1;
-    public readonly connectUpColIndex: number = -1;
-    public readonly infoColIndex: number = -1;
-    public readonly edifyColIndex: number = -1;
-    public readonly inviteColIndex: number = -1;
-    public readonly planColIndex: number = -1;
-    public readonly planDateColIndex: number = -1;
-    public readonly closingColIndex: number = -1;
-    public readonly castColIndex: number = -1;
-    public readonly updateOnColIndex: number = -1;
-    public readonly linkColIndex: number = -1;
-    public readonly addLogColIndex: number = -1;
-    public readonly doColIndex: number = -1;
 
     // public abstract variable
     public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
@@ -71,50 +53,20 @@ export class NameListSheetSchema extends BaseSchema {
         super();
         this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, NameListSheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
-        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
-            switch (firstRowRangeValues[0][i]) {
-                case NameListSheetSchema.COL_SELECT: this.selectColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_SL_NO: this.slNoColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_NAME: this.nameColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_LIST: this.listColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_LOCATION: this.locationColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_ZONE: this.zoneColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_CONNECT_UP: this.connectUpColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_INFO: this.infoColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_EDIFY: this.edifyColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_INVITE: this.inviteColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_PLAN: this.planColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_PLAN_DATE: this.planDateColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_CLOSING: this.closingColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_CAST: this.castColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_UPDATED_ON: this.updateOnColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_LINK: this.linkColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_ADD_LOG: this.addLogColIndex = i + 1;
-                    break;
-                case NameListSheetSchema.COL_DO: this.doColIndex = i + 1;
-                    break;
-                default:
-                    break;
-            }
-        }
         this.NUM_OF_ROWS = sheet.getMaxRows();
+
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return;
+        }
+        let firstRowValues = sheet.getRange(1, 1, 1, this.NUM_OF_COLUMNS).getDisplayValues()[0];
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
+            this.ISHEET.COLUMNS.find((column: IColumn) => {
+                if (column.NAME === firstRowValues[i]) {
+                    return true;
+                }
+                return false;
+            }).INDEX = i + 1;
+        }
     }
 
     // static method
@@ -136,99 +88,8 @@ export class NameListSheetSchema extends BaseSchema {
     }
 
     // public abstract methods 
-    public getMinColWidth(index: number): number {
-        switch (index) {
-            case this.selectColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.SELECT;
-            case this.slNoColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.SL_NO;
-            case this.nameColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.NAME;
-            case this.listColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.LIST;
-            case this.locationColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.LOCATION;
-            case this.zoneColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.ZONE;
-            case this.connectUpColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.INFO;
-            case this.edifyColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.EDIFY;
-            case this.inviteColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.INVITE;
-            case this.planColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.PLAN;
-            case this.planDateColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.PLAN_DATE;
-            case this.closingColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.CLOSING;
-            case this.castColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.CAST;
-            case this.updateOnColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.UPDATED_ON;
-            case this.linkColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.LINK;
-            case this.addLogColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.ADD_LOG;
-            case this.doColIndex: return NameListSheetSchema.SHEET.MIN_WIDTH.DO;
-            default: return null;
-        }
-    }
-
-    public getMaxColWidth(index: number): number {
-        switch (index) {
-            case this.selectColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.SELECT;
-            case this.slNoColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.SL_NO;
-            case this.nameColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.NAME;
-            case this.listColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.LIST;
-            case this.locationColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.LOCATION;
-            case this.zoneColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.ZONE;
-            case this.connectUpColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.INFO;
-            case this.edifyColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.EDIFY;
-            case this.inviteColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.INVITE;
-            case this.planColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.PLAN;
-            case this.planDateColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.PLAN_DATE;
-            case this.closingColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.CLOSING;
-            case this.castColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.CAST;
-            case this.updateOnColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.UPDATED_ON;
-            case this.linkColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.LINK;
-            case this.addLogColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.ADD_LOG;
-            case this.doColIndex: return NameListSheetSchema.SHEET.MAX_WIDTH.DO;
-            default: return null;
-        }
-    }
 
     // public local methods
-    public getColIndexByName(colName: string): number {
-        switch (colName.toLocaleUpperCase()) {
-            case NameListSheetSchema.COL_SELECT: return this.selectColIndex;
-            case NameListSheetSchema.COL_SL_NO: return this.slNoColIndex;
-            case NameListSheetSchema.COL_NAME: return this.nameColIndex;
-            case NameListSheetSchema.COL_LIST: return this.listColIndex;
-            case NameListSheetSchema.COL_LOCATION: return this.locationColIndex;
-            case NameListSheetSchema.COL_ZONE: return this.zoneColIndex;
-            case NameListSheetSchema.COL_CONNECT_UP: return this.connectUpColIndex;
-            case NameListSheetSchema.COL_INFO: return this.infoColIndex;
-            case NameListSheetSchema.COL_EDIFY: return this.edifyColIndex;
-            case NameListSheetSchema.COL_INVITE: return this.inviteColIndex;
-            case NameListSheetSchema.COL_PLAN: return this.planColIndex;
-            case NameListSheetSchema.COL_PLAN_DATE: return this.planDateColIndex;
-            case NameListSheetSchema.COL_CLOSING: return this.closingColIndex;
-            case NameListSheetSchema.COL_CAST: return this.castColIndex;
-            case NameListSheetSchema.COL_UPDATED_ON: return this.updateOnColIndex;
-            case NameListSheetSchema.COL_LINK: return this.linkColIndex;
-            case NameListSheetSchema.COL_ADD_LOG: return this.addLogColIndex;
-            case NameListSheetSchema.COL_DO: return this.doColIndex;
-            default: return null;
-        }
-    }
 
     // private local method
-    private isSchemaValid(): boolean {
-        if (Predicates.IS_NOT_POSITIVE.test(this.selectColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.slNoColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.nameColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.listColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.locationColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.zoneColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.connectUpColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.infoColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.edifyColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.inviteColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.planColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.planDateColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.closingColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.castColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.updateOnColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.linkColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.addLogColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.doColIndex)) return false;
-        return true;
-    }
 }

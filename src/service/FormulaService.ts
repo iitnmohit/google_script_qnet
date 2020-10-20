@@ -26,11 +26,12 @@ export class FormulaService {
 
     private applyFormulaToCitySheets(): FormulaService {
         let citySheet = this.citySchema.SPREADSHEET;
-        let countColRange = citySheet.getRange(2, this.citySchema.countColIndex, this.citySchema.NUM_OF_ROWS - 1, 1);
+        let countColRange = citySheet.getRange(2, this.citySchema.getColIndexByName(CitySheetSchema.COL_COUNT),
+            this.citySchema.NUM_OF_ROWS - 1, 1);
         let formula = FormulaBuilder.newBuilder()
             .COUNTIF(
-                Util.getColumnA1Notation(this.nameSchema.locationColIndex, 1, this.nameSchema.ISHEET.NAME)
-                , Util.getRangeA1Notation(citySheet.getRange(2, this.citySchema.locationColIndex)))
+                Util.getColumnA1Notation(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LOCATION), 1, this.nameSchema.ISHEET.NAME)
+                , Util.getRangeA1Notation(citySheet.getRange(2, this.citySchema.getColIndexByName(CitySheetSchema.COL_LOCATION))))
             .showIfNonZero()
             .build();
         countColRange.setFormula(formula);
@@ -63,9 +64,9 @@ export class FormulaService {
             let formulaRow = new Array<string>();
             for (let col = 1; col < rowArray.length; col++) {
                 if (col == 1) {
-                    formulaRow.push(`=COUNTIF(${Util.getColumnA1Notation(this.nameSchema.listColIndex, 1, this.nameSchema.ISHEET.NAME)},${Util.getColumnLetter(this.overviewSchema.tableListWiseColIndex)}${this.overviewSchema.tableListWiseRowIndex + row})`);
+                    formulaRow.push(`=COUNTIF(${Util.getColumnA1Notation(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LIST), 1, this.nameSchema.ISHEET.NAME)},${Util.getColumnLetter(this.overviewSchema.tableListWiseColIndex)}${this.overviewSchema.tableListWiseRowIndex + row})`);
                 } else {
-                    formulaRow.push(`=COUNTIFS(${Util.getColumnA1Notation(this.nameSchema.listColIndex, 1, this.nameSchema.ISHEET.NAME)},${Util.getColumnLetter(this.overviewSchema.tableListWiseColIndex)}${this.overviewSchema.tableListWiseRowIndex + row},${Util.getColumnA1Notation(this.nameSchema.getColIndexByName(topHeadderArray[col]), 1, this.nameSchema.ISHEET.NAME)},"<>")`);
+                    formulaRow.push(`=COUNTIFS(${Util.getColumnA1Notation(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LIST), 1, this.nameSchema.ISHEET.NAME)},${Util.getColumnLetter(this.overviewSchema.tableListWiseColIndex)}${this.overviewSchema.tableListWiseRowIndex + row},${Util.getColumnA1Notation(this.nameSchema.getColIndexByName(topHeadderArray[col]), 1, this.nameSchema.ISHEET.NAME)},"<>")`);
                 }
             }
             formulaTable.push(formulaRow);

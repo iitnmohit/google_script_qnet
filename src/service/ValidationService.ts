@@ -30,26 +30,26 @@ export class ValidationService {
     }
 
     private applyValidationToNameSheets(): ValidationService {
-        return this.applyToNamelistSheetCol(this.lovSchema, this.lovSchema.listColIndex
-            , NameListSheetSchema.COL_LIST, this.nameSchema.listColIndex)
-            .applyToNamelistSheetCol(this.citySchema, this.citySchema.locationColIndex,
-                NameListSheetSchema.COL_LOCATION, this.nameSchema.locationColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.zoneColIndex
-                , NameListSheetSchema.COL_ZONE, this.nameSchema.zoneColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.connectUpColIndex
-                , NameListSheetSchema.COL_CONNECT_UP, this.nameSchema.connectUpColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.infoColIndex
-                , NameListSheetSchema.COL_INFO, this.nameSchema.infoColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.edifyColIndex
-                , NameListSheetSchema.COL_EDIFY, this.nameSchema.edifyColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.inviteColIndex
-                , NameListSheetSchema.COL_INVITE, this.nameSchema.inviteColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.planColIndex
-                , NameListSheetSchema.COL_PLAN, this.nameSchema.planColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.closingColIndex
-                , NameListSheetSchema.COL_CLOSING, this.nameSchema.closingColIndex)
-            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.castColIndex
-                , NameListSheetSchema.COL_CAST, this.nameSchema.castColIndex);
+        return this.applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_LIST)
+            , NameListSheetSchema.COL_LIST, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LIST))
+            .applyToNamelistSheetCol(this.citySchema, this.citySchema.getColIndexByName(CitySheetSchema.COL_LOCATION),
+                NameListSheetSchema.COL_LOCATION, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LOCATION))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_ZONE)
+                , NameListSheetSchema.COL_ZONE, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_ZONE))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_CONNECT_UP)
+                , NameListSheetSchema.COL_CONNECT_UP, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_CONNECT_UP))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_INFO)
+                , NameListSheetSchema.COL_INFO, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_INFO))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_EDIFY)
+                , NameListSheetSchema.COL_EDIFY, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_EDIFY))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_INVITE)
+                , NameListSheetSchema.COL_INVITE, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_INVITE))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_PLAN)
+                , NameListSheetSchema.COL_PLAN, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_PLAN))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_CLOSING)
+                , NameListSheetSchema.COL_CLOSING, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_CLOSING))
+            .applyToNamelistSheetCol(this.lovSchema, this.lovSchema.getColIndexByName(LovSheetSchema.COL_CAST)
+                , NameListSheetSchema.COL_CAST, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_CAST));
     }
 
     private applyToNamelistSheetCol(schema: ISchema,

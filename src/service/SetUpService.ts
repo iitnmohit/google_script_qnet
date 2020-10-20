@@ -66,39 +66,39 @@ export class SetUpService {
     private createNameListSheets(): SetUpService {
         let nameListSheet = this.startSetUpOfSheet(Sheets.NAMELIST);
         let schema = NameListSheetSchema.getValidSchema(nameListSheet);
-        return this.fillNumbers(schema.slNoColIndex, schema)
-            .fillCheckBox(schema.doColIndex, schema)
-            .fillCheckBox(schema.selectColIndex, schema)
+        return this.fillNumbers(schema.getColIndexByName(NameListSheetSchema.COL_SL_NO), schema)
+            .fillCheckBox(schema.getColIndexByName(NameListSheetSchema.COL_DO), schema)
+            .fillCheckBox(schema.getColIndexByName(NameListSheetSchema.COL_SELECT), schema)
             .setupColWidth(schema);
     }
 
     private createLovSheets(): SetUpService {
         let lovSheet = this.startSetUpOfSheet(Sheets.LOV);
         let schema = LovSheetSchema.getValidSchema(lovSheet);
-        return this.fillColValue(Lov.LIST, schema.listColIndex, lovSheet)
-            .fillCheckBox(schema.strikeThroughColIndex, schema)
-            .fillColValue(Lov.CONNECT_UP, schema.connectUpColIndex, lovSheet)
-            .fillColValue(Lov.INFO, schema.infoColIndex, lovSheet)
-            .fillColValue(Lov.EDIFY, schema.edifyColIndex, lovSheet)
-            .fillColValue(Lov.INVITE, schema.inviteColIndex, lovSheet)
-            .fillColValue(Lov.PLAN, schema.planColIndex, lovSheet)
-            .fillColValue(Lov.CLOSING, schema.closingColIndex, lovSheet)
-            .fillColValue(Lov.ZONE, schema.zoneColIndex, lovSheet)
-            .fillColValue(Lov.CAST, schema.castColIndex, lovSheet)
+        return this.fillColValue(Lov.LIST, schema.getColIndexByName(LovSheetSchema.COL_LIST), lovSheet)
+            .fillCheckBox(schema.getColIndexByName(LovSheetSchema.COL_STRIKE_THORUGH), schema)
+            .fillColValue(Lov.CONNECT_UP, schema.getColIndexByName(LovSheetSchema.COL_CONNECT_UP), lovSheet)
+            .fillColValue(Lov.INFO, schema.getColIndexByName(LovSheetSchema.COL_INFO), lovSheet)
+            .fillColValue(Lov.EDIFY, schema.getColIndexByName(LovSheetSchema.COL_EDIFY), lovSheet)
+            .fillColValue(Lov.INVITE, schema.getColIndexByName(LovSheetSchema.COL_INVITE), lovSheet)
+            .fillColValue(Lov.PLAN, schema.getColIndexByName(LovSheetSchema.COL_PLAN), lovSheet)
+            .fillColValue(Lov.CLOSING, schema.getColIndexByName(LovSheetSchema.COL_CLOSING), lovSheet)
+            .fillColValue(Lov.ZONE, schema.getColIndexByName(LovSheetSchema.COL_ZONE), lovSheet)
+            .fillColValue(Lov.CAST, schema.getColIndexByName(LovSheetSchema.COL_CAST), lovSheet)
             .setupColWidth(schema);
     }
 
     private createCitySheets(): SetUpService {
         let citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
-        return this.fillColValue(Cities.LIST, schema.locationColIndex, citySheet)
+        return this.fillColValue(Cities.LIST, schema.getColIndexByName(CitySheetSchema.COL_LOCATION), citySheet)
             .setupColWidth(schema);
     }
 
     private createCalenderSheet(): SetUpService {
         let calenderSheet = this.startSetUpOfSheet(Sheets.CALENDER);
         let schema = CalenderSheetSchema.getValidSchema(calenderSheet);
-        return this.fillCheckBox(schema.doColIndex, schema)
+        return this.fillCheckBox(schema.getColIndexByName(CalenderSheetSchema.COL_DO), schema)
             .setupColWidth(schema);
     }
 

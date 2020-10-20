@@ -1,4 +1,4 @@
-export class MyCalenderEvent {
+export class ICalenderEvent {
     public id: string;
     public calenderName: string;
     public calenderId: string;

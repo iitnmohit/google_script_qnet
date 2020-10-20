@@ -1,5 +1,5 @@
 import { ISchema } from "../interface/ISchema";
-import { ISheet } from "../interface/ISheet";
+import { IColumn, ISheet } from "../interface/ISheet";
 import { Predicates } from "../library/Predicates";
 
 export abstract class BaseSchema implements ISchema {
@@ -17,8 +17,62 @@ export abstract class BaseSchema implements ISchema {
     public abstract FREEZE_COLUMN: number;
 
     // public abstract methods
-    public abstract getMinColWidth(index: number): number;
-    public abstract getMaxColWidth(index: number): number;
+    public getColIndexByName(colName: string): number {
+        if (Predicates.IS_BLANK.test(colName)) {
+            return -1;
+        }
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return -1;
+        }
+        let column = this.ISHEET.COLUMNS.find((column: IColumn) => {
+            if (column.NAME === colName) {
+                return true;
+            }
+            return false;
+        });
+        if (Predicates.IS_NULL.test(column)) {
+            return -1;
+        }
+        return column.INDEX;
+    }
+
+    public getMinColWidth(index: number): number {
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return null;
+        }
+        if (Predicates.IS_NOT_POSITIVE.test(index)) {
+            return null;
+        }
+        let column = this.ISHEET.COLUMNS.find((column: IColumn) => {
+            if (column.INDEX === index) {
+                return true;
+            }
+            return false;
+        });
+        if (Predicates.IS_NULL.test(column)) {
+            return null;
+        }
+        return column.MIN_WIDTH;
+    }
+
+    public getMaxColWidth(index: number): number {
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return null;
+        }
+        if (Predicates.IS_NOT_POSITIVE.test(index)) {
+            return null;
+        }
+        let column = this.ISHEET.COLUMNS.find((column: IColumn) => {
+            if (column.INDEX === index) {
+                return true;
+            }
+            return false;
+        });
+        if (Predicates.IS_NULL.test(column)) {
+            return null;
+        }
+        return column.MAX_WIDTH;
+    }
 
     public insertRows(howMany: number): void {
         if (howMany < 1) {
@@ -49,5 +103,14 @@ export abstract class BaseSchema implements ISchema {
         }
     }
 
-    // other public methods
+    // protected methods
+    protected isSchemaValid(): boolean {
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return true;
+        }
+        for (let column of this.ISHEET.COLUMNS) {
+            if (Predicates.IS_NOT_POSITIVE.test(column.INDEX)) return false;
+        }
+        return true;
+    }
 }

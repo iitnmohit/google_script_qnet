@@ -14,6 +14,8 @@ export interface ISchema {
     FREEZE_ROW: number;
     FREEZE_COLUMN: number;
 
+    getColIndexByName(colName: string): number;
+
     getMinColWidth(index: number): number;
 
     getMaxColWidth(index: number): number | null;

@@ -41,8 +41,8 @@ export class TaskService extends BaseService {
                         logDate = _task.updated;
                     }
                     let callLog = Util.formatUpdateLog(_task.notes, logDate);
-                    nameSheet.getRange(row, this.nameListSchema.nameColIndex).setNote(callLog);
-                    nameSheet.getRange(row, this.nameListSchema.updateOnColIndex).setValue(DateUtil.format());
+                    nameSheet.getRange(row, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_NAME)).setNote(callLog);
+                    nameSheet.getRange(row, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_UPDATED_ON)).setValue(DateUtil.format());
 
                     //delete task
                     this.deleteTaskById(_task.id);
@@ -57,7 +57,7 @@ export class TaskService extends BaseService {
         if (Predicates.IS_NOT_NULL.test(this.getTaskList(false))) {
             try {
                 Tasks.Tasklists.remove(this.getTaskList().id);
-                this.nameListSchema.SPREADSHEET.getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
+                this.nameListSchema.SPREADSHEET.getRange(2, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_DO), this.nameListSchema.NUM_OF_ROWS - 1, 1).clearNote();
             } catch (error) {
                 throw new ServerException(Msg.TASK.DELETE.SERVER_ERROR);
             }
@@ -65,7 +65,7 @@ export class TaskService extends BaseService {
     }
 
     public clearAllCheckbox(): void {
-        this.nameListSchema.SPREADSHEET.getRange(2, this.nameListSchema.doColIndex, this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
+        this.nameListSchema.SPREADSHEET.getRange(2, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_DO), this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
     public addAllTask(count: number = Task.MAX_TASK_CREATE): void {
@@ -110,13 +110,13 @@ export class TaskService extends BaseService {
     private addNewTask(schema: NameListSheetSchema, row: number): GoogleAppsScript.Tasks.Schema.Task {
         let sheet = schema.SPREADSHEET;
         // break if no name
-        let nameCell = sheet.getRange(row, schema.nameColIndex);
+        let nameCell = sheet.getRange(row, schema.getColIndexByName(NameListSheetSchema.COL_NAME));
         Preconditions.checkFalse(nameCell.isBlank(), Msg.SHEET.NAME_NOT_PRESENT, row);
 
         let nameCellValue = nameCell.getDisplayValue();
         let taskTitle: string = nameCellValue.trim()
             + " ("
-            + sheet.getRange(row, this.nameListSchema.slNoColIndex).getDisplayValue()
+            + sheet.getRange(row, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_SL_NO)).getDisplayValue()
             + ")";
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)

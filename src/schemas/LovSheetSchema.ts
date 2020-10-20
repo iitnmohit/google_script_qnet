@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ILovSheet, ISheet } from "../interface/ISheet";
+import { IColumn, ILovSheet, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -23,16 +23,6 @@ export class LovSheetSchema extends BaseSchema {
     public static readonly COL_CAST: string = LovSheetSchema.SHEET.COLUMN.CAST;
 
     // public local variable
-    public readonly listColIndex: number = -1;
-    public readonly strikeThroughColIndex: number = -1;
-    public readonly connectUpColIndex: number = -1;
-    public readonly infoColIndex: number = -1;
-    public readonly edifyColIndex: number = -1;
-    public readonly inviteColIndex: number = -1;
-    public readonly planColIndex: number = -1;
-    public readonly closingColIndex: number = -1;
-    public readonly zoneColIndex: number = -1;
-    public readonly castColIndex: number = -1;
 
     // public abstract variable
     public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
@@ -55,34 +45,20 @@ export class LovSheetSchema extends BaseSchema {
         super();
         this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, LovSheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
-        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
-            switch (firstRowRangeValues[0][i]) {
-                case LovSheetSchema.COL_LIST: this.listColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_STRIKE_THORUGH: this.strikeThroughColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_CONNECT_UP: this.connectUpColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_INFO: this.infoColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_EDIFY: this.edifyColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_INVITE: this.inviteColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_PLAN: this.planColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_CLOSING: this.closingColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_ZONE: this.zoneColIndex = i + 1;
-                    break;
-                case LovSheetSchema.COL_CAST: this.castColIndex = i + 1;
-                    break;
-                default:
-                    break;
-            }
-        }
         this.NUM_OF_ROWS = sheet.getMaxRows();
+
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return;
+        }
+        let firstRowValues = sheet.getRange(1, 1, 1, this.NUM_OF_COLUMNS).getDisplayValues()[0];
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
+            this.ISHEET.COLUMNS.find((column: IColumn) => {
+                if (column.NAME === firstRowValues[i]) {
+                    return true;
+                }
+                return false;
+            }).INDEX = i + 1;
+        }
     }
 
     // static method
@@ -104,52 +80,8 @@ export class LovSheetSchema extends BaseSchema {
     }
 
     // public abstract methods 
-    public getMinColWidth(index: number): number {
-        switch (index) {
-            case this.listColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.LIST;
-            case this.strikeThroughColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.STRIKE_THROUGH;
-            case this.connectUpColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.INFO;
-            case this.edifyColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.EDIFY;
-            case this.inviteColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.INVITE;
-            case this.planColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.PLAN;
-            case this.closingColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.CLOSING;
-            case this.zoneColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.ZONE;
-            case this.castColIndex: return LovSheetSchema.SHEET.MIN_WIDTH.CAST;
-            default: return null;
-        }
-    }
-
-    public getMaxColWidth(index: number): number {
-        switch (index) {
-            case this.listColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.LIST;
-            case this.strikeThroughColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.STRIKE_THROUGH;
-            case this.connectUpColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.CONNECT_UP;
-            case this.infoColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.INFO;
-            case this.edifyColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.EDIFY;
-            case this.inviteColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.INVITE;
-            case this.planColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.PLAN;
-            case this.closingColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.CLOSING;
-            case this.zoneColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.ZONE;
-            case this.castColIndex: return LovSheetSchema.SHEET.MAX_WIDTH.CAST;
-            default: return null;
-        }
-    }
 
     // public local methods
 
     // private local method
-    private isSchemaValid(): boolean {
-        if (Predicates.IS_NOT_POSITIVE.test(this.listColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.strikeThroughColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.connectUpColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.infoColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.edifyColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.inviteColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.planColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.closingColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.zoneColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.castColIndex)) return false;
-        return true;
-    }
 }

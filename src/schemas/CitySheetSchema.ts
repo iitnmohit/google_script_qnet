@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ICitySheet, ISheet } from "../interface/ISheet";
+import { ICitySheet, IColumn, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -15,8 +15,6 @@ export class CitySheetSchema extends BaseSchema {
     public static readonly COL_COUNT: string = CitySheetSchema.SHEET.COLUMN.COUNT;
 
     // public local variable
-    public readonly locationColIndex: number = -1;
-    public readonly countColIndex: number = -1;
 
     // public abstract variable
     public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
@@ -39,18 +37,20 @@ export class CitySheetSchema extends BaseSchema {
         super();
         this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CitySheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
-        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
-            switch (firstRowRangeValues[0][i]) {
-                case CitySheetSchema.COL_LOCATION: this.locationColIndex = i + 1;
-                    break;
-                case CitySheetSchema.COL_COUNT: this.countColIndex = i + 1;
-                    break;
-                default:
-                    break;
-            }
-        }
         this.NUM_OF_ROWS = sheet.getMaxRows();
+
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return;
+        }
+        let firstRowValues = sheet.getRange(1, 1, 1, this.NUM_OF_COLUMNS).getDisplayValues()[0];
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
+            this.ISHEET.COLUMNS.find((column: IColumn) => {
+                if (column.NAME === firstRowValues[i]) {
+                    return true;
+                }
+                return false;
+            }).INDEX = i + 1;
+        }
     }
 
     // static method
@@ -72,28 +72,8 @@ export class CitySheetSchema extends BaseSchema {
     }
 
     // public abstract methods 
-    public getMinColWidth(index: number): number {
-        switch (index) {
-            case this.locationColIndex: return CitySheetSchema.SHEET.MIN_WIDTH.LOCATION;
-            case this.countColIndex: return CitySheetSchema.SHEET.MIN_WIDTH.COUNT;
-            default: return null;
-        }
-    }
-
-    public getMaxColWidth(index: number): number {
-        switch (index) {
-            case this.locationColIndex: return CitySheetSchema.SHEET.MAX_WIDTH.LOCATION;
-            case this.countColIndex: return CitySheetSchema.SHEET.MAX_WIDTH.COUNT;
-            default: return null;
-        }
-    }
 
     // public local methods
 
     // private local method
-    private isSchemaValid(): boolean {
-        if (Predicates.IS_NOT_POSITIVE.test(this.locationColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.countColIndex)) return false;
-        return true;
-    }
 }

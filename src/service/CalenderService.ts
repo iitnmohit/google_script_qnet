@@ -1,5 +1,5 @@
 import { Calender } from "../constants/Calender";
-import { MyCalenderEvent } from "../interface/MyCalenderEvent";
+import { ICalenderEvent } from "../interface/ICalenderEvent";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { CalenderSheetSchema } from "../schemas/CalenderSheetSchema";
@@ -31,9 +31,9 @@ export class CalenderService extends BaseService {
                 row: number) => {
                 let sheet = schema.SPREADSHEET;
                 let notes = sheet.getRange(row, 1, 1, schema.NUM_OF_COLUMNS).getNotes();
-                let eventId = notes[0][schema.allDayColIndex - 1];
-                let calenderId = notes[0][schema.calenderColIndex - 1];
-                let statTime = notes[0][schema.startTimeColIndex - 1];
+                let eventId = notes[0][schema.getColIndexByName(CalenderSheetSchema.COL_ALL_DAY) - 1];
+                let calenderId = notes[0][schema.getColIndexByName(CalenderSheetSchema.COL_CALENDER) - 1];
+                let statTime = notes[0][schema.getColIndexByName(CalenderSheetSchema.COL_START_TIME) - 1];
                 Preconditions.checkNotBlank(eventId, "Event id is not present.");
                 let event = this.getEventById(eventId, calenderId, statTime);
                 Preconditions.checkNotNull(event, "Date not synked or server error");
@@ -52,11 +52,12 @@ export class CalenderService extends BaseService {
     }
 
     public clearAllCheckbox(): void {
-        this.calenderSchema.SPREADSHEET.getRange(2, this.calenderSchema.doColIndex, this.calenderSchema.NUM_OF_ROWS - 1, 1).uncheck();
+        this.calenderSchema.SPREADSHEET.getRange(2, this.calenderSchema.getColIndexByName(CalenderSheetSchema.COL_DO),
+            this.calenderSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
-    private fetchAllEvents(startdays: number, endDays: number): Array<MyCalenderEvent> {
-        let allEvents = new Array<MyCalenderEvent>();
+    private fetchAllEvents(startdays: number, endDays: number): Array<ICalenderEvent> {
+        let allEvents = new Array<ICalenderEvent>();
         let calenders = CalendarApp.getAllCalendars();
         outer: for (let calender of calenders) {
             for (let skipCalenderName of Calender.SKIP_CALENDER) {
@@ -78,7 +79,7 @@ export class CalenderService extends BaseService {
         return allEvents;
     }
 
-    private fillEventsToSheet(allEvents: MyCalenderEvent[]): void {
+    private fillEventsToSheet(allEvents: ICalenderEvent[]): void {
         this.calenderSchema.insertRows(allEvents.length + this.calenderSchema.ISHEET.NUM_OF.ROWS - this.calenderSchema.NUM_OF_ROWS);
         let sortedEvent = allEvents.sort(this.eventArraySortComprator);
         let sheet = this.calenderSchema.SPREADSHEET;
@@ -102,18 +103,18 @@ export class CalenderService extends BaseService {
                 .setValues([rowArray])
                 .setBackground(_my_event.color)
                 .setFontColor(this.resolveFontColor(_my_event.color));
-            sheet.getRange(row, this.calenderSchema.calenderColIndex)
+            sheet.getRange(row, this.calenderSchema.getColIndexByName(CalenderSheetSchema.COL_CALENDER))
                 .setBackground(_my_event.calenderColor)
                 .setFontColor(this.resolveFontColor(_my_event.calenderColor))
                 .setNote(_my_event.calenderId);
-            sheet.getRange(row, this.calenderSchema.allDayColIndex, 1, 2)
+            sheet.getRange(row, this.calenderSchema.getColIndexByName(CalenderSheetSchema.COL_ALL_DAY), 1, 2)
                 .setNotes([[_my_event.id, DateUtil.format(_my_event.startTime)]]);
             row++;
         }
     }
 
-    private createNewMyEvent(calEvent: GoogleAppsScript.Calendar.CalendarEvent, calender: GoogleAppsScript.Calendar.Calendar): MyCalenderEvent {
-        let _myEvent = new MyCalenderEvent();
+    private createNewMyEvent(calEvent: GoogleAppsScript.Calendar.CalendarEvent, calender: GoogleAppsScript.Calendar.Calendar): ICalenderEvent {
+        let _myEvent = new ICalenderEvent();
         _myEvent.id = calEvent.getId();
         _myEvent.calenderName = calender.getName();
         _myEvent.calenderId = calender.getId();
@@ -165,8 +166,8 @@ export class CalenderService extends BaseService {
         return this;
     }
 
-    private eventArraySortComprator(left: MyCalenderEvent,
-        right: MyCalenderEvent): number {
+    private eventArraySortComprator(left: ICalenderEvent,
+        right: ICalenderEvent): number {
         if (left.startTime.getTime() < right.startTime.getTime()) {
             return -1;
         } else {

@@ -26,19 +26,19 @@ export class CallLogService extends BaseService {
                 row: number) => {
                 this.appendLog(schema, row);
                 schema.SPREADSHEET
-                    .getRange(row, schema.updateOnColIndex).setValue(DateUtil.format());
+                    .getRange(row, schema.getColIndexByName(NameListSheetSchema.COL_UPDATED_ON)).setValue(DateUtil.format());
             });
     }
 
     private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
         let sheet = nameListSchema.SPREADSHEET;
-        let logCell = sheet.getRange(rowIndex, nameListSchema.addLogColIndex);
+        let logCell = sheet.getRange(rowIndex, nameListSchema.getColIndexByName(NameListSheetSchema.COL_ADD_LOG));
         //read new logs
         let newLogs = logCell.getDisplayValue();
         Preconditions.checkNotBlank(newLogs, "No Log to update at row %s", rowIndex);
         newLogs = Util.formatUpdateLog(newLogs);
 
-        let nameCell = sheet.getRange(rowIndex, nameListSchema.nameColIndex);
+        let nameCell = sheet.getRange(rowIndex, nameListSchema.getColIndexByName(NameListSheetSchema.COL_NAME));
         Preconditions.checkNotBlank(nameCell.getDisplayValue(), "No name present at Name Cell at row %s", rowIndex);
         //read old logs
         let oldLogs = nameCell.getNote().trim();

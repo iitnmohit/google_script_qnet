@@ -17,13 +17,14 @@ export class BaseService {
         let sheet = schema.SPREADSHEET;
         let numOfTimesOperated = 0;
         let rowArray = new Array<number>();
-        let doColValues = sheet.getSheetValues(2, schema.doColIndex, schema.NUM_OF_ROWS - 1, 1);
+        let doColValues = sheet.getSheetValues(2, schema.getColIndexByName(CalenderSheetSchema.COL_DO),
+            schema.NUM_OF_ROWS - 1, 1);
         for (let i = 0; i < doColValues.length; i++) {
             if (Predicates.IS_TRUE.negate().test(doColValues[i][0])) {
                 continue;
             }
             let row = i + 2;
-            let checkBoxCell = sheet.getRange(row, schema.doColIndex);
+            let checkBoxCell = sheet.getRange(row, schema.getColIndexByName(CalenderSheetSchema.COL_DO));
             // do operation
             cb(checkBoxCell, schema, row);
 

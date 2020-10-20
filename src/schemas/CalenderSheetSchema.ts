@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ICalenderSheet, ISheet } from "../interface/ISheet";
+import { ICalenderSheet, IColumn, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -20,13 +20,6 @@ export class CalenderSheetSchema extends BaseSchema {
     public static readonly COL_END_TIME: string = CalenderSheetSchema.SHEET.COLUMN.END_TIME;
 
     // public local variable
-    public readonly doColIndex: number = -1;
-    public readonly calenderColIndex: number = -1;
-    public readonly titleColIndex: number = -1;
-    public readonly descriptionColIndex: number = -1;
-    public readonly allDayColIndex: number = -1;
-    public readonly startTimeColIndex: number = -1;
-    public readonly endTimeColIndex: number = -1;
 
     // public abstract variable
     public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
@@ -49,28 +42,20 @@ export class CalenderSheetSchema extends BaseSchema {
         super();
         this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, CalenderSheetSchema.SHEET.NAME);
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
-        let firstRowRangeValues = sheet.getSheetValues(1, 1, 1, this.NUM_OF_COLUMNS);
-        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
-            switch (firstRowRangeValues[0][i]) {
-                case CalenderSheetSchema.COL_DO: this.doColIndex = i + 1;
-                    break;
-                case CalenderSheetSchema.COL_CALENDER: this.calenderColIndex = i + 1;
-                    break;
-                case CalenderSheetSchema.COL_TITLE: this.titleColIndex = i + 1;
-                    break;
-                case CalenderSheetSchema.COL_DESCRIPTION: this.descriptionColIndex = i + 1;
-                    break;
-                case CalenderSheetSchema.COL_ALL_DAY: this.allDayColIndex = i + 1;
-                    break;
-                case CalenderSheetSchema.COL_START_TIME: this.startTimeColIndex = i + 1;
-                    break;
-                case CalenderSheetSchema.COL_END_TIME: this.endTimeColIndex = i + 1;
-                    break;
-                default:
-                    break;
-            }
-        }
         this.NUM_OF_ROWS = sheet.getMaxRows();
+
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return;
+        }
+        let firstRowValues = sheet.getRange(1, 1, 1, this.NUM_OF_COLUMNS).getDisplayValues()[0];
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
+            this.ISHEET.COLUMNS.find((column: IColumn) => {
+                if (column.NAME === firstRowValues[i]) {
+                    return true;
+                }
+                return false;
+            }).INDEX = i + 1;
+        }
     }
 
     // static method
@@ -92,43 +77,8 @@ export class CalenderSheetSchema extends BaseSchema {
     }
 
     // public abstract methods 
-    public getMinColWidth(index: number): number {
-        switch (index) {
-            case this.doColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.DO;
-            case this.calenderColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.CALENDER;
-            case this.titleColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.TITLE;
-            case this.descriptionColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.DESCRIPTION;
-            case this.allDayColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.ALLDAY;
-            case this.startTimeColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.START_TIME;
-            case this.endTimeColIndex: return CalenderSheetSchema.SHEET.MIN_WIDTH.END_TIME;
-            default: return null;
-        }
-    }
-
-    public getMaxColWidth(index: number): number {
-        switch (index) {
-            case this.doColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.DO;
-            case this.calenderColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.CALENDER;
-            case this.titleColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.TITLE;
-            case this.descriptionColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.DESCRIPTION;
-            case this.allDayColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.ALLDAY;
-            case this.startTimeColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.START_TIME;
-            case this.endTimeColIndex: return CalenderSheetSchema.SHEET.MAX_WIDTH.END_TIME;
-            default: return null;
-        }
-    }
 
     // public local methods
 
     // private local method
-    private isSchemaValid(): boolean {
-        if (Predicates.IS_NOT_POSITIVE.test(this.doColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.calenderColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.titleColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.descriptionColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.allDayColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.startTimeColIndex)) return false;
-        if (Predicates.IS_NOT_POSITIVE.test(this.endTimeColIndex)) return false;
-        return true;
-    }
 }

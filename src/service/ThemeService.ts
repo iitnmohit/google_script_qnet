@@ -64,7 +64,7 @@ export class ThemeService {
 
         //conditional formatting
         let sheet = this.calenderSchema.SPREADSHEET;
-        let selectColChar = Util.getColumnLetter(this.calenderSchema.doColIndex);
+        let selectColChar = Util.getColumnLetter(this.calenderSchema.getColIndexByName(CalenderSheetSchema.COL_DO));
         let conditionForStrikeThrough = `$${selectColChar}2=true`;
         let rangeAll = sheet.getRange(2, 1, this.calenderSchema.NUM_OF_ROWS - 1, this.calenderSchema.NUM_OF_COLUMNS);
         rangeAll.setWrap(true).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
@@ -81,9 +81,9 @@ export class ThemeService {
 
         //conditional formatting
         let sheet = this.lovSchema.SPREADSHEET;
-        let selectColChar = Util.getColumnLetter(this.lovSchema.strikeThroughColIndex);
+        let selectColChar = Util.getColumnLetter(this.lovSchema.getColIndexByName(LovSheetSchema.COL_STRIKE_THORUGH));
         let conditionForStrikeThrough = `$${selectColChar}2=true`;
-        let rangeLists = sheet.getRange(2, this.lovSchema.listColIndex, this.lovSchema.NUM_OF_ROWS - 1, 1);
+        let rangeLists = sheet.getRange(2, this.lovSchema.getColIndexByName(LovSheetSchema.COL_LIST), this.lovSchema.NUM_OF_ROWS - 1, 1);
 
         this.applyConditionalForatting(sheet, conditionForStrikeThrough, rangeLists, true);
         return this;
@@ -93,11 +93,11 @@ export class ThemeService {
         // conditional formatting
         let sheet = this.nameSchema.SPREADSHEET;
         let rangeAll = sheet.getRange(2, 1, this.nameSchema.NUM_OF_ROWS - 1, this.nameSchema.NUM_OF_COLUMNS);
-        let rangeNames = sheet.getRange(2, this.nameSchema.nameColIndex, this.nameSchema.NUM_OF_ROWS - 1, 1);
+        let rangeNames = sheet.getRange(2, this.nameSchema.getColIndexByName(NameListSheetSchema.COL_NAME), this.nameSchema.NUM_OF_ROWS - 1, 1);
 
-        let selectColChar = Util.getColumnLetter(this.nameSchema.selectColIndex);
+        let selectColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_SELECT));
         let cfFormulaForSelectRow = `$${selectColChar}2=true`;
-        let doColChar = Util.getColumnLetter(this.nameSchema.doColIndex);
+        let doColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_DO));
         let cfFormulaForTaskRow = `$${doColChar}2=true`;
         let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
 
@@ -120,9 +120,9 @@ export class ThemeService {
     }
 
     private getCfFormulaForStrikeThrough(): string {
-        let lovListCol = Util.getColumnA1Notation(this.lovSchema.listColIndex, 2, this.lovSchema.ISHEET.NAME);//Lists!A2:A
-        let lovSelectCol = Util.getColumnA1Notation(this.lovSchema.strikeThroughColIndex, 2, this.lovSchema.ISHEET.NAME);//Lists!B2:B
-        let nameListColChar = Util.getColumnLetter(this.nameSchema.listColIndex);
+        let lovListCol = Util.getColumnA1Notation(this.lovSchema.getColIndexByName(LovSheetSchema.COL_LIST), 2, this.lovSchema.ISHEET.NAME);//Lists!A2:A
+        let lovSelectCol = Util.getColumnA1Notation(this.lovSchema.getColIndexByName(LovSheetSchema.COL_STRIKE_THORUGH), 2, this.lovSchema.ISHEET.NAME);//Lists!B2:B
+        let nameListColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LIST));
         return `EQ(IFERROR(FILTER(INDIRECT("${lovSelectCol}"),INDIRECT("${lovListCol}")=${nameListColChar}2),FALSE),TRUE)`;
     }
 
