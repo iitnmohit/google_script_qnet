@@ -1,4 +1,6 @@
+import { Constant } from "../constants/Constant";
 import { Log } from "../constants/Log";
+import { Msg } from "../constants/Message";
 import { ITable } from "../interface/ISheet";
 import { Index } from "../library/Index";
 import { Preconditions } from "../library/Preconditions";
@@ -6,78 +8,105 @@ import { Predicates } from "../library/Predicates";
 import { DateUtil } from "./DateUtil";
 
 export class Util {
+
+    /**
+     * Converts Array\<T\>, into Array\<Array\<T\>\> 
+     * @param array array of type T
+     * @return if array is non empty then return array of array of each element T
+     * @return if array is null then return null
+     * @return if array is empty then return a empty array of array
+     */
     public static arrayOfArray<T>(array: Array<T>): Array<Array<T>> {
+        // check for null
         if (Predicates.IS_NULL.test(array)) {
             return null;
         }
+        // check for empty array
+        if (Predicates.IS_LIST_EMPTY.test(array)) {
+            return [[]];
+        }
+        // converts the array
         return array.map((t): Array<T> => {
             return [t];
         });
     }
 
-    public static formatUpdateLog(log: string): string;
-    public static formatUpdateLog(log: string, todayDate: string): string;
-    public static formatUpdateLog(log: string, todayDate: string = null): string {
+    /**
+     * Format the log text with space and date.
+     * 
+     * replace special text as per LOG property 
+     * @param log input text log 
+     * @param todayDate [optional] if provided consider this date as referance date for today.
+     * @return formatted log text
+     * @return if log is null or blank, return empty text
+     */
+    public static formatLog(log: string): string;
+    public static formatLog(log: string, todayDate: Date): string;
+    public static formatLog(log: string, todayDate: Date = DateUtil.localDate()): string {
         if (Predicates.IS_BLANK.test(log)) {
             return "";
         }
-        let formatedLog: string = "";
-        let lines: string[] = log.split("\n");
-
-        for (let i = 0; i < lines.length; i++) {
-            let eachLine = lines[i].replace("•", "").replace("-", "").trim();
+        let formatedLogLines: Array<string> = new Array<string>();
+        let logLines: Array<string> = log.split("\n");
+        for (let eachLine of logLines) {
+            eachLine = eachLine.replace("•", "").replace("-", "").trim();
             if (Predicates.IS_BLANK.test(eachLine)) {
                 continue;
             }
-
             if (DateUtil.isValid(eachLine)) {
-                formatedLog = formatedLog + "\n\n" + DateUtil.format(eachLine);
+                formatedLogLines.push("\n");
+                formatedLogLines.push(DateUtil.format(eachLine));
                 continue;
             }
-
-            if (eachLine.toLocaleLowerCase() === Log.TEXT_TO_REPLACE_WITH_TODAYS_DATE) {
-                if (DateUtil.isValid(todayDate)) {
-                    formatedLog = formatedLog + "\n\n" + DateUtil.format(todayDate);
-                } else {
-                    formatedLog = formatedLog + "\n\n" + DateUtil.format();
-                }
+            if (Log.TEXT_TO_REPLACE_FUNCTION_MAP.has(eachLine.toLocaleLowerCase())) {
+                formatedLogLines.push("\n");
+                formatedLogLines.push(Log.TEXT_TO_REPLACE_FUNCTION_MAP
+                    .get(eachLine.toLocaleLowerCase())(todayDate));
                 continue;
             }
-
-            formatedLog = formatedLog + "\n" + " • " + eachLine;
+            if (Log.TEXT_TO_REPLACE_MAP.has(eachLine.toLocaleLowerCase())) {
+                formatedLogLines.push(Log.TEXT_TO_REPLACE_MAP.get(eachLine.toLocaleLowerCase()));
+                continue;
+            }
+            formatedLogLines.push(" • " + eachLine);
         }
-        return formatedLog.trim();
+        return formatedLogLines.join("\n").trim();
     }
 
+    /**
+     * Convert entire column into A1 notation.
+     * @param colIndex [mandatory] column index starting from 1. 
+     * @param beginRow [optional] row index starting from 1
+     * @param sheetName [optional] sheet name in text
+     * @return column A1 notation e.g. A:A
+     * @return if beginRow is positive return including begin row, eg A5:A or A:A if begin row is 1
+     * @return if sheetName is not blank retun include sheet name, e.g. 'sheet1'!A4:A
+     * @throws IllegalArgumentException, if colIndex is not positive.
+     */
     public static getColumnA1Notation(colIndex: number): string;
     public static getColumnA1Notation(colIndex: number, beginRow: number): string;
     public static getColumnA1Notation(colIndex: number, beginRow: number, sheetName: string): string;
-    public static getColumnA1Notation(colIndex: number, beginRow?: number, sheetName?: string): string {
-        Preconditions.checkPositive(colIndex, "col index invalid");
+    public static getColumnA1Notation(colIndex: number, beginRow: number = 1, sheetName?: string): string {
+        Preconditions.checkPositive(colIndex, Msg.SHEET.COL_INDEX_POSITIVE);
 
         let colLetter = Util.getColumnLetter(colIndex);
         let beginRowNum = "";
         if (beginRow > 1) {
             beginRowNum += beginRow;
         }
-        if (Predicates.IS_NULL.test(sheetName)) {
+        if (Predicates.IS_BLANK.test(sheetName)) {
             return `${colLetter}${beginRowNum}:${colLetter}`;
         } else {
             return `'${sheetName}'!${colLetter}${beginRowNum}:${colLetter}`;
         }
     }
 
-    public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range): string;
-    public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range, sheetName: string): string;
-    public static getRangeA1Notation(range: GoogleAppsScript.Spreadsheet.Range, sheetName?: string): string {
-        Preconditions.checkNotNull(range, "Invalid Range");
-        if (Predicates.IS_NULL.test(sheetName)) {
-            return range.getA1Notation();
-        } else {
-            return sheetName + "!" + range.getA1Notation();
-        }
-    }
-
+    /**
+     * Converts column index (number) to letter
+     * @param index starts from 1
+     * @return column Letter e.x. 27 -> AA, 3 -> C
+     * @return blank string, if column index is not positive
+     */
     public static getColumnLetter(index: number): string {
         switch (index) {
             case 1: return "A";
@@ -106,82 +135,182 @@ export class Util {
             case 24: return "X";
             case 25: return "Y";
             case 26: return "Z";
-            default: throw new Error("not implemented yet");
+        }
+        if (Predicates.IS_NOT_POSITIVE.test(index)) {
+            return "";
+        }
+        if (index % 26 == 0) {
+            return Util.getColumnLetter((index / 26) - 1) + "Z";
+        } else {
+            return Util.getColumnLetter(index / 26) + Util.getColumnLetter(index % 26);
         }
     }
 
-    public static innitializeEmptyTableArray(height: number, width: number): any[][] {
-        Preconditions.checkPositive(height);
-        Preconditions.checkPositive(width);
-
-        let _dataArray = [];
-        for (let _i = 0; _i < height; _i++) {
-            let _tempArray = [];
-            for (let _j = 0; _j < width; _j++) {
-                _tempArray.push("");
+    /**
+     * Create a two dimensional array of blank string or provided value.
+     * @param height positive height of array
+     * @param width positive widht of array
+     * @param innitialDate if provided, fill with this instead of blank
+     * @returns Two Dimensional array with provided size,
+     *  If size is not provided properly return zero size array.
+     */
+    public static innitializeEmptyTableArray(height: number, width: number): string[][];
+    public static innitializeEmptyTableArray(height: number, width: number, innitialData: string): string[][];
+    public static innitializeEmptyTableArray(height: number, width: number, innitialData?: string): string[][] {
+        if (Predicates.IS_NOT_POSITIVE.test(height)) {
+            return [[]];
+        }
+        if (Predicates.IS_NOT_POSITIVE.test(width)) {
+            return [[]];
+        }
+        if (Predicates.IS_NULL.test(innitialData)) {
+            innitialData = "";
+        }
+        let array = [];
+        for (let index = 0; index < height; index++) {
+            let tempArray = [];
+            for (let innerIndex = 0; innerIndex < width; innerIndex++) {
+                tempArray.push(innitialData);
             }
-            _dataArray.push(_tempArray);
+            array.push(tempArray);
         }
-        return _dataArray;
+        return array;
     }
 
-    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number): any[][];
-    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number, data: any): any[][];
-    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number, data: any, everyWhere: boolean): any[][];
-    public static validateAndFillDummyData(twoDarray: any[][], height: number, width: number, data: any = "NA", everyWhere: boolean = false): any[][] {
-        Preconditions.checkNotNull(twoDarray);
-        Preconditions.checkNotBlank(data);
-        Preconditions.checkNotNull(everyWhere);
-        Preconditions.checkArgument(twoDarray.length == height);
+    /**
+     * Ensures width, height and value in two dimensional array.
+     * @param twoDarray input array to be operate on.
+     * @param height ensure height of array, should be greater than 0.
+     * @param width ensure width of array, should be greater than 0.
+     * @param data [optional] text to be replaced by blank string, default is "NA" (Constant.DEFAULT_DUMMY_DATA).
+     * @param everywhere [optional] if true, replace blank with data at everywhere otherwise,
+     *  replace only at bottom right index iff either of last row or column is having all the value blank
+     * @returns modified array with data manuplated as above
+     * @returns if twoDarray is null, creates a new array instaed
+     * @throws IllegalArgumentException, if either of height or width is not positive.
+     */
+    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number): any[][];
+    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number, data: any): any[][];
+    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number, data: any, everyWhere: boolean): any[][];
+    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number,
+        data: any = Constant.DEFAULT_DUMMY_DATA, everyWhere: boolean = false): any[][] {
+        // preconditions
+        Preconditions.checkPositive(height, Msg.SHEET.INDEX_POSITIVE);
+        Preconditions.checkPositive(width, Msg.SHEET.INDEX_POSITIVE);
 
-        let _isLastRowEmpty = true;
-        let _isLastColEmpty = true;
-        for (let _rowInd_ = 0; _rowInd_ < height; _rowInd_++) {
+        let createdNewArrayLocally: boolean = false;
+        // verify for empty array, if so create new with initial data
+        if (Predicates.IS_LIST_EMPTY.test(twoDarray)) {
+            twoDarray = Util.innitializeEmptyTableArray(height, width, everyWhere ? data : "");
+            createdNewArrayLocally = true;
+        } else if (twoDarray.length < height) {
+            // ensures height
+            let numOfRowsToAdd = height - twoDarray.length;
+            while (numOfRowsToAdd > 0) {
+                twoDarray.push([""]);
+                numOfRowsToAdd--;
+            }
+        } else if (twoDarray.length > height) {
+            // ensures height
+            let numOfRowsToRemove = twoDarray.length - height;
+            while (numOfRowsToRemove > 0) {
+                twoDarray.pop();
+                numOfRowsToRemove--;
+            }
+        }
+        // if created locally then set last cell and return
+        if (createdNewArrayLocally && !everyWhere) {
+            twoDarray[height - 1][width - 1] = data;
+            return;
+        }
+
+        let isLastRowEmpty = true;
+        let isLastColEmpty = true;
+        for (let rowIndex = 0; rowIndex < height; rowIndex++) {
             // current row
-            let _row = twoDarray[_rowInd_];
-            Preconditions.checkArgument(_row.length == width);
-            for (let _colInd_ = 0; _colInd_ < width; _colInd_++) {
-                let _val = _row[_colInd_];
+            let innerArray = twoDarray[rowIndex];
+            // ensures inner row width
+            if (innerArray.length < width) {
+                let numOfRowsToAdd = width - innerArray.length;
+                while (numOfRowsToAdd > 0) {
+                    innerArray.push([""]);
+                    numOfRowsToAdd--;
+                }
+            } else if (innerArray.length > width) {
+                let numOfRowsToRemove = innerArray.length - width;
+                while (numOfRowsToRemove > 0) {
+                    innerArray.pop();
+                    numOfRowsToRemove--;
+                }
+            }
+            for (let columnIndex = 0; columnIndex < width; columnIndex++) {
+                let arrayValue = innerArray[columnIndex];
                 // fill value everywhere
                 if (everyWhere) {
-                    if (Predicates.IS_BLANK.test(_val)) {
-                        twoDarray[_rowInd_][_colInd_] = data;
+                    if (Predicates.IS_BLANK.test(arrayValue)) {
+                        twoDarray[rowIndex][columnIndex] = data;
                     }
                     continue;
                 }
                 // check for last column empty
-                if (_isLastColEmpty && _colInd_ == (width - 1)) {
-                    if (Predicates.IS_NOT_BLANK.test(_val)) {
-                        _isLastColEmpty = false;
+                if (isLastColEmpty && columnIndex == (width - 1)) {
+                    if (Predicates.IS_NOT_BLANK.test(arrayValue)) {
+                        isLastColEmpty = false;
                     }
                 }
                 //check for last row empty
-                if (_isLastRowEmpty && _rowInd_ == (height - 1)) {
-                    if (Predicates.IS_NOT_BLANK.test(_val)) {
-                        _isLastRowEmpty = false;
+                if (isLastRowEmpty && rowIndex == (height - 1)) {
+                    if (Predicates.IS_NOT_BLANK.test(arrayValue)) {
+                        isLastRowEmpty = false;
                     }
                 }
             }
         }
-        if ((_isLastColEmpty || _isLastRowEmpty) && !everyWhere) {
+        // if last row or col empty fill last cell
+        if ((isLastColEmpty || isLastRowEmpty) && !everyWhere) {
             twoDarray[height - 1][width - 1] = data;
         }
         return twoDarray;
     }
 
-    public static getTableIndex(lastValuedCellIndex: Index, table: ITable): Index {
-        Preconditions.checkNotNull(lastValuedCellIndex);
-        Preconditions.checkNotNull(table);
-        Preconditions.checkNotNull(table.TOP_OFFESET);
-        Preconditions.checkNotNull(table.LEFT_OFFSET);
+    /**
+     * Gets the index (start from 1) of table where it starts from.
+     * @param lastValuedCellIndex [optional] (getLastRow,getLastCol), index start from (0,0).
+     * 
+     * zero means no row or no col. If not provided assume index to be (0,0)
+     * @param table [optional] ITable interface, if null assume top offset = 0, left offset = 0, 
+     * and table append direction = row
+     * 
+     * If table append direction is row - it will try to find index in 1st row + offset, 
+     * otherwise in 1st column + offset
+     * @returns INDEX of table 1st cell
+     */
+    public static getExpectedTableStartIndex(): Index;
+    public static getExpectedTableStartIndex(lastValuedCellIndex: Index, table: ITable): Index;
+    public static getExpectedTableStartIndex(lastValuedCellIndex?: Index, table?: ITable): Index {
+        let lastValuedRow: number = 0, lastValuedColumn: number = 0;
+        if (Predicates.IS_NOT_NULL.test(lastValuedCellIndex)) {
+            lastValuedRow = isNaN(lastValuedCellIndex.row) ? 0 : lastValuedCellIndex.row;
+            lastValuedColumn = isNaN(lastValuedCellIndex.col) ? 0 : lastValuedCellIndex.col;
+        }
 
-        let tableStartRowIndex = 1 + table.TOP_OFFESET;
-        let tableStartColIndex = 1 + table.LEFT_OFFSET;
+        let topOffset: number = 0, leftOffset: number = 0,
+            append: "row" | "col" = Constant.DEFAULT_TABLE_APPEND_DIRECTION;
+        if (Predicates.IS_NOT_NULL.test(table)) {
+            topOffset = isNaN(table.TOP_OFFESET) ? 0 : table.TOP_OFFESET;
+            leftOffset = isNaN(table.LEFT_OFFSET) ? 0 : table.LEFT_OFFSET;
+            if (Predicates.IS_NOT_BLANK.test(table.APPEND)) {
+                append = table.APPEND;
+            }
+        }
 
-        if (table.APPEND === "row") {
-            tableStartColIndex += lastValuedCellIndex.col;
+        let tableStartRowIndex = 1 + topOffset;
+        let tableStartColIndex = 1 + leftOffset;
+
+        if (append === "row") {
+            tableStartColIndex += lastValuedColumn;
         } else {
-            tableStartRowIndex += lastValuedCellIndex.row;
+            tableStartRowIndex += lastValuedRow;
         }
         return new Index(tableStartRowIndex, tableStartColIndex);
     }

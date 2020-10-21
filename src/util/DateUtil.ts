@@ -22,17 +22,16 @@ export class DateUtil {
      * @Return if string & valid date then dd/MMM/yyyy string format.
      * @Return if string & invalid date then return input arg.
      * @Return if Date object then return dd/MMM/yyyy string format.
+     * @return if number 0 then format today date and +- number of days from today
+     * e.g -1 for yesturday, 
      * 
      */
-    public static format(dateArg: Date | GoogleAppsScript.Base.Date | string | null = null,
+    public static format(dateArg: Date | GoogleAppsScript.Base.Date | string | number | null = null,
         withTime: boolean = false): string {
         // if null return todays date
         if (dateArg === null) {
-            let _timestring = Utilities.formatDate(new Date(), "GMT+5:30", "dd-MMM-yyyy HH:mm:ss");
-            dateArg = new Date(_timestring);
-        }
-
-        if (typeof dateArg === "string") {
+            dateArg = DateUtil.localDate();
+        } else if (typeof dateArg === "string") {
             let _timestamp = Date.parse(dateArg);
             if (!isNaN(_timestamp)) {
                 //string & valid date
@@ -41,6 +40,10 @@ export class DateUtil {
                 //string & invalid date
                 return dateArg;
             }
+        } else if (typeof dateArg === "number") {
+            let refTime = DateUtil.localDate().getTime();
+            let refTimeOffset = dateArg * MILLISECONDS_IN_ONE_DAY;
+            dateArg = new Date(refTime + refTimeOffset);
         }
         let month = DateUtil.getMonthName(dateArg.getMonth());
         let day = String(dateArg.getDate());

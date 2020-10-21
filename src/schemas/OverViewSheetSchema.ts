@@ -117,7 +117,7 @@ export class OverViewSheetSchema extends BaseSchema {
     }
 
     private validateTable(table: ITable, sheetValues: any[][], lastValuedCellIndex: Index): Index {
-        let tableIndex = Util.getTableIndex(lastValuedCellIndex, table);
+        let tableIndex = Util.getExpectedTableStartIndex(lastValuedCellIndex, table);
         let topHeadder = table.HEADDER.TOP.VALUES;
         if (Predicates.IS_LIST_NOT_EMPTY.test(topHeadder)) {
             for (let index = 0; index < topHeadder.length; index++) {

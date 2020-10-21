@@ -1,7 +1,7 @@
 import { TaskBuilder } from "../builder/TaskBuilder";
 import { TaskListBuilder } from "../builder/TaskListBuilder";
 import { Msg } from "../constants/Message";
-import { Task } from "../constants/Task";
+import { Constant } from "../constants/Constant";
 import { ServerException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -20,9 +20,9 @@ export class TaskService extends BaseService {
             .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
     }
 
-    public updateSelectedLog(count: number = Task.MAX_TASK_UPDATE): void {
+    public updateSelectedLog(count: number = Constant.MAX_TASK_UPDATE): void {
         Preconditions.checkPositive(count, Msg.TASK.UPDATE.COUNT);
-        Preconditions.checkArgument(count <= Task.MAX_TASK_UPDATE, Msg.TASK.UPDATE.COUNT);
+        Preconditions.checkArgument(count <= Constant.MAX_TASK_UPDATE, Msg.TASK.UPDATE.COUNT);
 
         this.operateOnSelectedRows(count, this.nameListSchema,
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
@@ -34,13 +34,13 @@ export class TaskService extends BaseService {
                 let _task = this.getTaskById(taskId);
                 if (Predicates.IS_NOT_NULL.test(_task)) {
                     //update task
-                    let logDate: string = "today";
+                    let logDate: Date = DateUtil.localDate();
                     if (Predicates.IS_NOT_NULL.test(_task.completed)) {
-                        logDate = _task.completed;
+                        logDate = DateUtil.parse(_task.completed);
                     } else if (Predicates.IS_NOT_NULL.test(_task.updated)) {
-                        logDate = _task.updated;
+                        logDate = DateUtil.parse(_task.updated);
                     }
-                    let callLog = Util.formatUpdateLog(_task.notes, logDate);
+                    let callLog = Util.formatLog(_task.notes, logDate);
                     nameSheet.getRange(row, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_NAME)).setNote(callLog);
                     nameSheet.getRange(row, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_UPDATED_ON)).setValue(DateUtil.format());
 
@@ -68,9 +68,9 @@ export class TaskService extends BaseService {
         this.nameListSchema.SPREADSHEET.getRange(2, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_DO), this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
-    public addAllTask(count: number = Task.MAX_TASK_CREATE): void {
+    public addAllTask(count: number = Constant.MAX_TASK_CREATE): void {
         Preconditions.checkPositive(count, Msg.TASK.CREATE.COUNT);
-        Preconditions.checkArgument(count <= Task.MAX_TASK_CREATE, Msg.TASK.CREATE.COUNT);
+        Preconditions.checkArgument(count <= Constant.MAX_TASK_CREATE, Msg.TASK.CREATE.COUNT);
 
         this.operateOnSelectedRows(count, this.nameListSchema,
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
@@ -120,7 +120,7 @@ export class TaskService extends BaseService {
             + ")";
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)
-            .setNotes(Util.formatUpdateLog(nameCell.getNote()))
+            .setNotes(Util.formatLog(nameCell.getNote()))
             .build();
         try {
             return Tasks.Tasks.insert(newTask, this.getTaskList().id);
@@ -139,7 +139,7 @@ export class TaskService extends BaseService {
             let taskLists = Tasks.Tasklists.list();
             if (taskLists.items) {
                 for (let taskList of taskLists.items) {
-                    if (taskList.title === Task.LIST_NAME) {
+                    if (taskList.title === Constant.TASK_LIST_NAME) {
                         this.myTaskList = taskList;
                         break;
                     }
@@ -151,7 +151,7 @@ export class TaskService extends BaseService {
 
         if (this.myTaskList == null && create) {
             let newTaskList = TaskListBuilder.builder()
-                .setTitle(Task.LIST_NAME)
+                .setTitle(Constant.TASK_LIST_NAME)
                 .build();
             try {
                 this.myTaskList = Tasks.Tasklists.insert(newTaskList);

@@ -31,7 +31,7 @@ export class FormulaService {
         let formula = FormulaBuilder.newBuilder()
             .COUNTIF(
                 Util.getColumnA1Notation(this.nameSchema.getColIndexByName(NameListSheetSchema.COL_LOCATION), 1, this.nameSchema.ISHEET.NAME)
-                , Util.getRangeA1Notation(citySheet.getRange(2, this.citySchema.getColIndexByName(CitySheetSchema.COL_LOCATION))))
+                , citySheet.getRange(2, this.citySchema.getColIndexByName(CitySheetSchema.COL_LOCATION)).getA1Notation())
             .showIfNonZero()
             .build();
         countColRange.setFormula(formula);

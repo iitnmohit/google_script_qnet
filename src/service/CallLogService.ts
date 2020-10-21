@@ -36,7 +36,7 @@ export class CallLogService extends BaseService {
         //read new logs
         let newLogs = logCell.getDisplayValue();
         Preconditions.checkNotBlank(newLogs, "No Log to update at row %s", rowIndex);
-        newLogs = Util.formatUpdateLog(newLogs);
+        newLogs = Util.formatLog(newLogs);
 
         let nameCell = sheet.getRange(rowIndex, nameListSchema.getColIndexByName(NameListSheetSchema.COL_NAME));
         Preconditions.checkNotBlank(nameCell.getDisplayValue(), "No name present at Name Cell at row %s", rowIndex);

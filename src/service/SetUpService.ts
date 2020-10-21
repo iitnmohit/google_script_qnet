@@ -284,9 +284,9 @@ export class SetUpService {
         }
 
         // fill value in last cell
-        let tableIndex = Util.getTableIndex(new Index(sheet.getLastRow(), sheet.getLastColumn()), table);
+        let tableIndex = Util.getExpectedTableStartIndex(new Index(sheet.getLastRow(), sheet.getLastColumn()), table);
         sheet.getRange(tableIndex.row, tableIndex.col, table.HEIGHT, table.WIDTH)
-            .setValues(Util.validateAndFillDummyData(dataArray, table.HEIGHT, table.WIDTH));
+            .setValues(Util.ensuresDimensionAndFillDataToArray(dataArray, table.HEIGHT, table.WIDTH));
         return this;
     }
 }
