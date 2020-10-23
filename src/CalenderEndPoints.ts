@@ -21,14 +21,14 @@ function sync_todays_events(): void {
 
 function sync_currentWeek_events(): void {
     runSafely((): void => {
-        new CalenderService().syncEvent(DateUtil.getNumOfDaysBeforeWeekStarted(),
+        new CalenderService().syncEvent(0 - DateUtil.getNumOfDaysBeforeWeekStarted(),
             DateUtil.getNumOfDaysAfterWeekEnds());
     });
 }
 
 function sync_current_prev_next_Week_events(): void {
     runSafely((): void => {
-        new CalenderService().syncEvent(DateUtil.getNumOfDaysBeforeWeekStarted() - 7,
+        new CalenderService().syncEvent(0 - DateUtil.getNumOfDaysBeforeWeekStarted() - 7,
             DateUtil.getNumOfDaysAfterWeekEnds() + 7);
     });
 }

@@ -209,7 +209,7 @@ export class CalenderService extends BaseService {
 
     private fillEventsInCache(calenderId: string, eventStartDate: string): void {
         let events = this.getCalendarById(calenderId)
-            .getEvents(DateUtil.getBeginWeekDate(eventStartDate), DateUtil.getEndWeekDate(eventStartDate));
+            .getEvents(DateUtil.getBeginWeekDate(DateUtil.parse(eventStartDate)), DateUtil.getEndWeekDate(DateUtil.parse(eventStartDate)));
         if (!this.eventCache.has(calenderId)) {
             this.eventCache.set(calenderId, new Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>());
         }

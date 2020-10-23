@@ -7,43 +7,62 @@ const MILLISECONDS_IN_ONE_MINUTE = 60 * 1000;
 
 export class DateUtil {
     /**
+     * Check is a string is date or not.
      * @param date any date string
-     * @Return true if valid date or false
+     * @Return true if valid date string, otherwise false.
      */
+    public static isValid(date: string): boolean;
     public static isValid(date: string): boolean {
+        if (Predicates.IS_NULL.test(date)) {
+            return false;
+        }
         let d = Date.parse(date);
         return !isNaN(d);
     }
 
     /**
-     * @param dateArg date input
-     * @param withTime if true then return format is "dd/MMM/yyyy HH:mm AM"
-     * @Return if null then todays date in dd/MMM/yyyy string format.
-     * @Return if string & valid date then dd/MMM/yyyy string format.
-     * @Return if string & invalid date then return input arg.
-     * @Return if Date object then return dd/MMM/yyyy string format.
-     * @return if number 0 then format today date and +- number of days from today
-     * e.g -1 for yesturday, 
+     * Format date or string types into date or datetime string.
      * 
+     * Format number of days offset from today date, into date or datetime string.
+     * @param dateArg [optional] date or number of days
+     * @param withTime [optional] if true then return format is "dd/MMM/yyyy HH:mm AM"
+     * @Return if null, then todays date in dd/MMM/yyyy string format.
+     * @Return if valid date string, then dd/MMM/yyyy string format of provided date.
+     * @Return if invalid date string, then return input arg.
+     * @Return if Date object then return dd/MMM/yyyy string format.
+     * @return if number, then format today + numOfDaysOffset into dd/MMM/yyyy format.
+     * 
+     * e.g  1) 0 -> today in dd/MMM/yyyy format, 
+     * 2) 3 -> (today + 3 days) in dd/MMM/yyyy format,
+     * 3) -1 -> yesturday in dd/MMM/yyyy format.
      */
-    public static format(dateArg: Date | GoogleAppsScript.Base.Date | string | number | null = null,
+    public static format(): string;
+    public static format(dateArg: Date): string;
+    public static format(dateArg: Date, withTime: boolean): string;
+    public static format(dateArg: GoogleAppsScript.Base.Date): string;
+    public static format(dateArg: GoogleAppsScript.Base.Date, withTime: boolean): string;
+    public static format(dateArg: string): string;
+    public static format(dateArg: string, withTime: boolean): string;
+    public static format(dateArg: number): string;
+    public static format(dateArg: number, withTime: boolean): string;
+    public static format(dateArg: Date | GoogleAppsScript.Base.Date | string | number = null,
         withTime: boolean = false): string {
         // if null return todays date
         if (dateArg === null) {
             dateArg = DateUtil.localDate();
         } else if (typeof dateArg === "string") {
-            let _timestamp = Date.parse(dateArg);
-            if (!isNaN(_timestamp)) {
+            let timestamp = Date.parse(dateArg);
+            if (!isNaN(timestamp)) {
                 //string & valid date
-                dateArg = new Date(_timestamp);
+                dateArg = new Date(timestamp);
             } else {
                 //string & invalid date
                 return dateArg;
             }
         } else if (typeof dateArg === "number") {
-            let refTime = DateUtil.localDate().getTime();
-            let refTimeOffset = dateArg * MILLISECONDS_IN_ONE_DAY;
-            dateArg = new Date(refTime + refTimeOffset);
+            let refTimestamp = DateUtil.localDate().getTime();
+            let refTimestampOffset = dateArg * MILLISECONDS_IN_ONE_DAY;
+            dateArg = new Date(refTimestamp + refTimestampOffset);
         }
         let month = DateUtil.getMonthName(dateArg.getMonth());
         let day = String(dateArg.getDate());
@@ -66,72 +85,112 @@ export class DateUtil {
         }
     }
 
-    public static parse(dateString: string): Date {
-        let _timestamp = Date.parse(dateString);
-        if (!isNaN(_timestamp)) {
+    /**
+     * Convert date string in Date object
+     * @param dateString [optional] date in string format
+     * @returns today date, if date string is null or not provided.
+     * @returns today date, if invalid date string.
+     * @returns formatted date, if valid date string.
+     */
+    public static parse(): Date;
+    public static parse(dateString: string): Date;
+    public static parse(dateString: string = null): Date {
+        if (Predicates.IS_NULL.test(dateString)) {
+            return DateUtil.localDate();
+        }
+        let timestamp = Date.parse(dateString);
+        if (!isNaN(timestamp)) {
             //string & valid date
-            return DateUtil.localDate(new Date(_timestamp));
+            return DateUtil.localDate(new Date(timestamp));
         }
         return DateUtil.localDate();
     }
 
     /**
-     * 
-     * @param offsetDays num of days after(+) or before(-) today
+     * Get starting day Time, in date Object format.
+     * @param offsetDays [optional = 0] num of days before or after today.
+     * @param referenceTodayDate [optional = todays date] if provided, then provided date is consider as today.
      * @returns Date (today +- offsetDays with start day time)
      */
-    public static getBeginDayDate(offsetDays: number = 0, todayDate: Date = DateUtil.localDate()): GoogleAppsScript.Base.Date {
+    public static getBeginDayDate(): GoogleAppsScript.Base.Date;
+    public static getBeginDayDate(offsetDays: number): GoogleAppsScript.Base.Date;
+    public static getBeginDayDate(offsetDays: number, referenceTodayDate: Date): GoogleAppsScript.Base.Date;
+    public static getBeginDayDate(offsetDays: number = 0, referenceTodayDate: Date = DateUtil.localDate()): GoogleAppsScript.Base.Date {
         let offsetTime = offsetDays * MILLISECONDS_IN_ONE_DAY;
-        todayDate.setHours(0, 0, 0, 0);
-        return new Date(todayDate.getTime() + offsetTime);
+        referenceTodayDate.setHours(0, 0, 0, 0);
+        return new Date(referenceTodayDate.getTime() + offsetTime);
     }
 
     /**
-     * 
-     * @param offsetDays num of days after(+) or before(-) today
+     * Get End day Time, in date Object format.
+     * @param offsetDays [optional = 0] num of days before or after today.
+     * @param referenceTodayDate [optional = todays date] if provided, then provided date is consider as today.
      * @returns Date (today +- offsetDays with end day time)
      */
-    public static getEndDayDate(offsetDays: number = 0, todayDate: Date = DateUtil.localDate()): Date {
+    public static getEndDayDate(): GoogleAppsScript.Base.Date;
+    public static getEndDayDate(offsetDays: number): GoogleAppsScript.Base.Date;
+    public static getEndDayDate(offsetDays: number, referenceTodayDate: Date): GoogleAppsScript.Base.Date;
+    public static getEndDayDate(offsetDays: number = 0, referenceTodayDate: Date = DateUtil.localDate())
+        : GoogleAppsScript.Base.Date {
         let offsetTime = offsetDays * MILLISECONDS_IN_ONE_DAY;
-        todayDate.setHours(23, 59, 59, 999);
-        return new Date(todayDate.getTime() + offsetTime);
-    }
-
-    public static getBeginWeekDate(date: string): GoogleAppsScript.Base.Date {
-        let _date = this.parse(date);
-        return this.getBeginDayDate(DateUtil.getNumOfDaysBeforeWeekStarted(_date), _date);
-    }
-
-    public static getEndWeekDate(date: string): GoogleAppsScript.Base.Date {
-        let _date = this.parse(date);
-        return this.getEndDayDate(DateUtil.getNumOfDaysAfterWeekEnds(_date), _date);
+        referenceTodayDate.setHours(23, 59, 59, 999);
+        return new Date(referenceTodayDate.getTime() + offsetTime);
     }
 
     /**
-     * 
-     * @param number 0 to 11
-     * @returns three letter month or empty string
+     * Get week start date object.
+     * @param date [optional = todays date] if provided consider provided date as a day in current week.
+     * @returns if date is invalid or not provided, then current week start time
+     * @returns if valid date then, start week date having provided date.
      */
-    private static getMonthName(number: number): string {
-        if (Predicates.IS_NULL.test(number)) {
-            return "";
-        }
-        if (number < 0 || number > 11) {
-            return "";
+    public static getBeginWeekDate(): GoogleAppsScript.Base.Date;
+    public static getBeginWeekDate(date: Date): GoogleAppsScript.Base.Date;
+    public static getBeginWeekDate(date: Date = DateUtil.localDate()): GoogleAppsScript.Base.Date {
+        return this.getBeginDayDate(0 - DateUtil.getNumOfDaysBeforeWeekStarted(date), date);
+    };
+
+    /**
+    * Get week end date object.
+    * @param date [optional = todays date] if provided consider provided date as a day in current week.
+    * @returns if date is invalid or not provided, then current week end time
+    * @returns if valid date then, end week date having provided date.
+    */
+    public static getEndWeekDate(): GoogleAppsScript.Base.Date;
+    public static getEndWeekDate(date: Date): GoogleAppsScript.Base.Date;
+    public static getEndWeekDate(date: Date = DateUtil.localDate()): GoogleAppsScript.Base.Date {
+        return this.getEndDayDate(DateUtil.getNumOfDaysAfterWeekEnds(date), date);
+    }
+
+    /**
+     * Converts month number to month string (three letters).
+     * @param number [optional = current month] 0 to 11
+     * @returns three letter month or empty string
+     * @returns current month if number arg is invalid.
+     */
+    public static getMonthName(): string;
+    public static getMonthName(number: number): string;
+    public static getMonthName(number?: number): string {
+        if (Predicates.IS_NULL.test(number) || number < 0 || number > 11) {
+            number = DateUtil.localDate().getMonth();
         }
         return Lov.MONTHS[number];
     }
 
     /**
-     * 
-     * @param month month from 0 to 11
+     * Get number of days in month
+     * @param month [optional = current month] month from 0 to 11
+     * @param year [optional = current year] startes from 1970 till 3000
+     * @returns if any of the input is not correct consider current month or year.
      */
+    public static getNumberOfDaysInMonth(): number;
+    public static getNumberOfDaysInMonth(month: number): number;
+    public static getNumberOfDaysInMonth(month: number, year: number): number;
     public static getNumberOfDaysInMonth(month?: number, year?: number): number {
         let newDate = DateUtil.localDate();
-        if (Predicates.IS_NULL.test(month)) {
+        if (Predicates.IS_NULL.test(month) || month < 0 || month > 11) {
             month = newDate.getMonth();
         }
-        if (Predicates.IS_NULL.test(year)) {
+        if (Predicates.IS_NULL.test(year) || year < 1970 || year > 3000) {
             year = newDate.getFullYear();
         }
         let isLeapYear: boolean = (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
@@ -153,47 +212,77 @@ export class DateUtil {
     }
 
     /**
-     * 
-     * @param date nothing or null for today date, date compare to
-     * returns negative or zero number, i.e. num of days before week started
+     * Get to know that how many days before week has been started.
+     * @param date [optional = todays date] if provided, consider this as todays date.
+     * @param date invalid string, consider todays date.
+     * @returns num of days before week started (e.g. 0 ,1 , 2  etc)
      */
+    public static getNumOfDaysBeforeWeekStarted(): number;
+    public static getNumOfDaysBeforeWeekStarted(date: Date): number;
+    public static getNumOfDaysBeforeWeekStarted(date: GoogleAppsScript.Base.Date): number;
+    public static getNumOfDaysBeforeWeekStarted(date: string): number;
     public static getNumOfDaysBeforeWeekStarted(date?: Date | GoogleAppsScript.Base.Date | string): number {
-        let refDate: Date | GoogleAppsScript.Base.Date = new Date();
+        let refDate: Date | GoogleAppsScript.Base.Date = DateUtil.localDate();
         if (Predicates.IS_NULL.test(date)) {
         } else if (typeof date === "string") {
             refDate = DateUtil.parse(date);
         } else {
             refDate = date;
         }
-        let localDate = DateUtil.localDate(refDate);
-        var day = localDate.getDay();
+        let day = refDate.getDay();
         switch (Calender.START_WEEK_DAY) {
-            case CalendarApp.Weekday.SUNDAY: return 0 - day;
-            case CalendarApp.Weekday.MONDAY: return 0 - ((day + 6) % 7);
-            case CalendarApp.Weekday.TUESDAY: return 0 - ((day + 5) % 7);
-            case CalendarApp.Weekday.WEDNESDAY: return 0 - ((day + 4) % 7);
-            case CalendarApp.Weekday.THURSDAY: return 0 - ((day + 3) % 7);
-            case CalendarApp.Weekday.FRIDAY: return 0 - ((day + 2) % 7);
-            case CalendarApp.Weekday.SATURDAY: return 0 - ((day + 1) % 7);
-            default: return 0 - day;
+            case CalendarApp.Weekday.SUNDAY: return day;
+            case CalendarApp.Weekday.MONDAY: return (day + 6) % 7;
+            case CalendarApp.Weekday.TUESDAY: return (day + 5) % 7;
+            case CalendarApp.Weekday.WEDNESDAY: return (day + 4) % 7;
+            case CalendarApp.Weekday.THURSDAY: return (day + 3) % 7;
+            case CalendarApp.Weekday.FRIDAY: return (day + 2) % 7;
+            case CalendarApp.Weekday.SATURDAY: return (day + 1) % 7;
+            default: return day;
         }
     }
 
     /**
-     * 
-     * @param date nothing or null for today date, date compare to
-     * returns positive or zero number, i.e. num of days after week ends
+     * Get to know that how many days after week ends.
+     * @param date [optional = todays date] if provided valid, consider this as todays date.
+     * @returns num of days after week ends (e.g. 0 ,1 , 2  etc)
      */
+    public static getNumOfDaysAfterWeekEnds(): number;
+    public static getNumOfDaysAfterWeekEnds(date: Date): number;
+    public static getNumOfDaysAfterWeekEnds(date: GoogleAppsScript.Base.Date): number;
+    public static getNumOfDaysAfterWeekEnds(date: string): number;
     public static getNumOfDaysAfterWeekEnds(date?: Date | GoogleAppsScript.Base.Date | string): number {
-        return 6 + DateUtil.getNumOfDaysBeforeWeekStarted(date);
+        let refDate: Date | GoogleAppsScript.Base.Date = DateUtil.localDate();
+        if (Predicates.IS_NULL.test(date)) {
+        } else if (typeof date === "string") {
+            refDate = DateUtil.parse(date);
+        } else {
+            refDate = date;
+        }
+        let day = refDate.getDay();
+        switch (Calender.START_WEEK_DAY) {
+            case CalendarApp.Weekday.SUNDAY: return 6 - day;
+            case CalendarApp.Weekday.MONDAY: return 6 - ((day + 6) % 7);
+            case CalendarApp.Weekday.TUESDAY: return 6 - ((day + 5) % 7);
+            case CalendarApp.Weekday.WEDNESDAY: return 6 - ((day + 4) % 7);
+            case CalendarApp.Weekday.THURSDAY: return 6 - ((day + 3) % 7);
+            case CalendarApp.Weekday.FRIDAY: return 6 - ((day + 2) % 7);
+            case CalendarApp.Weekday.SATURDAY: return 6 - ((day + 1) % 7);
+            default: return 6 - day;
+        }
     }
 
     /**
-     * use this in stead of new Date()
-     * @param refDate 
-     * @returns new date as per calender property
+     * use this in stead of new Date().
+     * 
+     * converts date into time zone provided in property file.
+     * @param refDate [optional = todays date] date to be converted to local date.
+     * @returns new date as per calender time zone
      */
-    public static localDate(refDate: Date | GoogleAppsScript.Base.Date = new Date()) {
+    public static localDate(): Date;
+    public static localDate(refDate: Date): Date;
+    public static localDate(refDate: GoogleAppsScript.Base.Date): Date;
+    public static localDate(refDate: Date | GoogleAppsScript.Base.Date = new Date()): Date {
         let refTime = refDate.getTime();
         let refTimeOffset = refDate.getTimezoneOffset(); //IN MINUTES
         let utcTime = refTime + (refTimeOffset * MILLISECONDS_IN_ONE_MINUTE);

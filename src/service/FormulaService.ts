@@ -83,8 +83,7 @@ export class FormulaService {
             this.overviewSchema.tableOverallColIndex, this.overviewSchema.ISHEET.TABLES.TABLE_OVERALL.HEIGHT, 1);
         let formulaArray = new Array<string[]>();
         for (let key of tableOverAllLeftHeaderValue) {
-            formulaArray.push([`=COUNTA(${Util.getColumnA1Notation(
-                this.nameSchema.getColIndexByName(key[0]), 2, this.nameSchema.ISHEET.NAME)})`]);
+            formulaArray.push([`=COUNTA(${Util.getColumnA1Notation(this.nameSchema.getColIndexByName(key[0]), 2, this.nameSchema.ISHEET.NAME)})`]);
         }
         overViewSheet.getRange(this.overviewSchema.tableOverallRowIndex,
             this.overviewSchema.tableOverallColIndex + 1, this.overviewSchema.ISHEET.TABLES.TABLE_OVERALL.HEIGHT, 1)
