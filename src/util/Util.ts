@@ -7,6 +7,9 @@ import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { DateUtil } from "./DateUtil";
 
+/**
+ * Util class used for data manuplation, no service call or api call.
+ */
 export class Util {
 
     /**
@@ -16,6 +19,7 @@ export class Util {
      * @return if array is null then return null
      * @return if array is empty then return a empty array of array
      */
+    public static arrayOfArray<T>(array: Array<T>): Array<Array<T>>;
     public static arrayOfArray<T>(array: Array<T>): Array<Array<T>> {
         // check for null
         if (Predicates.IS_NULL.test(array)) {
@@ -36,7 +40,7 @@ export class Util {
      * 
      * replace special text as per LOG property 
      * @param log input text log 
-     * @param todayDate [optional] if provided consider this date as referance date for today.
+     * @param todayDate [optional = today date] if provided consider this date as referance date for today.
      * @return formatted log text
      * @return if log is null or blank, return empty text
      */
@@ -76,8 +80,8 @@ export class Util {
     /**
      * Convert entire column into A1 notation.
      * @param colIndex [mandatory] column index starting from 1. 
-     * @param beginRow [optional] row index starting from 1
-     * @param sheetName [optional] sheet name in text
+     * @param beginRow [optional = 1] row index starting from 1
+     * @param sheetName [optional = ""] sheet name in text
      * @return column A1 notation e.g. A:A
      * @return if beginRow is positive return including begin row, eg A5:A or A:A if begin row is 1
      * @return if sheetName is not blank retun include sheet name, e.g. 'sheet1'!A4:A
@@ -107,6 +111,7 @@ export class Util {
      * @return column Letter e.x. 27 -> AA, 3 -> C
      * @return blank string, if column index is not positive
      */
+    public static getColumnLetter(index: number): string;
     public static getColumnLetter(index: number): string {
         switch (index) {
             case 1: return "A";
@@ -150,7 +155,7 @@ export class Util {
      * Create a two dimensional array of blank string or provided value.
      * @param height positive height of array
      * @param width positive widht of array
-     * @param innitialDate if provided, fill with this instead of blank
+     * @param innitialDate [optional = ""] fill with this instead of blank
      * @returns Two Dimensional array with provided size,
      *  If size is not provided properly return zero size array.
      */
@@ -182,16 +187,19 @@ export class Util {
      * @param twoDarray input array to be operate on.
      * @param height ensure height of array, should be greater than 0.
      * @param width ensure width of array, should be greater than 0.
-     * @param data [optional] text to be replaced by blank string, default is "NA" (Constant.DEFAULT_DUMMY_DATA).
-     * @param everywhere [optional] if true, replace blank with data at everywhere otherwise,
+     * @param data [optional = Constant.DEFAULT_DUMMY_DATA] text to be replaced by blank string, 
+     * default is "NA" (Constant.DEFAULT_DUMMY_DATA).
+     * @param everywhere [optional = false] if true, replace blank with data at everywhere otherwise,
      *  replace only at bottom right index iff either of last row or column is having all the value blank
      * @returns modified array with data manuplated as above
      * @returns if twoDarray is null, creates a new array instaed
      * @throws IllegalArgumentException, if either of height or width is not positive.
      */
     public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number): any[][];
-    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number, data: any): any[][];
-    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number, data: any, everyWhere: boolean): any[][];
+    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number,
+        data: any): any[][];
+    public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number,
+        data: any, everyWhere: boolean): any[][];
     public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number,
         data: any = Constant.DEFAULT_DUMMY_DATA, everyWhere: boolean = false): any[][] {
         // preconditions
@@ -275,10 +283,11 @@ export class Util {
 
     /**
      * Gets the index (start from 1) of table where it starts from.
-     * @param lastValuedCellIndex [optional] (getLastRow,getLastCol), index start from (0,0).
+     * @param lastValuedCellIndex [optional = (0,0)] (getLastRow,getLastCol), index start from (0,0).
      * 
      * zero means no row or no col. If not provided assume index to be (0,0)
-     * @param table [optional] ITable interface, if null assume top offset = 0, left offset = 0, 
+     * @param table [optional = (0,0,Constant.DEFAULT_TABLE_APPEND_DIRECTION)] ITable interface, 
+     * if null assume top offset = 0, left offset = 0, 
      * and table append direction = row
      * 
      * If table append direction is row - it will try to find index in 1st row + offset, 
