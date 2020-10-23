@@ -13,6 +13,10 @@ export class ValidationService {
     private static lovSchema: LovSheetSchema;
     private static nameSchema: NameListSheetSchema;
 
+    /**
+     * Applies validation to all sheet.
+     * @param spreadsheet current spreadsheet
+     */
     public static applyValidationToAllSheets(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void;
     public static applyValidationToAllSheets(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
         ValidationService.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
