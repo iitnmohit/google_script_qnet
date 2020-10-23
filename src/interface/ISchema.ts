@@ -22,4 +22,6 @@ export interface ISchema {
     insertsColumns(howMany: number): void;
 
     removeRow(index: number, howmany?: number): void;
+
+    getColumnRangeByName(columnName: string): GoogleAppsScript.Spreadsheet.Range;
 }

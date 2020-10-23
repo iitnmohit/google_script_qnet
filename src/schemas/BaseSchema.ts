@@ -101,6 +101,10 @@ export abstract class BaseSchema implements ISchema {
         }
     }
 
+    public getColumnRangeByName(columnName: string): GoogleAppsScript.Spreadsheet.Range {
+        return this.SPREADSHEET.getRange(2, this.getColIndexByName(columnName), this.NUM_OF_ROWS - 1, 1);
+    }
+
     // protected methods
     protected isSchemaValid(): boolean {
         if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {

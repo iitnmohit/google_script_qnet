@@ -45,7 +45,8 @@ export class Msg {
         NAME_NOT_PRESENT: "No name present at row %s",
         INVALID_COL_INDEX: "Column index is not valid.",
         COL_INDEX_POSITIVE: "Column Index must be positive.",
-        INDEX_POSITIVE: "Index must be positive."
+        INDEX_POSITIVE: "Index must be positive.",
+        VALIDATION_DROP_DOWN__INVALID_INPUT: "Select %s value from dropdown."
     };
 }
 

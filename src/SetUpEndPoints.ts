@@ -5,7 +5,7 @@ import { SecurityService } from "./service/SecurityService";
 import { SetUpService } from "./service/SetUpService";
 import { ThemeService } from "./service/ThemeService";
 import { UiService } from "./service/UiService";
-import { ValidationService } from "./service/ValidationService";
+import { ValidationService } from "./service/setup/ValidationService";
 import { ThemeUtil } from "./util/ThemeUtil";
 
 function setUpSheet(): void {
@@ -19,7 +19,7 @@ function setUpSheet(): void {
 
         new FormulaService(spreadsheet).applyFormulaToAllSheets();
 
-        new ValidationService(spreadsheet).applyValidationToAllSheets();
+        ValidationService.applyValidationToAllSheets(spreadsheet);
 
         new ThemeService(spreadsheet, ThemeUtil.getCurrentTheme()).setTheme();
 
