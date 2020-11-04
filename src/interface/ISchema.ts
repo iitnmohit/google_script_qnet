@@ -1,4 +1,4 @@
-import { ISheet } from "./ISheet";
+import { ISheet, ITable } from "./ISheet";
 
 export interface ISchema {
     SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
@@ -24,4 +24,16 @@ export interface ISchema {
     removeRow(index: number, howmany?: number): void;
 
     getColumnRangeByName(columnName: string): GoogleAppsScript.Spreadsheet.Range;
+
+    getColumnA1NotationByName(columnName: string): string;
+
+    getCellRange(row: number, columnName: string): GoogleAppsScript.Spreadsheet.Range;
+
+    getCellA1Notation(row: number, columnName: string): string;
+
+    setFormulaToColumn(columnName: string, formula: string): void;
+
+    setFormulasToTable(table: ITable, formulas: string[][]): void;
+
+    getTableValues(table: ITable): string[][];
 }

@@ -1,6 +1,6 @@
 import { runSafely } from "./Code";
 import { Msg } from "./constants/Message";
-import { FormulaService } from "./service/FormulaService";
+import { FormulaService } from "./service/setup/FormulaService";
 import { SecurityService } from "./service/SecurityService";
 import { SetUpService } from "./service/SetUpService";
 import { ThemeService } from "./service/ThemeService";
@@ -17,7 +17,7 @@ function setUpSheet(): void {
         let spreadsheet = setUpService.createAllSheets();
         setUpService.deleteNonQnetSheets();
 
-        new FormulaService(spreadsheet).applyFormulaToAllSheets();
+        FormulaService.applyFormulaToAllSheets(spreadsheet);
 
         ValidationService.applyValidationToAllSheets(spreadsheet);
 

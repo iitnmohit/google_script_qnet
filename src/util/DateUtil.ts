@@ -5,6 +5,9 @@ import { Calender } from "../constants/Calender";
 const MILLISECONDS_IN_ONE_DAY = 24 * 60 * 60 * 1000;
 const MILLISECONDS_IN_ONE_MINUTE = 60 * 1000;
 
+/**
+ * Utility class for date time related query.
+ */
 export class DateUtil {
     /**
      * Check is a string is date or not.

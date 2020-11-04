@@ -1,6 +1,7 @@
 import { ISchema } from "../interface/ISchema";
-import { IColumn, ISheet } from "../interface/ISheet";
+import { IColumn, ISheet, ITable } from "../interface/ISheet";
 import { Predicates } from "../library/Predicates";
+import { Util } from "../util/Util";
 
 export abstract class BaseSchema implements ISchema {
 
@@ -103,6 +104,38 @@ export abstract class BaseSchema implements ISchema {
 
     public getColumnRangeByName(columnName: string): GoogleAppsScript.Spreadsheet.Range {
         return this.SPREADSHEET.getRange(2, this.getColIndexByName(columnName), this.NUM_OF_ROWS - 1, 1);
+    }
+
+    public getColumnA1NotationByName(columnName: string): string {
+        let colIndex = this.getColIndexByName(columnName);
+        let sheetName = this.ISHEET.NAME;
+        return Util.getColumnA1Notation(colIndex, 1, sheetName);
+    }
+
+    public getCellRange(row: number, columnName: string): GoogleAppsScript.Spreadsheet.Range {
+        return this.SPREADSHEET.getRange(row, this.getColIndexByName(columnName));
+    }
+
+    public getCellA1Notation(row: number, columnName: string): string {
+        return this.getCellRange(row, columnName).getA1Notation();
+    }
+
+    public setFormulaToColumn(columnName: string, formula: string): void {
+        this.getColumnRangeByName(columnName).setFormula(formula);
+    }
+
+    public setFormulasToTable(table: ITable, formulas: string[][]): void {
+        let rowShift = Predicates.IS_LIST_EMPTY.test(table.HEADDER.TOP.VALUES) ? 0 : 1;
+        let columShift = Predicates.IS_LIST_EMPTY.test(table.HEADDER.LEFT.VALUES) ? 0 : 1;
+
+        this.SPREADSHEET.getRange(table.INDEX.row + rowShift, table.INDEX.col + columShift,
+            table.HEIGHT - rowShift, table.WIDTH - columShift).setFormulas(formulas);
+    }
+
+    public getTableValues(table: ITable): string[][] {
+        let tableValues = this.SPREADSHEET.getRange(table.INDEX.row, table.INDEX.col,
+            table.HEIGHT, table.WIDTH).getDisplayValues();
+        return tableValues;
     }
 
     // protected methods
