@@ -23,6 +23,6 @@ function handleError(error: unknown) {
 function commonClearAllCheckBox(): void {
     runSafely((): void => {
         new TaskService().clearAllCheckbox();
-        new CalenderService();
+        new CalenderService().clearAllCheckbox();
     });
 }

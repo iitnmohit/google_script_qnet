@@ -77,7 +77,7 @@ export class FormulaService {
                     eachFormulaRow.push(formula);
                 } else {
                     let range2 = this.nameSchema.getColumnA1NotationByName(topHeadderRowArray[col]);
-                    let condition2 = "<>";
+                    let condition2 = "\"<>\"";
                     let formula = FormulaBuilder.newBuilder()
                         .COUNTIF2(range1, condition1, range2, condition2)
                         .build();
