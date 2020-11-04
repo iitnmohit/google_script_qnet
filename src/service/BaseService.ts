@@ -1,3 +1,4 @@
+import { Sheets } from "../constants/Sheets";
 import { ISchema } from "../interface/ISchema";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -17,14 +18,14 @@ export class BaseService {
         let sheet = schema.SPREADSHEET;
         let numOfTimesOperated = 0;
         let rowArray = new Array<number>();
-        let doColValues = sheet.getSheetValues(2, schema.getColIndexByName(CalenderSheetSchema.COL_DO),
+        let doColValues = sheet.getSheetValues(2, schema.getColIndexByName(Sheets.COLUMN_NAME.DO),
             schema.NUM_OF_ROWS - 1, 1);
         for (let i = 0; i < doColValues.length; i++) {
             if (Predicates.IS_TRUE.negate().test(doColValues[i][0])) {
                 continue;
             }
             let row = i + 2;
-            let checkBoxCell = sheet.getRange(row, schema.getColIndexByName(CalenderSheetSchema.COL_DO));
+            let checkBoxCell = sheet.getRange(row, schema.getColIndexByName(Sheets.COLUMN_NAME.DO));
             // do operation
             cb(checkBoxCell, schema, row);
 

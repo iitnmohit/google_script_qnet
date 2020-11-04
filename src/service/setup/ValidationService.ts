@@ -1,4 +1,5 @@
 import { Msg } from "../../constants/Message";
+import { Sheets } from "../../constants/Sheets";
 import { ISchema } from "../../interface/ISchema";
 import { Preconditions } from "../../library/Preconditions";
 import { CitySheetSchema } from "../../schemas/CitySheetSchema";
@@ -31,26 +32,27 @@ export class ValidationService {
      */
     private static applyValidationToNameSheets(): void;
     private static applyValidationToNameSheets(): void {
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_LIST,
-            this.lovSchema, LovSheetSchema.COL_LIST);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_LOCATION,
-            this.citySchema, CitySheetSchema.COL_LOCATION);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_ZONE,
-            this.lovSchema, LovSheetSchema.COL_ZONE);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_CONNECT_UP,
-            this.lovSchema, LovSheetSchema.COL_CONNECT_UP);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_INFO,
-            this.lovSchema, LovSheetSchema.COL_INFO);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_EDIFY,
-            this.lovSchema, LovSheetSchema.COL_EDIFY);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_INVITE,
-            this.lovSchema, LovSheetSchema.COL_INVITE);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_PLAN,
-            this.lovSchema, LovSheetSchema.COL_PLAN);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_CLOSING,
-            this.lovSchema, LovSheetSchema.COL_CLOSING);
-        ValidationService.createDropDown(this.nameSchema, NameListSheetSchema.COL_CAST,
-            this.lovSchema, LovSheetSchema.COL_CAST);
+        let colName = Sheets.COLUMN_NAME;
+        ValidationService.createDropDown(this.nameSchema, colName.LIST,
+            this.lovSchema, colName.LIST);
+        ValidationService.createDropDown(this.nameSchema, colName.LOCATION,
+            this.citySchema, colName.LOCATION);
+        ValidationService.createDropDown(this.nameSchema, colName.ZONE,
+            this.lovSchema, colName.ZONE);
+        ValidationService.createDropDown(this.nameSchema, colName.CONNECT_UP,
+            this.lovSchema, colName.CONNECT_UP);
+        ValidationService.createDropDown(this.nameSchema, colName.INFO,
+            this.lovSchema, colName.INFO);
+        ValidationService.createDropDown(this.nameSchema, colName.EDIFY,
+            this.lovSchema, colName.EDIFY);
+        ValidationService.createDropDown(this.nameSchema, colName.INVITE,
+            this.lovSchema, colName.INVITE);
+        ValidationService.createDropDown(this.nameSchema, colName.PLAN,
+            this.lovSchema, colName.PLAN);
+        ValidationService.createDropDown(this.nameSchema, colName.CLOSING,
+            this.lovSchema, colName.CLOSING);
+        ValidationService.createDropDown(this.nameSchema, colName.CAST,
+            this.lovSchema, colName.CAST);
     }
 
     /**

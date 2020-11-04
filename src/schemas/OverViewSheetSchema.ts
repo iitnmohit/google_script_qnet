@@ -20,10 +20,7 @@ export class OverViewSheetSchema extends BaseSchema {
     public readonly tableListWiseColIndex: number = -1;
 
     // public abstract variable
-    public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
     public ISHEET: IOverViewSheet = OverViewSheetSchema.SHEET;
-    public NUM_OF_ROWS: number = 1;
-    public NUM_OF_COLUMNS: number = 1;
 
     public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderFontColor;
     public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderColor;
@@ -33,10 +30,8 @@ export class OverViewSheetSchema extends BaseSchema {
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super();
-        this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, OverViewSheetSchema.SHEET.NAME);
-        this.NUM_OF_ROWS = sheet.getMaxRows();
-        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+        super(sheet, Sheets.OVERVIEW);
+
         let sheetValues = sheet.getSheetValues(1, 1, this.NUM_OF_ROWS, this.NUM_OF_COLUMNS);
         let overAllTableBeginIndex = this.validateTable(OverViewSheetSchema.SHEET.TABLES.TABLE_OVERALL,
             sheetValues, new Index(0, 0));

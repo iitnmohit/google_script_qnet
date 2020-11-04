@@ -1,3 +1,4 @@
+import { Sheets } from "../../constants/Sheets";
 import { CitySheetSchema } from "../../schemas/CitySheetSchema";
 import { NameListSheetSchema } from "../../schemas/NameListSheetSchema";
 import { OverViewSheetSchema } from "../../schemas/OverViewSheetSchema";
@@ -30,15 +31,15 @@ export class FormulaService {
      * Applies formula to city sheet.
      */
     private static applyFormulaToCitySheets(): void {
-        let rangeLocationA1Notation = this.nameSchema.getColumnA1NotationByName(NameListSheetSchema.COL_LOCATION);
-        let cityCellA1Notation = this.citySchema.getCellA1Notation(2, CitySheetSchema.COL_LOCATION);
+        let rangeLocationA1Notation = this.nameSchema.getColumnA1NotationByName(Sheets.COLUMN_NAME.LOCATION);
+        let cityCellA1Notation = this.citySchema.getCellA1Notation(2, Sheets.COLUMN_NAME.LOCATION);
 
         let formula = FormulaBuilder.newBuilder()
             .COUNTIF(rangeLocationA1Notation, cityCellA1Notation)
             .showIfNonZero()
             .build();
 
-        this.citySchema.setFormulaToColumn(CitySheetSchema.COL_COUNT, formula);
+        this.citySchema.setFormulaToColumn(Sheets.COLUMN_NAME.COUNT, formula);
     }
 
     /**
@@ -65,7 +66,7 @@ export class FormulaService {
             let eachFormulaRow = new Array<string>();
 
             for (let col = 1; col < eachRowArray.length; col++) {
-                let range1 = this.nameSchema.getColumnA1NotationByName(NameListSheetSchema.COL_LIST);
+                let range1 = this.nameSchema.getColumnA1NotationByName(Sheets.COLUMN_NAME.LIST);
 
                 let tableStartColumLetter = Util.getColumnLetter(table.INDEX.col);
                 let rowNumInSheet = table.INDEX.row + row;

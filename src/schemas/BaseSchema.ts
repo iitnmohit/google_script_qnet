@@ -1,19 +1,43 @@
+import { Msg } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { IColumn, ISheet, ITable } from "../interface/ISheet";
+import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { Util } from "../util/Util";
 
 export abstract class BaseSchema implements ISchema {
 
+    // public fields
+    public SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
+    public NUM_OF_ROWS: number;
+    public NUM_OF_COLUMNS: number;
+    public ISHEET: ISheet;
+
     // public abstract fields
-    public abstract SPREADSHEET: GoogleAppsScript.Spreadsheet.Sheet;
-    public abstract ISHEET: ISheet;
-    public abstract NUM_OF_ROWS: number;
-    public abstract NUM_OF_COLUMNS: number;
     public abstract HEADDER_ROW_FONT_COLOR: string;
     public abstract HEADDER_ROW_COLOR: string;
     public abstract FIRST_ROW_COLOR: string;
     public abstract SECOND_ROW_COLOR: string;
+
+    constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet, isheet: ISheet) {
+        this.ISHEET = isheet;
+        this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, isheet.NAME);
+        this.NUM_OF_ROWS = sheet.getMaxRows();
+        this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+
+        if (Predicates.IS_LIST_EMPTY.test(isheet.COLUMNS)) {
+            return;
+        }
+        let firstRowValues = sheet.getRange(1, 1, 1, this.NUM_OF_COLUMNS).getDisplayValues()[0];
+        for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
+            isheet.COLUMNS.find((column: IColumn) => {
+                if (column.NAME === firstRowValues[i]) {
+                    return true;
+                }
+                return false;
+            }).INDEX = i + 1;
+        }
+    }
 
     // public abstract methods
     public getColIndexByName(colName: string): number {
