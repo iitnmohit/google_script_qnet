@@ -41,5 +41,10 @@ export class Themes {
         calenderTableHeadderColor: "#5791ec",
         calenderTableFirstRowColor: "#ffffff",
         calenderTableSecondRowColor: "#ffffff",
+
+        contactsTableHeadderFontColor: "#f3f3f3",
+        contactsTableHeadderColor: "#5791ec",
+        contactsTableFirstRowColor: "#ffffff",
+        contactsTableSecondRowColor: "#ffffff",
     } as ITheme;
 }

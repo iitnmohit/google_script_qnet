@@ -1,7 +1,6 @@
 export class TaskListBuilder {
     private etag?: string;
     private id?: string;
-    // private kind?: string;
     private selfLink?: string;
     private title?: string;
     private updated?: string;

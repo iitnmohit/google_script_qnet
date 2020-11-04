@@ -40,4 +40,9 @@ export interface ITheme {
     calenderTableHeadderColor: string,
     calenderTableFirstRowColor: string,
     calenderTableSecondRowColor: string,
+
+    contactsTableHeadderFontColor: string,
+    contactsTableHeadderColor: string,
+    contactsTableFirstRowColor: string,
+    contactsTableSecondRowColor: string,
 }

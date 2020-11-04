@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ICitySheet, IColumn, ISheet } from "../interface/ISheet";
+import { IColumn, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,10 +9,10 @@ import { BaseSchema } from "./BaseSchema";
 
 export class CitySheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET: ICitySheet = Sheets.CITY;
+    public static readonly SHEET: ISheet = Sheets.CITY;
 
-    public static readonly COL_LOCATION: string = CitySheetSchema.SHEET.COLUMN.LOCATION;
-    public static readonly COL_COUNT: string = CitySheetSchema.SHEET.COLUMN.COUNT;
+    public static readonly COL_LOCATION: string = Sheets.COLUMN_NAME.LOCATION;
+    public static readonly COL_COUNT: string = Sheets.COLUMN_NAME.COUNT;
 
     // public local variable
 

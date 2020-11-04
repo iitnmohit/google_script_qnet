@@ -20,9 +20,9 @@ export class TaskService extends BaseService {
             .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
     }
 
-    public updateSelectedLog(count: number = Constant.MAX_TASK_UPDATE): void {
+    public updateSelectedLog(count: number = Constant.TASK_MAX_UPDATE_COUNT): void {
         Preconditions.checkPositive(count, Msg.TASK.UPDATE.COUNT);
-        Preconditions.checkArgument(count <= Constant.MAX_TASK_UPDATE, Msg.TASK.UPDATE.COUNT);
+        Preconditions.checkArgument(count <= Constant.TASK_MAX_UPDATE_COUNT, Msg.TASK.UPDATE.COUNT);
 
         this.operateOnSelectedRows(count, this.nameListSchema,
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
@@ -68,9 +68,9 @@ export class TaskService extends BaseService {
         this.nameListSchema.SPREADSHEET.getRange(2, this.nameListSchema.getColIndexByName(NameListSheetSchema.COL_DO), this.nameListSchema.NUM_OF_ROWS - 1, 1).uncheck();
     }
 
-    public addAllTask(count: number = Constant.MAX_TASK_CREATE): void {
+    public addAllTask(count: number = Constant.TASK_MAX_CREATE_COUNT): void {
         Preconditions.checkPositive(count, Msg.TASK.CREATE.COUNT);
-        Preconditions.checkArgument(count <= Constant.MAX_TASK_CREATE, Msg.TASK.CREATE.COUNT);
+        Preconditions.checkArgument(count <= Constant.TASK_MAX_CREATE_COUNT, Msg.TASK.CREATE.COUNT);
 
         this.operateOnSelectedRows(count, this.nameListSchema,
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,

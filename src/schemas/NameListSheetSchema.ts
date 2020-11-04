@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { IColumn, INameListSheet, ISheet } from "../interface/ISheet";
+import { IColumn, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,26 +9,26 @@ import { BaseSchema } from "./BaseSchema";
 
 export class NameListSheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET: INameListSheet = Sheets.NAMELIST;
+    public static readonly SHEET: ISheet = Sheets.NAMELIST;
 
-    public static readonly COL_SELECT: string = NameListSheetSchema.SHEET.COLUMN.SELECT;
-    public static readonly COL_SL_NO: string = NameListSheetSchema.SHEET.COLUMN.SL_NO;
-    public static readonly COL_NAME: string = NameListSheetSchema.SHEET.COLUMN.NAME;
-    public static readonly COL_LIST: string = NameListSheetSchema.SHEET.COLUMN.LIST;
-    public static readonly COL_LOCATION: string = NameListSheetSchema.SHEET.COLUMN.LOCATION;
-    public static readonly COL_ZONE: string = NameListSheetSchema.SHEET.COLUMN.ZONE;
-    public static readonly COL_CONNECT_UP: string = NameListSheetSchema.SHEET.COLUMN.CONNECT_UP;
-    public static readonly COL_INFO: string = NameListSheetSchema.SHEET.COLUMN.INFO;
-    public static readonly COL_EDIFY: string = NameListSheetSchema.SHEET.COLUMN.EDIFY;
-    public static readonly COL_INVITE: string = NameListSheetSchema.SHEET.COLUMN.INVITE;
-    public static readonly COL_PLAN: string = NameListSheetSchema.SHEET.COLUMN.PLAN;
-    public static readonly COL_PLAN_DATE: string = NameListSheetSchema.SHEET.COLUMN.PLAN_DATE;
-    public static readonly COL_CLOSING: string = NameListSheetSchema.SHEET.COLUMN.CLOSING;
-    public static readonly COL_CAST: string = NameListSheetSchema.SHEET.COLUMN.CAST;
-    public static readonly COL_UPDATED_ON: string = NameListSheetSchema.SHEET.COLUMN.UPDATED_ON;
-    public static readonly COL_LINK: string = NameListSheetSchema.SHEET.COLUMN.LINK;
-    public static readonly COL_ADD_LOG: string = NameListSheetSchema.SHEET.COLUMN.ADD_LOG;
-    public static readonly COL_DO: string = NameListSheetSchema.SHEET.COLUMN.DO;
+    public static readonly COL_SELECT: string = Sheets.COLUMN_NAME.SELECT;
+    public static readonly COL_SL_NO: string = Sheets.COLUMN_NAME.SL_NO;
+    public static readonly COL_NAME: string = Sheets.COLUMN_NAME.NAME;
+    public static readonly COL_LIST: string = Sheets.COLUMN_NAME.LIST;
+    public static readonly COL_LOCATION: string = Sheets.COLUMN_NAME.LOCATION;
+    public static readonly COL_ZONE: string = Sheets.COLUMN_NAME.ZONE;
+    public static readonly COL_CONNECT_UP: string = Sheets.COLUMN_NAME.CONNECT_UP;
+    public static readonly COL_INFO: string = Sheets.COLUMN_NAME.INFO;
+    public static readonly COL_EDIFY: string = Sheets.COLUMN_NAME.EDIFY;
+    public static readonly COL_INVITE: string = Sheets.COLUMN_NAME.INVITE;
+    public static readonly COL_PLAN: string = Sheets.COLUMN_NAME.PLAN;
+    public static readonly COL_PLAN_DATE: string = Sheets.COLUMN_NAME.PLAN_DATE;
+    public static readonly COL_CLOSING: string = Sheets.COLUMN_NAME.CLOSING;
+    public static readonly COL_CAST: string = Sheets.COLUMN_NAME.CAST;
+    public static readonly COL_UPDATED_ON: string = Sheets.COLUMN_NAME.UPDATED_ON;
+    public static readonly COL_LINK: string = Sheets.COLUMN_NAME.LINK;
+    public static readonly COL_ADD_LOG: string = Sheets.COLUMN_NAME.ADD_LOG;
+    public static readonly COL_DO: string = Sheets.COLUMN_NAME.DO;
 
     // public local variable
 

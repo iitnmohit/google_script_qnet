@@ -1,6 +1,6 @@
 import { Lov } from "../constants/Lov";
 import { Predicates } from "../library/Predicates";
-import { Calender } from "../constants/Calender";
+import { Constant } from "../constants/Constant";
 
 const MILLISECONDS_IN_ONE_DAY = 24 * 60 * 60 * 1000;
 const MILLISECONDS_IN_ONE_MINUTE = 60 * 1000;
@@ -233,7 +233,7 @@ export class DateUtil {
             refDate = date;
         }
         let day = refDate.getDay();
-        switch (Calender.START_WEEK_DAY) {
+        switch (Constant.CALENDER_START_WEEK_DAY) {
             case CalendarApp.Weekday.SUNDAY: return day;
             case CalendarApp.Weekday.MONDAY: return (day + 6) % 7;
             case CalendarApp.Weekday.TUESDAY: return (day + 5) % 7;
@@ -263,7 +263,7 @@ export class DateUtil {
             refDate = date;
         }
         let day = refDate.getDay();
-        switch (Calender.START_WEEK_DAY) {
+        switch (Constant.CALENDER_START_WEEK_DAY) {
             case CalendarApp.Weekday.SUNDAY: return 6 - day;
             case CalendarApp.Weekday.MONDAY: return 6 - ((day + 6) % 7);
             case CalendarApp.Weekday.TUESDAY: return 6 - ((day + 5) % 7);
@@ -289,7 +289,7 @@ export class DateUtil {
         let refTime = refDate.getTime();
         let refTimeOffset = refDate.getTimezoneOffset(); //IN MINUTES
         let utcTime = refTime + (refTimeOffset * MILLISECONDS_IN_ONE_MINUTE);
-        let localTimeOffsetInmilliSec = Calender.LOCAL_COUNTRY_OFFSET_IN_MINUTES * MILLISECONDS_IN_ONE_MINUTE;
+        let localTimeOffsetInmilliSec = Constant.CALENDER_LOCAL_COUNTRY_TIME_OFFSET_IN_MINUTES * MILLISECONDS_IN_ONE_MINUTE;
 
         let localDate = new Date(utcTime + localTimeOffsetInmilliSec);
         return localDate;

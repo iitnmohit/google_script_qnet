@@ -1,17 +1,13 @@
 export class TaskBuilder {
     private completed?: string;
-    // private deleted?: boolean;
     private due?: string;
     private etag?: string;
-    // private hidden?: boolean;
     private id?: string;
-    // private kind?: string;
     private links?: GoogleAppsScript.Tasks.Schema.TaskLinks[];
     private notes?: string;
     private parent?: string;
     private position?: string;
     private selfLink?: string;
-    // private status?: string;
     private title?: string;
     private updated?: string;
 

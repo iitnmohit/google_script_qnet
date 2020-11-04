@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { IColumn, ILovSheet, ISheet } from "../interface/ISheet";
+import { IColumn, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,18 +9,18 @@ import { BaseSchema } from "./BaseSchema";
 
 export class LovSheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET: ILovSheet = Sheets.LOV;
+    public static readonly SHEET: ISheet = Sheets.LOV;
 
-    public static readonly COL_LIST: string = LovSheetSchema.SHEET.COLUMN.LIST;
-    public static readonly COL_STRIKE_THORUGH: string = LovSheetSchema.SHEET.COLUMN.STRIKE_THROUGH;
-    public static readonly COL_CONNECT_UP: string = LovSheetSchema.SHEET.COLUMN.CONNECT_UP;
-    public static readonly COL_INFO: string = LovSheetSchema.SHEET.COLUMN.INFO;
-    public static readonly COL_EDIFY: string = LovSheetSchema.SHEET.COLUMN.EDIFY;
-    public static readonly COL_INVITE: string = LovSheetSchema.SHEET.COLUMN.INVITE;
-    public static readonly COL_PLAN: string = LovSheetSchema.SHEET.COLUMN.PLAN;
-    public static readonly COL_CLOSING: string = LovSheetSchema.SHEET.COLUMN.CLOSING;
-    public static readonly COL_ZONE: string = LovSheetSchema.SHEET.COLUMN.ZONE;
-    public static readonly COL_CAST: string = LovSheetSchema.SHEET.COLUMN.CAST;
+    public static readonly COL_LIST: string = Sheets.COLUMN_NAME.LIST;
+    public static readonly COL_STRIKE_THORUGH: string = Sheets.COLUMN_NAME.SELECT;
+    public static readonly COL_CONNECT_UP: string = Sheets.COLUMN_NAME.CONNECT_UP;
+    public static readonly COL_INFO: string = Sheets.COLUMN_NAME.INFO;
+    public static readonly COL_EDIFY: string = Sheets.COLUMN_NAME.EDIFY;
+    public static readonly COL_INVITE: string = Sheets.COLUMN_NAME.INVITE;
+    public static readonly COL_PLAN: string = Sheets.COLUMN_NAME.PLAN;
+    public static readonly COL_CLOSING: string = Sheets.COLUMN_NAME.CLOSING;
+    public static readonly COL_ZONE: string = Sheets.COLUMN_NAME.ZONE;
+    public static readonly COL_CAST: string = Sheets.COLUMN_NAME.CAST;
 
     // public local variable
 

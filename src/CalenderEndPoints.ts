@@ -1,11 +1,11 @@
 import { runSafely } from "./Code";
-import { Calender } from "./constants/Calender";
+import { Constant } from "./constants/Constant";
 import { CalenderService } from "./service/CalenderService";
 import { UiService } from "./service/UiService";
 import { DateUtil } from "./util/DateUtil";
 
 function deleteSelectedCalenderEvents(): void {
-    if (!UiService.doesUserReConfirmedAction(Calender.RECONFIRM_FOR_DELETE)) {
+    if (!UiService.doesUserReConfirmedAction(Constant.CALENDER_RECONFIRM_FOR_DELETE_MSG)) {
         return;
     }
     runSafely((): void => {

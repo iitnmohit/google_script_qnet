@@ -1,4 +1,4 @@
-import { Log } from "../constants/Log";
+import { Constant } from "../constants/Constant";
 import { Msg } from "../constants/Message";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -16,9 +16,9 @@ export class CallLogService extends BaseService {
             .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
     }
 
-    public addSelectedLog(count: number = Log.MAX_LOG_UPDATE): void {
+    public addSelectedLog(count: number = Constant.LOG_MAX_UPDATE_COUNT): void {
         Preconditions.checkPositive(count, Msg.LOG.UPDATE.COUNT);
-        Preconditions.checkArgument(count <= Log.MAX_LOG_UPDATE, Msg.LOG.UPDATE.COUNT);
+        Preconditions.checkArgument(count <= Constant.LOG_MAX_UPDATE_COUNT, Msg.LOG.UPDATE.COUNT);
 
         this.operateOnSelectedRows(count, this.nameListSchema,
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,

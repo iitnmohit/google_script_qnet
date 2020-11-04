@@ -1,4 +1,4 @@
-import { Calender } from "../constants/Calender";
+import { Constant } from "../constants/Constant";
 import { ICalenderEvent } from "../interface/ICalenderEvent";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -21,9 +21,9 @@ export class CalenderService extends BaseService {
         this.eventCache = new Map<string, Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>>();
     }
 
-    public deleteSelectedEvent(count: number = Calender.MAX_EVENT_DELETE): void {
+    public deleteSelectedEvent(count: number = Constant.CALENDER_MAX_EVENT_DELETE): void {
         Preconditions.checkPositive(count);
-        Preconditions.checkArgument(count <= Calender.MAX_EVENT_DELETE);
+        Preconditions.checkArgument(count <= Constant.CALENDER_MAX_EVENT_DELETE);
 
         this.operateOnSelectedRows(count, this.calenderSchema,
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
@@ -60,7 +60,7 @@ export class CalenderService extends BaseService {
         let allEvents = new Array<ICalenderEvent>();
         let calenders = CalendarApp.getAllCalendars();
         outer: for (let calender of calenders) {
-            for (let skipCalenderName of Calender.SKIP_CALENDER) {
+            for (let skipCalenderName of Constant.CALENDER_SKIP) {
                 if (skipCalenderName === calender.getName()) {
                     continue outer;
                 }

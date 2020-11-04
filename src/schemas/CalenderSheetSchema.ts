@@ -1,6 +1,6 @@
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
-import { ICalenderSheet, IColumn, ISheet } from "../interface/ISheet";
+import { IColumn, ISheet } from "../interface/ISheet";
 import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
@@ -9,15 +9,15 @@ import { BaseSchema } from "./BaseSchema";
 
 export class CalenderSheetSchema extends BaseSchema {
     // static variable
-    public static readonly SHEET: ICalenderSheet = Sheets.CALENDER;
+    public static readonly SHEET: ISheet = Sheets.CALENDER;
 
-    public static readonly COL_DO: string = CalenderSheetSchema.SHEET.COLUMN.DO;
-    public static readonly COL_CALENDER: string = CalenderSheetSchema.SHEET.COLUMN.CALENDER;
-    public static readonly COL_TITLE: string = CalenderSheetSchema.SHEET.COLUMN.TITLE;
-    public static readonly COL_DESCRIPTION: string = CalenderSheetSchema.SHEET.COLUMN.DESCRIPTION;
-    public static readonly COL_ALL_DAY: string = CalenderSheetSchema.SHEET.COLUMN.ALLDAY;
-    public static readonly COL_START_TIME: string = CalenderSheetSchema.SHEET.COLUMN.START_TIME;
-    public static readonly COL_END_TIME: string = CalenderSheetSchema.SHEET.COLUMN.END_TIME;
+    public static readonly COL_DO: string = Sheets.COLUMN_NAME.DO;
+    public static readonly COL_CALENDER: string = Sheets.COLUMN_NAME.CALENDER;
+    public static readonly COL_TITLE: string = Sheets.COLUMN_NAME.TITLE;
+    public static readonly COL_DESCRIPTION: string = Sheets.COLUMN_NAME.DESCRIPTION;
+    public static readonly COL_ALL_DAY: string = Sheets.COLUMN_NAME.ALL_DAY;
+    public static readonly COL_START_TIME: string = Sheets.COLUMN_NAME.START_TIME;
+    public static readonly COL_END_TIME: string = Sheets.COLUMN_NAME.END_TIME;
 
     // public local variable
 

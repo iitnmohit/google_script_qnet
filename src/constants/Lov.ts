@@ -128,4 +128,9 @@ export class Lov {
         "PUNJABI",
         "CHRISTIAN"
     ];
+
+    public static readonly CITIES: Array<string> = [
+        "Delhi",
+        "Mumbai"
+    ];
 }

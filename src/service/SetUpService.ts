@@ -1,4 +1,3 @@
-import { Cities } from "../constants/Cities";
 import { Lov } from "../constants/Lov";
 import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
@@ -91,7 +90,7 @@ export class SetUpService {
     private createCitySheets(): SetUpService {
         let citySheet = this.startSetUpOfSheet(Sheets.CITY);
         let schema = CitySheetSchema.getValidSchema(citySheet);
-        return this.fillColValue(Cities.LIST, schema.getColIndexByName(CitySheetSchema.COL_LOCATION), citySheet)
+        return this.fillColValue(Lov.CITIES, schema.getColIndexByName(CitySheetSchema.COL_LOCATION), citySheet)
             .setupColWidth(schema);
     }
 
@@ -175,11 +174,14 @@ export class SetUpService {
             .ensureColsCount(sheet, iSheet.NUM_OF.COLUMNS);
 
         // set headder row value and alignment
-        if (Predicates.IS_NOT_NULL.test(iSheet.COLUMN)) {
-            let headderArray = Object.values<string>(iSheet.COLUMN);
-            if (headderArray.length > iSheet.NUM_OF.COLUMNS) {
+        if (Predicates.IS_LIST_NOT_EMPTY.test(iSheet.COLUMNS)) {
+            if (iSheet.COLUMNS.length > iSheet.NUM_OF.COLUMNS) {
                 throw new InvalidConfigurationException(Utilities
                     .formatString(Msg.SHEET.HEADDER_MORE_THAN_COLUMN, iSheet.NAME));
+            }
+            let headderArray = new Array<string>();
+            for (let column of iSheet.COLUMNS) {
+                headderArray.push(column.NAME);
             }
             if (Predicates.IS_LIST_NOT_EMPTY.test(headderArray)) {
                 sheet.getRange(1, 1, 1, headderArray.length)

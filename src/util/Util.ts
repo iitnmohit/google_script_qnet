@@ -1,5 +1,4 @@
 import { Constant } from "../constants/Constant";
-import { Log } from "../constants/Log";
 import { Msg } from "../constants/Message";
 import { ITable } from "../interface/ISheet";
 import { Index } from "../library/Index";
@@ -62,14 +61,14 @@ export class Util {
                 formatedLogLines.push(DateUtil.format(eachLine));
                 continue;
             }
-            if (Log.TEXT_TO_REPLACE_FUNCTION_MAP.has(eachLine.toLocaleLowerCase())) {
+            if (Constant.LOG_TEXT_TO_REPLACE_FUNCTION_MAP.has(eachLine.toLocaleLowerCase())) {
                 formatedLogLines.push("\n");
-                formatedLogLines.push(Log.TEXT_TO_REPLACE_FUNCTION_MAP
+                formatedLogLines.push(Constant.LOG_TEXT_TO_REPLACE_FUNCTION_MAP
                     .get(eachLine.toLocaleLowerCase())(todayDate));
                 continue;
             }
-            if (Log.TEXT_TO_REPLACE_MAP.has(eachLine.toLocaleLowerCase())) {
-                formatedLogLines.push(Log.TEXT_TO_REPLACE_MAP.get(eachLine.toLocaleLowerCase()));
+            if (Constant.LOG_TEXT_TO_REPLACE_MAP.has(eachLine.toLocaleLowerCase())) {
+                formatedLogLines.push(Constant.LOG_TEXT_TO_REPLACE_MAP.get(eachLine.toLocaleLowerCase()));
                 continue;
             }
             formatedLogLines.push(" • " + eachLine);
@@ -201,7 +200,7 @@ export class Util {
     public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number,
         data: any, everyWhere: boolean): any[][];
     public static ensuresDimensionAndFillDataToArray(twoDarray: any[][], height: number, width: number,
-        data: any = Constant.DEFAULT_DUMMY_DATA, everyWhere: boolean = false): any[][] {
+        data: any = Constant.UTIL_NA, everyWhere: boolean = false): any[][] {
         // preconditions
         Preconditions.checkPositive(height, Msg.SHEET.INDEX_POSITIVE);
         Preconditions.checkPositive(width, Msg.SHEET.INDEX_POSITIVE);
@@ -304,7 +303,7 @@ export class Util {
         }
 
         let topOffset: number = 0, leftOffset: number = 0,
-            append: "row" | "col" = Constant.DEFAULT_TABLE_APPEND_DIRECTION;
+            append: "row" | "col" = Constant.TABLE_APPEND_DIRECTION;
         if (Predicates.IS_NOT_NULL.test(table)) {
             topOffset = isNaN(table.TOP_OFFESET) ? 0 : table.TOP_OFFESET;
             leftOffset = isNaN(table.LEFT_OFFSET) ? 0 : table.LEFT_OFFSET;
