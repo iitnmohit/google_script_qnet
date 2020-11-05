@@ -28,10 +28,10 @@ export class SetUpService {
         this.clearNameRange()
             .createOverViewSheets()
             .createNameListSheets()
-            .createLovSheets()
-            .createCitySheets()
+            .createContactsSheet()
             .createCalenderSheet()
-            .createContactsSheet();
+            .createLovSheets()
+            .createCitySheets();
     }
 
     public deleteNonQnetSheets(): void {
