@@ -14,15 +14,15 @@ function setUpSheet(): void {
     }
     runSafely((): void => {
         let setUpService = new SetUpService();
-        let spreadsheet = setUpService.createAllSheets();
+        setUpService.createAllSheets();
         setUpService.deleteNonQnetSheets();
 
-        FormulaService.applyFormulaToAllSheets(spreadsheet);
+        FormulaService.applyFormulaToAllSheets();
 
-        ValidationService.applyValidationToAllSheets(spreadsheet);
+        ValidationService.applyValidationToAllSheets();
 
-        new ThemeService(spreadsheet, ThemeUtil.getCurrentTheme()).setTheme();
+        new ThemeService(ThemeUtil.getCurrentTheme()).setTheme();
 
-        new SecurityService(spreadsheet).protectSpreadSheet();
+        new SecurityService().protectSpreadSheet();
     });
 }

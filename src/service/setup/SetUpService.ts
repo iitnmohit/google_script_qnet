@@ -23,7 +23,7 @@ export class SetUpService {
         this.spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     }
 
-    public createAllSheets(): GoogleAppsScript.Spreadsheet.Spreadsheet {
+    public createAllSheets(): void {
         this.spreadsheet.resetSpreadsheetTheme();
         this.clearNameRange()
             .createOverViewSheets()
@@ -32,7 +32,6 @@ export class SetUpService {
             .createCitySheets()
             .createCalenderSheet()
             .createContactsSheet();
-        return this.spreadsheet;
     }
 
     public deleteNonQnetSheets(): void {

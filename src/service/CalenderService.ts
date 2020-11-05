@@ -18,7 +18,7 @@ export class CalenderService extends BaseService {
     public constructor () {
         super();
         this.calenderSchema = CalenderSheetSchema
-            .getValidCalenderSchema(SpreadsheetApp.getActiveSpreadsheet());
+            .getValidCalenderSchema();
         this.calenderCache = new Map<string, GoogleAppsScript.Calendar.Calendar>();
         this.eventCache = new Map<string, Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>>();
     }

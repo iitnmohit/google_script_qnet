@@ -31,18 +31,17 @@ export class ThemeService {
     private readonly overviewSchema: ISchema;
     private currentTheme: ITheme;
 
-    constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, currentTheme: ITheme) {
-        Preconditions.checkNotNull(spreadsheet);
+    constructor (currentTheme: ITheme) {
         Preconditions.checkNotNull(currentTheme);
 
-        this.spreadsheet = spreadsheet;
+        this.spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
         this.currentTheme = currentTheme;
-        this.contactSchema = ContactsSheetSchema.getValidContactsSchema(spreadsheet);
-        this.calenderSchema = CalenderSheetSchema.getValidCalenderSchema(spreadsheet);
-        this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
-        this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
-        this.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
-        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
+        this.contactSchema = ContactsSheetSchema.getValidContactsSchema();
+        this.calenderSchema = CalenderSheetSchema.getValidCalenderSchema();
+        this.citySchema = CitySheetSchema.getValidCitySchema();
+        this.lovSchema = LovSheetSchema.getValidLovSchema();
+        this.nameSchema = NameListSheetSchema.getValidNameListSchema();
+        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema();
     }
 
     public setTheme(): void {

@@ -10,6 +10,7 @@ import { Util } from "../util/Util";
 import { BaseSchema } from "./BaseSchema";
 
 export class OverViewSheetSchema extends BaseSchema {
+    private static instance: OverViewSheetSchema = null;
     // static variable
 
     // public local variable
@@ -47,18 +48,26 @@ export class OverViewSheetSchema extends BaseSchema {
 
     // static method
     public static getValidSchema(sheet: GoogleAppsScript.Spreadsheet.Sheet): OverViewSheetSchema {
+        if (Predicates.IS_NOT_NULL.test(OverViewSheetSchema.instance)) {
+            return OverViewSheetSchema.instance;
+        }
         Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, Sheets.OVERVIEW.NAME);
         Preconditions.checkArgument(sheet.getName() === Sheets.OVERVIEW.NAME,
             Msg.SHEET.INVALID_SHEET, Sheets.OVERVIEW.NAME);
 
         let newSchema = new OverViewSheetSchema(sheet);
         if (newSchema.isSchemaValid()) {
+            OverViewSheetSchema.instance = newSchema;
             return newSchema;
         }
         throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, Sheets.OVERVIEW.NAME));
     }
 
-    public static getValidOverViewSchema(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): OverViewSheetSchema {
+    public static getValidOverViewSchema(): OverViewSheetSchema {
+        if (Predicates.IS_NOT_NULL.test(OverViewSheetSchema.instance)) {
+            return OverViewSheetSchema.instance;
+        }
+        let spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
         Preconditions.checkNotNull(spreadsheet, Msg.SHEET.NOT_FOUND, Sheets.OVERVIEW.NAME);
         return OverViewSheetSchema.getValidSchema(spreadsheet.getSheetByName(Sheets.OVERVIEW.NAME));
     }

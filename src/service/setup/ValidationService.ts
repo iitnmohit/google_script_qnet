@@ -16,13 +16,11 @@ export class ValidationService {
 
     /**
      * Applies validation to all sheet.
-     * @param spreadsheet current spreadsheet
      */
-    public static applyValidationToAllSheets(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void;
-    public static applyValidationToAllSheets(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
-        ValidationService.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
-        ValidationService.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
-        ValidationService.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
+    public static applyValidationToAllSheets(): void {
+        ValidationService.citySchema = CitySheetSchema.getValidCitySchema();
+        ValidationService.lovSchema = LovSheetSchema.getValidLovSchema();
+        ValidationService.nameSchema = NameListSheetSchema.getValidNameListSchema();
 
         ValidationService.applyValidationToNameSheets();
     }

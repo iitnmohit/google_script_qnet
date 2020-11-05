@@ -14,7 +14,7 @@ export class CallLogService extends BaseService {
     public constructor () {
         super();
         this.nameListSchema = NameListSheetSchema
-            .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
+            .getValidNameListSchema();
     }
 
     public addSelectedLog(count: number = Constant.LOG_MAX_UPDATE_COUNT): void {
@@ -33,7 +33,7 @@ export class CallLogService extends BaseService {
 
     private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
         let sheet = nameListSchema.SPREADSHEET;
-        let logCell = sheet.getRange(rowIndex, nameListSchema.getColIndexByName(Sheets.COLUMN_NAME.ADD_LOG));
+        let logCell = sheet.getRange(rowIndex, nameListSchema.getColIndexByName(Sheets.COLUMN_NAME.INPUT));
         //read new logs
         let newLogs = logCell.getDisplayValue();
         Preconditions.checkNotBlank(newLogs, "No Log to update at row %s", rowIndex);

@@ -7,10 +7,10 @@ export class SecurityService {
     private readonly lovSchema: LovSheetSchema;
     private readonly overviewSchema: OverViewSheetSchema;
 
-    constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
-        this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
-        this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
-        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
+    constructor () {
+        this.citySchema = CitySheetSchema.getValidCitySchema();
+        this.lovSchema = LovSheetSchema.getValidLovSchema();
+        this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema();
     }
 
     public protectSpreadSheet(): void {

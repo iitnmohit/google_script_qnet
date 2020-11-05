@@ -29,7 +29,7 @@ export class Sheets {
         CLOSING: "CLOSING",
         CAST: "CAST",
         LINK: "LINK",
-        ADD_LOG: "ADD LOG",
+        INPUT: "INPUT",
     };
 
     public static readonly MIN_ROW_HEIGHT: number = 5;
@@ -228,8 +228,8 @@ export class Sheets {
                 MAX_WIDTH: null,
                 INDEX: -1
             } as IColumn, {
-                NAME: Sheets.COLUMN_NAME.ADD_LOG,
-                MIN_WIDTH: null,
+                NAME: Sheets.COLUMN_NAME.INPUT,
+                MIN_WIDTH: 80,
                 MAX_WIDTH: null,
                 INDEX: -1
             } as IColumn, {

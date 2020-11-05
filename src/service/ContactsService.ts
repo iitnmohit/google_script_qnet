@@ -11,7 +11,7 @@ export class ContactsService extends BaseService {
     public constructor () {
         super();
         this.contactSchema = ContactsSheetSchema
-            .getValidContactsSchema(SpreadsheetApp.getActiveSpreadsheet());
+            .getValidContactsSchema();
     }
 
     public readAllContacts(): void {

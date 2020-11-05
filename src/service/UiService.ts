@@ -67,8 +67,8 @@ export class UiService {
     private getUpdateMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Update")
-            .addItem('1 Tasks', 'taskUpdateOneLog')
-            .addItem('10 Tasks', 'taskUpdateSelectedLog')
+            .addItem('From 1 Tasks', 'taskUpdateOneLog')
+            .addItem('From 10 Tasks', 'taskUpdateSelectedLog')
             .addSeparator()
             .addItem('1 Log', 'logUpdateOne')
             .addItem('10 Logs', 'logUpdateTen')

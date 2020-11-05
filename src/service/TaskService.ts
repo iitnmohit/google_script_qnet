@@ -18,7 +18,7 @@ export class TaskService extends BaseService {
     public constructor () {
         super();
         this.nameListSchema = NameListSheetSchema
-            .getValidNameListSchema(SpreadsheetApp.getActiveSpreadsheet());
+            .getValidNameListSchema();
     }
 
     public updateSelectedLog(count: number = Constant.TASK_MAX_UPDATE_COUNT): void {

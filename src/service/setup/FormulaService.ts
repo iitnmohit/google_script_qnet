@@ -15,13 +15,11 @@ export class FormulaService {
 
     /**
      * Applies formulas to all sheet.
-     * @param spreadsheet current spreadsheet
      */
-    public static applyFormulaToAllSheets(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void;
-    public static applyFormulaToAllSheets(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet): void {
-        FormulaService.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
-        FormulaService.nameSchema = NameListSheetSchema.getValidNameListSchema(spreadsheet);
-        FormulaService.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
+    public static applyFormulaToAllSheets(): void {
+        FormulaService.citySchema = CitySheetSchema.getValidCitySchema();
+        FormulaService.nameSchema = NameListSheetSchema.getValidNameListSchema();
+        FormulaService.overviewSchema = OverViewSheetSchema.getValidOverViewSchema();
 
         FormulaService.applyFormulaToCitySheets();
         FormulaService.applyFormulaToOverviewSheets();
