@@ -1,4 +1,5 @@
 import { CalenderService } from "./service/CalenderService";
+import { ContactsService } from "./service/ContactsService";
 import { TaskService } from "./service/TaskService";
 import { UiService } from "./service/UiService";
 
@@ -24,5 +25,6 @@ function commonClearAllCheckBox(): void {
     runSafely((): void => {
         new TaskService().clearAllCheckbox();
         new CalenderService().clearAllCheckbox();
+        new ContactsService().clearAllCheckbox();
     });
 }

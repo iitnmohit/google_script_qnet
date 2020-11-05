@@ -3,6 +3,7 @@ import { ContactsSheetSchema } from "../schemas/ContactsSheetSchema";
 import { DateUtil } from "../util/DateUtil";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseService } from "./BaseService";
+import { Sheets } from "../constants/Sheets";
 
 export class ContactsService extends BaseService {
     private readonly contactSchema: ContactsSheetSchema;
@@ -19,6 +20,11 @@ export class ContactsService extends BaseService {
         this.fillContactsToSheet(allContacts);
     }
 
+    public clearAllCheckbox(): void {
+        this.contactSchema.SPREADSHEET.getRange(2, this.contactSchema.getColIndexByName(Sheets.COLUMN_NAME.DO),
+            this.contactSchema.NUM_OF_ROWS - 1, 1).uncheck();
+    }
+
     private fillContactsToSheet(allContacts: GoogleAppsScript.Contacts.Contact[]): void {
         let sortedContacts = allContacts.sort(this.contactsArraySortComprator);
         let values: Array<Array<any>> = [];
@@ -30,7 +36,7 @@ export class ContactsService extends BaseService {
                 let rowArray = new Array<any>();
                 rowArray.push(index + 1);
                 rowArray.push(contactEach.getFullName());
-                rowArray.push(phoneField[0].getLabel());
+                rowArray.push(this.correctLabel(phoneField[0].getLabel()));
                 rowArray.push(phoneField[0].getPhoneNumber());
                 rowArray.push(DateUtil.format(contactEach.getLastUpdated()));
                 values.push(rowArray);
@@ -38,7 +44,7 @@ export class ContactsService extends BaseService {
                 let rowArray = new Array<any>();
                 rowArray.push(index + 1);
                 rowArray.push(contactEach.getFullName());
-                rowArray.push(phoneField[0].getLabel());
+                rowArray.push(this.correctLabel(phoneField[0].getLabel()));
                 rowArray.push(phoneField[0].getPhoneNumber());
                 rowArray.push(DateUtil.format(contactEach.getLastUpdated()));
                 values.push(rowArray);
@@ -46,7 +52,7 @@ export class ContactsService extends BaseService {
                     let rowArray = new Array<any>();
                     rowArray.push("");
                     rowArray.push("");
-                    rowArray.push(phoneField[indexPhoneField].getLabel());
+                    rowArray.push(this.correctLabel(phoneField[indexPhoneField].getLabel()));
                     rowArray.push(phoneField[indexPhoneField].getPhoneNumber());
                     rowArray.push("");
                     values.push(rowArray);
@@ -55,6 +61,16 @@ export class ContactsService extends BaseService {
         }
         this.contactSchema.insertRows(values.length + this.contactSchema.ISHEET.NUM_OF.ROWS - this.contactSchema.NUM_OF_ROWS);
         this.contactSchema.setValues(2, 1, values);
+    }
+
+    private correctLabel(label: string | GoogleAppsScript.Contacts.Field | GoogleAppsScript.Contacts.ExtendedField): string {
+        if (typeof label === "string") {
+            return label;
+        }
+        if (label.toLocaleString().endsWith("_PHONE")) {
+            return label.toLocaleString().substr(0, label.toLocaleString().length - 6);
+        }
+        return label.toLocaleString();
     }
 
     private contactsArraySortComprator(left: GoogleAppsScript.Contacts.Contact,
