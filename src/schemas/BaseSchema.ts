@@ -167,6 +167,14 @@ export abstract class BaseSchema implements ISchema {
         return tableValues;
     }
 
+    public setValues(row: number, column: number, values: Array<Array<any>>): void {
+        if (Predicates.IS_LIST_EMPTY.test(values)) {
+            return;
+        }
+        this.SPREADSHEET.getRange(row, column, values.length, values[0].length)
+            .setValues(values);
+    }
+
     // protected methods
     protected isSchemaValid(): boolean {
         if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {

@@ -49,7 +49,7 @@ export class Themes {
 
         CONTACTS_SHEET: {
             HEADDER_FONT_COLOR: "#f3f3f3",
-            HEADDER_COLOR: "#5791ec",
+            HEADDER_COLOR: "#51808b",
             FIRST_ROW_COLOR: "#ffffff",
             SECOND_ROW_COLOR: "#ffffff",
         },

@@ -16,6 +16,8 @@ export class UiService {
             .addSubMenu(this.getCalenderMenu())
             .addItem('Delete Events', 'deleteSelectedCalenderEvents')
             .addSeparator()
+            .addSubMenu(this.getContactMenu())
+            .addSeparator()
             .addItem('Clear Do CheckBoxes', 'commonClearAllCheckBox')
             .addSubMenu(this.getSettingsMenu())
             .addToUi();
@@ -82,6 +84,12 @@ export class UiService {
             .addItem('Sync current month', 'sync_current_month_events')
             .addItem('Sync past 30 days', 'sync_before_30days_events')
             .addItem('Sync past 90 days', 'sync_before_90days_events');
+    }
+
+    private getContactMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Contacts")
+            .addItem('Sync All', 'getAllContacts');
     }
 
     private getSettingsMenu(): GoogleAppsScript.Base.Menu {

@@ -108,7 +108,8 @@ export class SetUpService {
     private createContactsSheet(): SetUpService {
         let contactsSheet = this.startSetUpOfSheet(Sheets.CONTACTS);
         let schema = ContactsSheetSchema.getValidSchema(contactsSheet);
-        return this.fillCheckBox(schema.getColIndexByName(Sheets.COLUMN_NAME.DO), schema)
+        return this.fillNumbers(schema.getColIndexByName(Sheets.COLUMN_NAME.SL_NO), schema)
+            .fillCheckBox(schema.getColIndexByName(Sheets.COLUMN_NAME.DO), schema)
             .setupColWidth(schema);
     }
 

@@ -404,17 +404,17 @@ export class Sheets {
             INDEX: -1
         } as IColumn, {
             NAME: Sheets.COLUMN_NAME.NAME,
-            MIN_WIDTH: null,
+            MIN_WIDTH: 275,
             MAX_WIDTH: null,
             INDEX: -1
         } as IColumn, {
             NAME: Sheets.COLUMN_NAME.LABEL,
-            MIN_WIDTH: null,
+            MIN_WIDTH: 100,
             MAX_WIDTH: null,
             INDEX: -1
         } as IColumn, {
             NAME: Sheets.COLUMN_NAME.NUMBER,
-            MIN_WIDTH: null,
+            MIN_WIDTH: 150,
             MAX_WIDTH: null,
             INDEX: -1
         } as IColumn, {
@@ -425,7 +425,7 @@ export class Sheets {
         } as IColumn, {
             NAME: Sheets.COLUMN_NAME.DO,
             MIN_WIDTH: null,
-            MAX_WIDTH: null,
+            MAX_WIDTH: 30,
             INDEX: -1
         } as IColumn
         ]

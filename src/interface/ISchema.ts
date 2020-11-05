@@ -36,4 +36,6 @@ export interface ISchema {
     setFormulasToTable(table: ITable, formulas: string[][]): void;
 
     getTableValues(table: ITable): string[][];
+
+    setValues(row: number, column: number, values: Array<Array<any>>): void;
 }
