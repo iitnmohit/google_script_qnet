@@ -1,6 +1,6 @@
-import { CitySheetSchema } from "../schemas/CitySheetSchema";
-import { LovSheetSchema } from "../schemas/LovSheetSchema";
-import { OverViewSheetSchema } from "../schemas/OverViewSheetSchema";
+import { CitySheetSchema } from "../../schemas/CitySheetSchema";
+import { LovSheetSchema } from "../../schemas/LovSheetSchema";
+import { OverViewSheetSchema } from "../../schemas/OverViewSheetSchema";
 
 export class SecurityService {
     private readonly spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;

@@ -1,3 +1,4 @@
+import { CalenderEventBuilder } from "../builder/CalenderEventBuilder";
 import { Constant } from "../constants/Constant";
 import { Sheets } from "../constants/Sheets";
 import { ICalenderEvent } from "../interface/ICalenderEvent";
@@ -115,28 +116,29 @@ export class CalenderService extends BaseService {
     }
 
     private createNewMyEvent(calEvent: GoogleAppsScript.Calendar.CalendarEvent, calender: GoogleAppsScript.Calendar.Calendar): ICalenderEvent {
-        let _myEvent = new ICalenderEvent();
-        _myEvent.id = calEvent.getId();
-        _myEvent.calenderName = calender.getName();
-        _myEvent.calenderId = calender.getId();
-        _myEvent.title = calEvent.getTitle();
-        _myEvent.description = calEvent.getDescription();
-        _myEvent.calenderColor = calender.getColor();
+        let eventBuilder = CalenderEventBuilder.builder();
+        eventBuilder.setId(calEvent.getId())
+            .setCalenderName(calender.getName())
+            .setCalenderId(calender.getId())
+            .setTitle(calEvent.getTitle())
+            .setDescription(calEvent.getDescription())
+            .setCalenderColor(calender.getColor());
+
         if (calEvent.isAllDayEvent()) {
-            _myEvent.isAllDayEvent = "YES";
-            _myEvent.startTime = calEvent.getAllDayStartDate();
-            _myEvent.endTime = calEvent.getAllDayEndDate();
+            eventBuilder.setIsAllDayEvent("YES")
+                .setStartTime(calEvent.getAllDayStartDate())
+                .setEndTime(calEvent.getAllDayEndDate());
         } else {
-            _myEvent.isAllDayEvent = "NO";
-            _myEvent.startTime = calEvent.getStartTime();
-            _myEvent.endTime = calEvent.getEndTime();
+            eventBuilder.setIsAllDayEvent("NO")
+                .setStartTime(calEvent.getStartTime())
+                .setEndTime(calEvent.getEndTime());
         }
         if (Predicates.IS_NOT_BLANK.test(calEvent.getColor())) {
-            _myEvent.color = this.resolveEventColor(calEvent.getColor());
+            eventBuilder.setColor(this.resolveEventColor(calEvent.getColor()));
         } else {
-            _myEvent.color = calender.getColor();
+            eventBuilder.setColor(calender.getColor());
         }
-        return _myEvent;
+        return eventBuilder.build();
     }
 
     private resolveEventColor(color: string): string {

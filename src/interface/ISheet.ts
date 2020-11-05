@@ -1,12 +1,5 @@
 import { Index } from "../library/Index";
 
-export interface IColumn {
-    NAME: string,
-    MIN_WIDTH: number,
-    MAX_WIDTH: number,
-    INDEX: number;
-}
-
 export interface ISheet {
     NAME: string,
     INDEX: number,
@@ -20,6 +13,13 @@ export interface ISheet {
     },
     COLUMNS?: Array<IColumn>,
     TABLES?: {};
+}
+
+export interface IColumn {
+    NAME: string,
+    MIN_WIDTH: number,
+    MAX_WIDTH: number,
+    INDEX: number;
 }
 
 export interface ITable {

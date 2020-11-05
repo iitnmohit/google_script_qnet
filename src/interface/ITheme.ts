@@ -26,6 +26,7 @@ export interface ITheme {
     nameTableHeadderColor: string,
     nameTableFirstRowColor: string,
     nameTableSecondRowColor: string,
+
     nameSheetSelectBgColor: string,
     nameSheetSelectFontColor: string,
     nameSheetDoSelectBgColor: string,
