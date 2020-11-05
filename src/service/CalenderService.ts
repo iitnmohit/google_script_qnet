@@ -163,7 +163,7 @@ export class CalenderService extends BaseService {
         this.calenderSchema.SPREADSHEET
             .getRange(2, 1, this.calenderSchema.NUM_OF_ROWS - 1, this.calenderSchema.NUM_OF_COLUMNS)
             .clearContent()
-            .setBackground(ThemeUtil.getCurrentTheme().calenderTableFirstRowColor)
+            .setBackground(ThemeUtil.getCurrentTheme().CALENDER_SHEET.FIRST_ROW_COLOR)
             .clearNote();
         this.calenderSchema.SPREADSHEET.setRowHeights(1, this.calenderSchema.NUM_OF_ROWS, ThemeUtil.getCurrentTheme().rowHeight);
         return this;

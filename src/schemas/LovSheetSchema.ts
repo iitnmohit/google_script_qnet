@@ -13,15 +13,12 @@ export class LovSheetSchema extends BaseSchema {
     // public local variable
 
     // public abstract variable
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().lovTableSecondRowColor;
+
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super(sheet, Sheets.LOV);
+        super(sheet, Sheets.LOV, ThemeUtil.getCurrentTheme().LOV_SHEET);
     }
 
     // static method

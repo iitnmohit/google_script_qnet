@@ -13,15 +13,12 @@ export class ContactsSheetSchema extends BaseSchema {
     // public local variable
 
     // public abstract variable
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().contactsTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().contactsTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().contactsTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().contactsTableSecondRowColor;
+
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super(sheet, Sheets.CONTACTS);
+        super(sheet, Sheets.CONTACTS, ThemeUtil.getCurrentTheme().CONTACTS_SHEET);
     }
 
     // static method

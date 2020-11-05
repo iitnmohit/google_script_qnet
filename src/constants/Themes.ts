@@ -13,38 +13,51 @@ export class Themes {
         rowHeight: 25,
         colWidthOffset: 14,
 
-        cityTableHeadderFontColor: "#ffffff",
-        cityTableHeadderColor: "#274e13",
-        cityTableFirstRowColor: "#ffffff",
-        cityTableSecondRowColor: "#ffffff",
+        CITY_SHEET: {
+            HEADDER_FONT_COLOR: "#ffffff",
+            HEADDER_COLOR: "#274e13",
+            FIRST_ROW_COLOR: "#ffffff",
+            SECOND_ROW_COLOR: "#ffffff",
+        },
 
-        lovTableHeadderFontColor: "#990000",
-        lovTableHeadderColor: "#f4cccc",
-        lovTableFirstRowColor: "#ffffff",
-        lovTableSecondRowColor: "#ffffff",
+        LOV_SHEET: {
+            HEADDER_FONT_COLOR: "#990000",
+            HEADDER_COLOR: "#f4cccc",
+            FIRST_ROW_COLOR: "#ffffff",
+            SECOND_ROW_COLOR: "#ffffff",
+        },
 
-        nameTableHeadderFontColor: "#ffffff",
-        nameTableHeadderColor: "#6aa84f",
-        nameTableFirstRowColor: "#ffffff",
-        nameTableSecondRowColor: "#ffffff",
+        NAME_LIST_SHEET: {
+            HEADDER_FONT_COLOR: "#ffffff",
+            HEADDER_COLOR: "#6aa84f",
+            FIRST_ROW_COLOR: "#ffffff",
+            SECOND_ROW_COLOR: "#ffffff",
+        },
+
+        OVERVIEW_SHEET: {
+            HEADDER_FONT_COLOR: "#351c75",
+            HEADDER_COLOR: "#b4a7d6",
+            FIRST_ROW_COLOR: "#fff2cc",
+            SECOND_ROW_COLOR: "#e8e7fc",
+        },
+        CALENDER_SHEET: {
+            HEADDER_FONT_COLOR: "#f3f3f3",
+            HEADDER_COLOR: "#5791ec",
+            FIRST_ROW_COLOR: "#ffffff",
+            SECOND_ROW_COLOR: "#ffffff",
+        },
+
+        CONTACTS_SHEET: {
+            HEADDER_FONT_COLOR: "#f3f3f3",
+            HEADDER_COLOR: "#5791ec",
+            FIRST_ROW_COLOR: "#ffffff",
+            SECOND_ROW_COLOR: "#ffffff",
+        },
+
         nameSheetSelectBgColor: "#d1c7eb",
         nameSheetSelectFontColor: "#2c1763",
+
         nameSheetDoSelectBgColor: "#e6a7a7",
         nameSheetDoSelectFontColor: "#6d4141",
-
-        overviewTableHeadderFontColor: "#351c75",
-        overviewTableHeadderColor: "#b4a7d6",
-        overviewTableFirstRowColor: "#fff2cc",
-        overviewTableSecondRowColor: "#e8e7fc",
-
-        calenderTableHeadderFontColor: "#f3f3f3",
-        calenderTableHeadderColor: "#5791ec",
-        calenderTableFirstRowColor: "#ffffff",
-        calenderTableSecondRowColor: "#ffffff",
-
-        contactsTableHeadderFontColor: "#f3f3f3",
-        contactsTableHeadderColor: "#5791ec",
-        contactsTableFirstRowColor: "#ffffff",
-        contactsTableSecondRowColor: "#ffffff",
     } as ITheme;
 }

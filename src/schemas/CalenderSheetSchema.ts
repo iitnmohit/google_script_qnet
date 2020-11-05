@@ -13,15 +13,12 @@ export class CalenderSheetSchema extends BaseSchema {
     // public local variable
 
     // public abstract variable
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().calenderTableSecondRowColor;
+
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super(sheet, Sheets.CALENDER);
+        super(sheet, Sheets.CALENDER, ThemeUtil.getCurrentTheme().CALENDER_SHEET);
     }
 
     // static method

@@ -12,38 +12,25 @@ export interface ITheme {
     colWidthOffset: number,
 
     //sheet specific 
-    cityTableHeadderFontColor: string,
-    cityTableHeadderColor: string,
-    cityTableFirstRowColor: string,
-    cityTableSecondRowColor: string,
 
-    lovTableHeadderFontColor: string,
-    lovTableHeadderColor: string,
-    lovTableFirstRowColor: string,
-    lovTableSecondRowColor: string,
 
-    nameTableHeadderFontColor: string,
-    nameTableHeadderColor: string,
-    nameTableFirstRowColor: string,
-    nameTableSecondRowColor: string,
+    CITY_SHEET: ITableTheme,
+    LOV_SHEET: ITableTheme,
+    NAME_LIST_SHEET: ITableTheme,
+    OVERVIEW_SHEET: ITableTheme,
+    CALENDER_SHEET: ITableTheme,
+    CONTACTS_SHEET: ITableTheme;
 
     nameSheetSelectBgColor: string,
     nameSheetSelectFontColor: string,
+
     nameSheetDoSelectBgColor: string,
     nameSheetDoSelectFontColor: string,
+}
 
-    overviewTableHeadderFontColor: string,
-    overviewTableHeadderColor: string,
-    overviewTableFirstRowColor: string,
-    overviewTableSecondRowColor: string,
-
-    calenderTableHeadderFontColor: string,
-    calenderTableHeadderColor: string,
-    calenderTableFirstRowColor: string,
-    calenderTableSecondRowColor: string,
-
-    contactsTableHeadderFontColor: string,
-    contactsTableHeadderColor: string,
-    contactsTableFirstRowColor: string,
-    contactsTableSecondRowColor: string,
+export interface ITableTheme {
+    HEADDER_COLOR: string,
+    HEADDER_FONT_COLOR: string,
+    FIRST_ROW_COLOR: string,
+    SECOND_ROW_COLOR: string,
 }

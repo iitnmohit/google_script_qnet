@@ -1,6 +1,7 @@
 import { Msg } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { IColumn, ISheet, ITable } from "../interface/ISheet";
+import { ITableTheme } from "../interface/ITheme";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { Util } from "../util/Util";
@@ -13,17 +14,23 @@ export abstract class BaseSchema implements ISchema {
     public NUM_OF_COLUMNS: number;
     public ISHEET: ISheet;
 
-    // public abstract fields
-    public abstract HEADDER_ROW_FONT_COLOR: string;
-    public abstract HEADDER_ROW_COLOR: string;
-    public abstract FIRST_ROW_COLOR: string;
-    public abstract SECOND_ROW_COLOR: string;
+    public HEADDER_ROW_FONT_COLOR: string;
+    public HEADDER_ROW_COLOR: string;
+    public FIRST_ROW_COLOR: string;
+    public SECOND_ROW_COLOR: string;
 
-    constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet, isheet: ISheet) {
+    // public abstract fields
+
+    constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet, isheet: ISheet, tableTheme: ITableTheme) {
         this.ISHEET = isheet;
         this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, isheet.NAME);
         this.NUM_OF_ROWS = sheet.getMaxRows();
         this.NUM_OF_COLUMNS = sheet.getMaxColumns();
+
+        this.HEADDER_ROW_FONT_COLOR = tableTheme.HEADDER_FONT_COLOR;
+        this.HEADDER_ROW_COLOR = tableTheme.HEADDER_COLOR;
+        this.FIRST_ROW_COLOR = tableTheme.FIRST_ROW_COLOR;
+        this.SECOND_ROW_COLOR = tableTheme.SECOND_ROW_COLOR;
 
         if (Predicates.IS_LIST_EMPTY.test(isheet.COLUMNS)) {
             return;

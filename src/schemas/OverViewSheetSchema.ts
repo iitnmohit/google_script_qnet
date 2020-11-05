@@ -22,15 +22,11 @@ export class OverViewSheetSchema extends BaseSchema {
     // public abstract variable
     public ISHEET: IOverViewSheet = OverViewSheetSchema.SHEET;
 
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().overviewTableSecondRowColor;
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super(sheet, Sheets.OVERVIEW);
+        super(sheet, Sheets.OVERVIEW, ThemeUtil.getCurrentTheme().OVERVIEW_SHEET);
 
         let sheetValues = sheet.getSheetValues(1, 1, this.NUM_OF_ROWS, this.NUM_OF_COLUMNS);
         let overAllTableBeginIndex = this.validateTable(OverViewSheetSchema.SHEET.TABLES.TABLE_OVERALL,

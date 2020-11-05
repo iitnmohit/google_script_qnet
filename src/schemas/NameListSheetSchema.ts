@@ -13,15 +13,12 @@ export class NameListSheetSchema extends BaseSchema {
     // public local variable
 
     // public abstract variable
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().nameTableSecondRowColor;
+
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super(sheet, Sheets.NAMELIST);
+        super(sheet, Sheets.NAMELIST, ThemeUtil.getCurrentTheme().NAME_LIST_SHEET);
     }
 
     // static method

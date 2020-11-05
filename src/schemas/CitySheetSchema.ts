@@ -13,15 +13,12 @@ export class CitySheetSchema extends BaseSchema {
     // public local variable
 
     // public abstract variable
-    public HEADDER_ROW_FONT_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderFontColor;
-    public HEADDER_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableHeadderColor;
-    public FIRST_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableFirstRowColor;
-    public SECOND_ROW_COLOR: string = ThemeUtil.getCurrentTheme().cityTableSecondRowColor;
+
     // private local variable
 
     //constructor
     private constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet) {
-        super(sheet, Sheets.CITY);
+        super(sheet, Sheets.CITY, ThemeUtil.getCurrentTheme().CITY_SHEET);
     }
 
     // static method
