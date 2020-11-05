@@ -19,8 +19,6 @@ export abstract class BaseSchema implements ISchema {
     public FIRST_ROW_COLOR: string;
     public SECOND_ROW_COLOR: string;
 
-    // public abstract fields
-
     constructor (sheet: GoogleAppsScript.Spreadsheet.Sheet, isheet: ISheet, tableTheme: ITableTheme) {
         this.ISHEET = isheet;
         this.SPREADSHEET = Preconditions.checkNotNull(sheet, Msg.SHEET.NOT_FOUND, isheet.NAME);

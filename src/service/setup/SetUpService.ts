@@ -9,6 +9,7 @@ import { Preconditions } from "../../library/Preconditions";
 import { Predicates } from "../../library/Predicates";
 import { CalenderSheetSchema } from "../../schemas/CalenderSheetSchema";
 import { CitySheetSchema } from "../../schemas/CitySheetSchema";
+import { ContactsSheetSchema } from "../../schemas/ContactsSheetSchema";
 import { LovSheetSchema } from "../../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../../schemas/NameListSheetSchema";
 import { OverViewSheetSchema } from "../../schemas/OverViewSheetSchema";
@@ -29,7 +30,8 @@ export class SetUpService {
             .createNameListSheets()
             .createLovSheets()
             .createCitySheets()
-            .createCalenderSheet();
+            .createCalenderSheet()
+            .createContactsSheet();
         return this.spreadsheet;
     }
 
@@ -99,6 +101,13 @@ export class SetUpService {
     private createCalenderSheet(): SetUpService {
         let calenderSheet = this.startSetUpOfSheet(Sheets.CALENDER);
         let schema = CalenderSheetSchema.getValidSchema(calenderSheet);
+        return this.fillCheckBox(schema.getColIndexByName(Sheets.COLUMN_NAME.DO), schema)
+            .setupColWidth(schema);
+    }
+
+    private createContactsSheet(): SetUpService {
+        let contactsSheet = this.startSetUpOfSheet(Sheets.CONTACTS);
+        let schema = ContactsSheetSchema.getValidSchema(contactsSheet);
         return this.fillCheckBox(schema.getColIndexByName(Sheets.COLUMN_NAME.DO), schema)
             .setupColWidth(schema);
     }

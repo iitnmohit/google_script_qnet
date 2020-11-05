@@ -24,8 +24,8 @@ export interface ITheme {
     nameSheetSelectBgColor: string,
     nameSheetSelectFontColor: string,
 
-    nameSheetDoSelectBgColor: string,
-    nameSheetDoSelectFontColor: string,
+    DO_SELECT_BG_COLOR: string,
+    DO_SELECT_FONT_COLOR: string,
 }
 
 export interface ITableTheme {

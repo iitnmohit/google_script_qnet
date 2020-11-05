@@ -6,6 +6,7 @@ import { Preconditions } from "../../library/Preconditions";
 import { Predicates } from "../../library/Predicates";
 import { CalenderSheetSchema } from "../../schemas/CalenderSheetSchema";
 import { CitySheetSchema } from "../../schemas/CitySheetSchema";
+import { ContactsSheetSchema } from "../../schemas/ContactsSheetSchema";
 import { LovSheetSchema } from "../../schemas/LovSheetSchema";
 import { NameListSheetSchema } from "../../schemas/NameListSheetSchema";
 import { OverViewSheetSchema } from "../../schemas/OverViewSheetSchema";
@@ -22,6 +23,7 @@ const HORIZENTAL: true = true;
 
 export class ThemeService {
     private readonly spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
+    private readonly contactSchema: ContactsSheetSchema;
     private readonly calenderSchema: CalenderSheetSchema;
     private readonly citySchema: ISchema;
     private readonly lovSchema: LovSheetSchema;
@@ -35,6 +37,7 @@ export class ThemeService {
 
         this.spreadsheet = spreadsheet;
         this.currentTheme = currentTheme;
+        this.contactSchema = ContactsSheetSchema.getValidContactsSchema(spreadsheet);
         this.calenderSchema = CalenderSheetSchema.getValidCalenderSchema(spreadsheet);
         this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
         this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
@@ -44,6 +47,7 @@ export class ThemeService {
 
     public setTheme(): void {
         this.setSpreadSheetTheme()
+            .setContactSheetTheme()
             .setCalenderSheetTheme()
             .setCitySheetsTheme()
             .setLovSheetsTheme()
@@ -56,6 +60,20 @@ export class ThemeService {
             .setFontFamily(this.currentTheme.fontFamily)
             .setConcreteColor(SpreadsheetApp.ThemeColorType.TEXT, this.buildColor(this.currentTheme.textColor));
         this.spreadsheet.setSpreadsheetTheme(theme);
+        return this;
+    }
+
+    private setContactSheetTheme(): ThemeService {
+        this.setCommonTheme(this.contactSchema);
+
+        //conditional formatting
+        let sheet = this.contactSchema.SPREADSHEET;
+        let selectColChar = Util.getColumnLetter(this.contactSchema.getColIndexByName(Sheets.COLUMN_NAME.DO));
+        let cfFormulaForDo = `$${selectColChar}2=true`;
+        let rangeAll = sheet.getRange(2, 1, this.contactSchema.NUM_OF_ROWS - 1, this.contactSchema.NUM_OF_COLUMNS);
+
+        this.applyConditionalForatting(sheet, cfFormulaForDo, rangeAll, false,
+            this.currentTheme.DO_SELECT_BG_COLOR, this.currentTheme.DO_SELECT_FONT_COLOR);
         return this;
     }
 
@@ -102,10 +120,10 @@ export class ThemeService {
         let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
 
         this.applyConditionalForatting(sheet, `AND(${cfFormulaForTaskRow},${cfFormulaForStrikeThrough})`,
-            rangeNames, true, this.currentTheme.nameSheetDoSelectBgColor,
-            this.currentTheme.nameSheetDoSelectFontColor);
+            rangeNames, true, this.currentTheme.DO_SELECT_BG_COLOR,
+            this.currentTheme.DO_SELECT_FONT_COLOR);
         this.applyConditionalForatting(sheet, cfFormulaForTaskRow, rangeAll, false,
-            this.currentTheme.nameSheetDoSelectBgColor, this.currentTheme.nameSheetDoSelectFontColor);
+            this.currentTheme.DO_SELECT_BG_COLOR, this.currentTheme.DO_SELECT_FONT_COLOR);
         this.applyConditionalForatting(sheet, `AND(${cfFormulaForSelectRow},${cfFormulaForStrikeThrough})`,
             rangeNames, true, this.currentTheme.nameSheetSelectBgColor,
             this.currentTheme.nameSheetSelectFontColor);

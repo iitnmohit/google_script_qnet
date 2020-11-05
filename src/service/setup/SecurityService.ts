@@ -3,13 +3,11 @@ import { LovSheetSchema } from "../../schemas/LovSheetSchema";
 import { OverViewSheetSchema } from "../../schemas/OverViewSheetSchema";
 
 export class SecurityService {
-    private readonly spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
     private readonly citySchema: CitySheetSchema;
     private readonly lovSchema: LovSheetSchema;
     private readonly overviewSchema: OverViewSheetSchema;
 
     constructor (spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
-        this.spreadSheet = spreadsheet;
         this.citySchema = CitySheetSchema.getValidCitySchema(spreadsheet);
         this.lovSchema = LovSheetSchema.getValidLovSchema(spreadsheet);
         this.overviewSchema = OverViewSheetSchema.getValidOverViewSchema(spreadsheet);
