@@ -39,11 +39,12 @@ export class SetUpService {
         let numOfSheetDeleted = 0;
         for (let sheet of sheets) {
             let sheetName = sheet.getName();
-            if (sheetName === OverViewSheetSchema.SHEET.NAME
-                || sheetName === NameListSheetSchema.SHEET.NAME
-                || sheetName === LovSheetSchema.SHEET.NAME
-                || sheetName === CitySheetSchema.SHEET.NAME
-                || sheetName === Sheets.CALENDER.NAME) {
+            if (sheetName === Sheets.OVERVIEW.NAME
+                || sheetName === Sheets.NAMELIST.NAME
+                || sheetName === Sheets.LOV.NAME
+                || sheetName === Sheets.CITY.NAME
+                || sheetName === Sheets.CALENDER.NAME
+                || sheetName === Sheets.CONTACTS.NAME) {
                 continue;
             }
             if (totalNumOfSheets - numOfSheetDeleted != 1) {
