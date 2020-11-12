@@ -18,7 +18,7 @@ export class CalenderEventBuilder {
     public build(): ICalenderEvent {
         let _myEvent = {} as ICalenderEvent;
         _myEvent.id = this.id;
-        _myEvent.calenderName = this.calenderId;
+        _myEvent.calenderName = this.calenderName;
         _myEvent.calenderId = this.calenderId;
         _myEvent.title = this.title;
         _myEvent.description = this.description;
