@@ -28,13 +28,14 @@ export class ContactsService extends BaseService {
     private fillContactsToSheet(allContacts: GoogleAppsScript.Contacts.Contact[]): void {
         let sortedContacts = allContacts.sort(this.contactsArraySortComprator);
         let values: Array<Array<any>> = [];
+        let slNo = 1;
         for (let index = 0; index < sortedContacts.length; index++) {
             let contactEach = sortedContacts[index];
             let phoneField = contactEach.getPhones();
             if (Predicates.IS_LIST_EMPTY.test(phoneField)) {
             } else if (phoneField.length == 1) {
                 let rowArray = new Array<any>();
-                rowArray.push(index + 1);
+                rowArray.push(slNo++);
                 rowArray.push(contactEach.getFullName());
                 rowArray.push(this.correctLabel(phoneField[0].getLabel()));
                 rowArray.push(phoneField[0].getPhoneNumber());
@@ -42,7 +43,7 @@ export class ContactsService extends BaseService {
                 values.push(rowArray);
             } else {
                 let rowArray = new Array<any>();
-                rowArray.push(index + 1);
+                rowArray.push(slNo++);
                 rowArray.push(contactEach.getFullName());
                 rowArray.push(this.correctLabel(phoneField[0].getLabel()));
                 rowArray.push(phoneField[0].getPhoneNumber());
