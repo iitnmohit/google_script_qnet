@@ -1,16 +1,20 @@
 import { CalenderEventBuilder } from "../builder/CalenderEventBuilder";
 import { Constant } from "../constants/Constant";
+import { Msg } from "../constants/Message";
 import { Sheets } from "../constants/Sheets";
 import { ICalenderEvent } from "../interface/ICalenderEvent";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { CalenderSheetSchema } from "../schemas/CalenderSheetSchema";
+import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { DateUtil } from "../util/DateUtil";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseService } from "./BaseService";
 
 export class CalenderService extends BaseService {
     private readonly calenderSchema: CalenderSheetSchema;
+    private readonly nameListSchema: NameListSheetSchema;
+    
     private readonly calenderCache: Map<string, GoogleAppsScript.Calendar.Calendar>;
     //calenderid -> date(dd/MMM/yyyy) -> list<events>
     private readonly eventCache: Map<string, Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>>;
@@ -19,6 +23,8 @@ export class CalenderService extends BaseService {
         super();
         this.calenderSchema = CalenderSheetSchema
             .getValidCalenderSchema();
+        this.nameListSchema = NameListSheetSchema
+            .getValidNameListSchema();
         this.calenderCache = new Map<string, GoogleAppsScript.Calendar.Calendar>();
         this.eventCache = new Map<string, Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>>();
     }
@@ -53,6 +59,57 @@ export class CalenderService extends BaseService {
         this.fillEventsToSheet(allEvents);
     }
 
+    public scheduleInvite(count: number = Constant.CALENDER_MAX_EVENT_CREATE): void {
+        Preconditions.checkPositive(count, Msg.CALENDER.EVENT_CREATE.COUNT);
+        Preconditions.checkArgument(count <= Constant.CALENDER_MAX_EVENT_CREATE, Msg.CALENDER.EVENT_CREATE.COUNT);
+
+        let businessCalender = this.getOrCreateBusinessCalender();
+
+
+        this.operateOnSelectedRows(count, this.nameListSchema,
+            (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
+                schema: NameListSheetSchema,
+                row: number) => {
+                let nameSheet = schema.SPREADSHEET;
+                
+                
+                let title;
+                let startTime;
+                let endTime;
+                let description;
+                let location;
+                let emailId;
+
+                businessCalender.createEvent(title,startTime,endTime,{
+                    description: description,
+                    location: location,
+                    guests: emailId,
+                    sendInvites: true
+                });
+
+               
+            });
+    }
+
+    private getOrCreateBusinessCalender(): GoogleAppsScript.Calendar.Calendar {
+        let calendars = CalendarApp.getCalendarsByName(Constant.CALENDER_NAME);
+        if(Predicates.IS_LIST_NOT_EMPTY.test(calendars)) {
+            for (let calender of calendars) {
+                if(calender.isOwnedByMe()){
+                    return calender;
+                }
+            }
+        }
+        return this.createCalender();
+    }
+
+    private createCalender(): GoogleAppsScript.Calendar.Calendar {
+        return CalendarApp.createCalendar(Constant.CALENDER_NAME, {
+            timeZone: Constant.CALENDER_TIMEZONE,
+            color: Constant.CALENDER_COLOR
+        });
+    }
+
     public clearAllCheckbox(): void {
         this.calenderSchema.SPREADSHEET.getRange(2, this.calenderSchema.getColIndexByName(Sheets.COLUMN_NAME.DO),
             this.calenderSchema.NUM_OF_ROWS - 1, 1).uncheck();
@@ -62,6 +119,9 @@ export class CalenderService extends BaseService {
         let allEvents = new Array<ICalenderEvent>();
         let calenders = CalendarApp.getAllCalendars();
         outer: for (let calender of calenders) {
+            if(!calender.isOwnedByMe()){
+                continue outer;
+            }
             for (let skipCalenderName of Constant.CALENDER_SKIP) {
                 if (skipCalenderName === calender.getName()) {
                     continue outer;

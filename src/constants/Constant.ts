@@ -13,7 +13,11 @@ export class Constant {
     public static readonly TABLE_APPEND_DIRECTION: "row" | "col" = "row";
 
     // calender
+    public static readonly CALENDER_NAME: string = "Business";
+    public static readonly CALENDER_TIMEZONE = "Asia/Kolkata";
+    public static readonly CALENDER_COLOR = CalendarApp.Color.ORANGE;
     public static readonly CALENDER_MAX_EVENT_DELETE: number = 50;
+    public static readonly CALENDER_MAX_EVENT_CREATE: number = 5;
     public static readonly CALENDER_SKIP: Array<string> = [
         "Holidays in India"
     ];

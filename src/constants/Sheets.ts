@@ -73,7 +73,7 @@ export class Sheets {
         INDEX: 5,
         NUM_OF: {
             ROWS: 100,
-            COLUMNS: 10
+            COLUMNS: 9
         },
         FREEZE: {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
@@ -219,7 +219,7 @@ export class Sheets {
                 INDEX: -1
             } as IColumn, {
                 NAME: Sheets.COLUMN_NAME.EMAIL,
-                MIN_WIDTH: 130,
+                MIN_WIDTH: 180,
                 MAX_WIDTH: null,
                 INDEX: -1
             } as IColumn, {
