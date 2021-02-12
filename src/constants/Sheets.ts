@@ -27,9 +27,9 @@ export class Sheets {
         PLAN: "PLAN",
         PLAN_DATE: "PLAN DATE",
         CLOSING: "CLOSING",
-        CAST: "CAST",
         LINK: "LINK",
         INPUT: "INPUT",
+        EMAIL: "EMAIL ID",
     };
 
     public static readonly MIN_ROW_HEIGHT: number = 5;
@@ -125,11 +125,6 @@ export class Sheets {
                 MIN_WIDTH: null,
                 MAX_WIDTH: null,
                 INDEX: -1
-            } as IColumn, {
-                NAME: Sheets.COLUMN_NAME.CAST,
-                MIN_WIDTH: null,
-                MAX_WIDTH: null,
-                INDEX: -1
             } as IColumn,
         ]
     } as ISheet;
@@ -213,11 +208,6 @@ export class Sheets {
                 MAX_WIDTH: null,
                 INDEX: -1
             } as IColumn, {
-                NAME: Sheets.COLUMN_NAME.CAST,
-                MIN_WIDTH: 105,
-                MAX_WIDTH: null,
-                INDEX: -1
-            } as IColumn, {
                 NAME: Sheets.COLUMN_NAME.UPDATED_ON,
                 MIN_WIDTH: null,
                 MAX_WIDTH: null,
@@ -225,6 +215,11 @@ export class Sheets {
             } as IColumn, {
                 NAME: Sheets.COLUMN_NAME.LINK,
                 MIN_WIDTH: 70,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: Sheets.COLUMN_NAME.EMAIL,
+                MIN_WIDTH: 130,
                 MAX_WIDTH: null,
                 INDEX: -1
             } as IColumn, {

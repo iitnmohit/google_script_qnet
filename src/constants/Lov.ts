@@ -122,13 +122,6 @@ export class Lov {
         "SUPER COLD"
     ];
 
-    public static readonly CAST: Array<string> = [
-        "HINDU",
-        "MUSLIM",
-        "PUNJABI",
-        "CHRISTIAN"
-    ];
-
     public static readonly CITIES: Array<string> = [
         "Delhi",
         "Mumbai"

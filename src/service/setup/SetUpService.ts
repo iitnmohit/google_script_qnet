@@ -86,7 +86,6 @@ export class SetUpService {
             .fillColValue(Lov.PLAN, schema.getColIndexByName(colName.PLAN), lovSheet)
             .fillColValue(Lov.CLOSING, schema.getColIndexByName(colName.CLOSING), lovSheet)
             .fillColValue(Lov.ZONE, schema.getColIndexByName(colName.ZONE), lovSheet)
-            .fillColValue(Lov.CAST, schema.getColIndexByName(colName.CAST), lovSheet)
             .setupColWidth(schema);
     }
 

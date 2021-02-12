@@ -49,8 +49,6 @@ export class ValidationService {
             this.lovSchema, colName.PLAN);
         ValidationService.createDropDown(this.nameSchema, colName.CLOSING,
             this.lovSchema, colName.CLOSING);
-        ValidationService.createDropDown(this.nameSchema, colName.CAST,
-            this.lovSchema, colName.CAST);
     }
 
     /**
