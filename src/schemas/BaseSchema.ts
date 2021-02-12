@@ -2,7 +2,6 @@ import { Msg } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { IColumn, ISheet, ITable } from "../interface/ISheet";
 import { ITableTheme } from "../interface/ITheme";
-import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { Util } from "../util/Util";
