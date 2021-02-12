@@ -189,4 +189,14 @@ export abstract class BaseSchema implements ISchema {
         }
         return true;
     }
+
+    protected getUndefinedColumnName(): string {
+        if (Predicates.IS_LIST_EMPTY.test(this.ISHEET.COLUMNS)) {
+            return null;
+        }
+        for (let column of this.ISHEET.COLUMNS) {
+            if (Predicates.IS_NOT_POSITIVE.test(column.INDEX)) return column.NAME;
+        }
+        return null;
+    }
 }

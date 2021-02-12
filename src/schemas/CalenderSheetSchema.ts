@@ -26,7 +26,9 @@ export class CalenderSheetSchema extends BaseSchema {
             CalenderSheetSchema.instance = newSchema;
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, Sheets.CALENDER.NAME));
+        let unDefColName: string = newSchema.getUndefinedColumnName();
+        throw new InvalidSheetException(Utilities
+            .formatString(Msg.SHEET.INVALID_SHEET_COLUMN, Sheets.CALENDER.NAME, unDefColName));
     }
 
     public static getValidCalenderSchema(): CalenderSheetSchema {

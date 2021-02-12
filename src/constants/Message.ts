@@ -36,6 +36,7 @@ export class Msg {
     public static readonly SHEET = {
         NOT_FOUND: "%s sheet not found.",
         INVALID_SHEET: "%s sheet is not valid.",
+        INVALID_SHEET_COLUMN: "%s sheet is not valid. column '%s' is not found.",
         MSG_INVALID_NAME_CELL_FORMAT: "Name is not valid.",
         SERVER_ERROR: "Server error occured.",
         HEADDER_MORE_THAN_COLUMN: "Failed creating schema, for %s sheet, headder count is more than column count.",

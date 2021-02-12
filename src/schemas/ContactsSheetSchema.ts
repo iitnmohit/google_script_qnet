@@ -25,8 +25,10 @@ export class ContactsSheetSchema extends BaseSchema {
             ContactsSheetSchema.instance = newSchema;
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, Sheets.CONTACTS.NAME));
-    }
+        let unDefColName: string = newSchema.getUndefinedColumnName();
+        throw new InvalidSheetException(Utilities
+            .formatString(Msg.SHEET.INVALID_SHEET_COLUMN, Sheets.CONTACTS.NAME, unDefColName));
+     }
 
     public static getValidContactsSchema(): ContactsSheetSchema {
         if (Predicates.IS_NOT_NULL.test(ContactsSheetSchema.instance)) {

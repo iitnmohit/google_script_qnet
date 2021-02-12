@@ -25,8 +25,10 @@ export class CitySheetSchema extends BaseSchema {
             CitySheetSchema.instance = newSchema;
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, Sheets.CITY.NAME));
-    }
+        let unDefColName: string = newSchema.getUndefinedColumnName();
+        throw new InvalidSheetException(Utilities
+            .formatString(Msg.SHEET.INVALID_SHEET_COLUMN, Sheets.CITY.NAME, unDefColName));
+     }
 
     public static getValidCitySchema(): CitySheetSchema {
         if (Predicates.IS_NOT_NULL.test(CitySheetSchema.instance)) {

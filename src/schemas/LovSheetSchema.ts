@@ -25,7 +25,9 @@ export class LovSheetSchema extends BaseSchema {
             LovSheetSchema.instance = newSchema;
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, Sheets.LOV.NAME));
+        let unDefColName: string = newSchema.getUndefinedColumnName();
+        throw new InvalidSheetException(Utilities
+            .formatString(Msg.SHEET.INVALID_SHEET_COLUMN, Sheets.LOV.NAME, unDefColName));
     }
 
     public static getValidLovSchema(): LovSheetSchema {

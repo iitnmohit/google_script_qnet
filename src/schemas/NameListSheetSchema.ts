@@ -25,7 +25,9 @@ export class NameListSheetSchema extends BaseSchema {
             NameListSheetSchema.instance = newSchema;
             return newSchema;
         }
-        throw new InvalidSheetException(Utilities.formatString(Msg.SHEET.INVALID_SHEET, Sheets.NAMELIST.NAME));
+        let unDefColName: string = newSchema.getUndefinedColumnName();
+        throw new InvalidSheetException(Utilities
+            .formatString(Msg.SHEET.INVALID_SHEET_COLUMN, Sheets.NAMELIST.NAME, unDefColName));
     }
 
     public static getValidNameListSchema(): NameListSheetSchema {
