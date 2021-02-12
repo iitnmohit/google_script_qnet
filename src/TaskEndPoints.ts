@@ -40,3 +40,9 @@ function taskUpdateOneLog(): void {
     new TaskService().updateSelectedLog(1);
   });
 }
+
+function taskUpdateSelectedFiftyLog(): void {
+  runSafely((): void => {
+    new TaskService().updateSelectedLog(50);
+  });
+}

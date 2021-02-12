@@ -2,6 +2,7 @@ import { Msg } from "../constants/Message";
 import { ISchema } from "../interface/ISchema";
 import { IColumn, ISheet, ITable } from "../interface/ISheet";
 import { ITableTheme } from "../interface/ITheme";
+import { InvalidSheetException } from "../library/Exceptions";
 import { Preconditions } from "../library/Preconditions";
 import { Predicates } from "../library/Predicates";
 import { Util } from "../util/Util";
@@ -35,12 +36,16 @@ export abstract class BaseSchema implements ISchema {
         }
         let firstRowValues = sheet.getRange(1, 1, 1, this.NUM_OF_COLUMNS).getDisplayValues()[0];
         for (let i = 0; i < this.NUM_OF_COLUMNS; i++) {
-            isheet.COLUMNS.find((column: IColumn) => {
+            let baseSchemaColumn: IColumn = isheet.COLUMNS.find((column: IColumn) => {
                 if (column.NAME === firstRowValues[i]) {
                     return true;
                 }
                 return false;
-            }).INDEX = i + 1;
+            });
+            
+            if(Predicates.IS_NOT_NULL.test(baseSchemaColumn)){
+                baseSchemaColumn.INDEX = i + 1;
+            }
         }
     }
 

@@ -11,7 +11,6 @@ export class UiService {
             .createMenu(MAIN_MENU_NAME)
             .addSubMenu(this.getCreateMenu())
             .addSubMenu(this.getUpdateMenu())
-            .addItem('Delete All Tasks', 'taskDeleteAll')
             .addSeparator()
             .addSubMenu(this.getCalenderMenu())
             .addItem('Delete Events', 'deleteSelectedCalenderEvents')
@@ -69,10 +68,10 @@ export class UiService {
             .createMenu("Update")
             .addItem('From 1 Tasks', 'taskUpdateOneLog')
             .addItem('From 10 Tasks', 'taskUpdateSelectedLog')
+            .addItem('From 50 Tasks', 'taskUpdateSelectedFiftyLog')
             .addSeparator()
             .addItem('1 Log', 'logUpdateOne')
-            .addItem('10 Logs', 'logUpdateTen')
-            .addItem('20 Logs', 'logUpdateTwenty');
+            .addItem('10 Logs', 'logUpdateTen');
     }
 
     private getCalenderMenu(): GoogleAppsScript.Base.Menu {
@@ -95,6 +94,7 @@ export class UiService {
     private getSettingsMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Settings")
-            .addItem('Set Up Sheet', 'setUpSheet');
+            .addItem('Set Up Sheet', 'setUpSheet')
+            .addItem('Delete All Tasks', 'taskDeleteAll');
     }
 }
