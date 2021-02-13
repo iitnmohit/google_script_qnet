@@ -94,7 +94,7 @@ export class CalenderService extends BaseService {
                     Constant.CALENDER_ZOOM_MEETING_LINK_MSG);
                 let inviteEventDescription: string = UserPropertyService.get(
                     Constant.CALENDER_INVITE_MEETING_DESCRIPTION_KEY,
-                    Constant.CALENDER_INVITE_MEETING_DESCRIPTION_MSG);
+                    Constant.CALENDER_INVITE_MEETING_DESCRIPTION_MSG).split("\\").join("\n");
 
                 businessCalender.createEvent(
                     Utilities.formatString(Constant.CALENDER_INVITE_EVENT_TITLE, prospectNAme),
