@@ -10,11 +10,12 @@ import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { DateUtil } from "../util/DateUtil";
 import { ThemeUtil } from "../util/ThemeUtil";
 import { BaseService } from "./BaseService";
+import { UserPropertyService } from "./UserPropertyService";
 
 export class CalenderService extends BaseService {
     private readonly calenderSchema: CalenderSheetSchema;
     private readonly nameListSchema: NameListSheetSchema;
-    
+
     private readonly calenderCache: Map<string, GoogleAppsScript.Calendar.Calendar>;
     //calenderid -> date(dd/MMM/yyyy) -> list<events>
     private readonly eventCache: Map<string, Map<string, Array<GoogleAppsScript.Calendar.CalendarEvent>>>;
@@ -70,32 +71,49 @@ export class CalenderService extends BaseService {
             (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
                 schema: NameListSheetSchema,
                 row: number) => {
-                let nameSheet = schema.SPREADSHEET;
-                
-                
-                let title;
-                let startTime;
-                let endTime;
-                let description;
-                let location;
-                let emailId;
+                let prospectNAme: string = schema.getCellRange(row, Sheets.COLUMN_NAME.NAME).getDisplayValue();
+                Preconditions.checkNotBlank(prospectNAme, "No name present at Name Cell at row %s", row);
 
-                businessCalender.createEvent(title,startTime,endTime,{
-                    description: description,
-                    location: location,
-                    guests: emailId,
+                let planDateValue: string = schema.getCellRange(row, Sheets.COLUMN_NAME.PLAN_DATE).getDisplayValue();
+                Preconditions.checkNotBlank(planDateValue, "invalid plan date present at row %s", row);
+                Preconditions.checkArgument(DateUtil.isValid(planDateValue), "invalid plan date present at row %s", row);
+
+                let planTimeValue: string = schema.getCellRange(row, Sheets.COLUMN_NAME.INPUT).getDisplayValue();
+                Preconditions.checkNotBlank(planTimeValue, "invalid plan time present at row %s", row);
+                Preconditions.checkArgument(DateUtil.isValid(planDateValue + " " + planTimeValue), "invalid plan time present at row %s", row);
+
+                let planStartDateTime: Date = DateUtil.parse(planDateValue + " " + planTimeValue);
+                let planEndDateTime: Date = DateUtil.localDate();
+                planEndDateTime.setTime(planStartDateTime.getTime() + (1000 * 60 * Constant.CALENDER_INVITE_EVENT_DURATION_IN_MINUTES));
+
+                let emailIdValue: string = schema.getCellRange(row, Sheets.COLUMN_NAME.EMAIL).getDisplayValue();
+                Preconditions.checkNotBlank(emailIdValue, "invalid email id present at row %s", row);
+
+                let zoomMeetingLink: string = UserPropertyService.get(
+                    Constant.CALENDER_ZOOM_MEETING_LINK_KEY,
+                    Constant.CALENDER_ZOOM_MEETING_LINK_MSG);
+                let inviteEventDescription: string = UserPropertyService.get(
+                    Constant.CALENDER_INVITE_MEETING_DESCRIPTION_KEY,
+                    Constant.CALENDER_INVITE_MEETING_DESCRIPTION_MSG);
+
+                businessCalender.createEvent(
+                    Utilities.formatString(Constant.CALENDER_INVITE_EVENT_TITLE, prospectNAme),
+                    planStartDateTime, planEndDateTime, {
+                    description: zoomMeetingLink + "\n" + inviteEventDescription,
+                    location: zoomMeetingLink,
+                    guests: emailIdValue,
                     sendInvites: true
                 });
 
-               
+                schema.getCellRange(row, Sheets.COLUMN_NAME.INPUT).setValue("");
             });
     }
 
     private getOrCreateBusinessCalender(): GoogleAppsScript.Calendar.Calendar {
         let calendars = CalendarApp.getCalendarsByName(Constant.CALENDER_NAME);
-        if(Predicates.IS_LIST_NOT_EMPTY.test(calendars)) {
+        if (Predicates.IS_LIST_NOT_EMPTY.test(calendars)) {
             for (let calender of calendars) {
-                if(calender.isOwnedByMe()){
+                if (calender.isOwnedByMe()) {
                     return calender;
                 }
             }
@@ -119,7 +137,7 @@ export class CalenderService extends BaseService {
         let allEvents = new Array<ICalenderEvent>();
         let calenders = CalendarApp.getAllCalendars();
         outer: for (let calender of calenders) {
-            if(!calender.isOwnedByMe()){
+            if (!calender.isOwnedByMe()) {
                 continue outer;
             }
             for (let skipCalenderName of Constant.CALENDER_SKIP) {

@@ -13,31 +13,34 @@ export class UserPropertyService {
      * ask user if not exist
      * if user deny to response after 1 retry then return null and send msg to user
      */
-    public static get(key: string, msg: string): string {
-        let value = UserPropertyService.property.getProperty(key);
-        if (Predicates.IS_BLANK.test(value)) {
+    public static get(key: string, msg: string, alwaysAsk: boolean = false): string {
+        let propValue;
+        if (!alwaysAsk) {
+            propValue = UserPropertyService.property.getProperty(key);
+        }
+        if (Predicates.IS_BLANK.test(propValue)) {
             // get property from user
-            value = UiService.getInputFromUser(msg);
+            propValue = UiService.getInputFromUser(msg);
 
             //user press cancel
-            if (Predicates.IS_NULL.test(value)) {
+            if (Predicates.IS_NULL.test(propValue)) {
                 UiService.showErrorMessage("Current Operation Cancelled!");
                 return null;
             }
 
             // user provide blank input, retry
-            if (Predicates.IS_BLANK.test(value)) {
-                value = UiService.getInputFromUser(msg, true);
+            if (Predicates.IS_BLANK.test(propValue)) {
+                propValue = UiService.getInputFromUser(msg, true);
             }
 
             //user press cancel after retry
-            if (Predicates.IS_BLANK.test(value)) {
+            if (Predicates.IS_BLANK.test(propValue)) {
                 UiService.showErrorMessage("Current Operation Cancelled!");
                 return null;
             }
-            UserPropertyService.property.setProperty(key, value);
+            UserPropertyService.property.setProperty(key, propValue);
         }
-        return value;
+        return propValue;
     }
 
     /**

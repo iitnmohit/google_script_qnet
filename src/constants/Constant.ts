@@ -26,6 +26,9 @@ export class Constant {
     public static readonly CALENDER_RECONFIRM_FOR_DELETE_MSG = "This will delete the events from calender," +
         " and can be found in calender trash.\nOnly 50 events will be deleted in one go.\n" +
         "Proceed to continue.";
+    public static readonly CALENDER_INVITE_EVENT_TITLE = "Business Discussion with %s";
+    public static readonly CALENDER_INVITE_EVENT_DURATION_IN_MINUTES = 170;
+
 
     // logs
     public static readonly LOG_MAX_UPDATE_COUNT: number = 50;
@@ -42,5 +45,11 @@ export class Constant {
 
     // MESSAGE
 
+    // PROPERTY
+    public static readonly CALENDER_ZOOM_MEETING_LINK_KEY = "zoomMeetingLinkKey";
+    public static readonly CALENDER_ZOOM_MEETING_LINK_MSG = "Please provide Meeting link.";
+
+    public static readonly CALENDER_INVITE_MEETING_DESCRIPTION_KEY = "inviteMeetingDescription";
+    public static readonly CALENDER_INVITE_MEETING_DESCRIPTION_MSG = "Enter Invite Description.";
 
 }

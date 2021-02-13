@@ -54,8 +54,8 @@ function sync_before_90days_events(): void {
     });
 }
 
-function scheduleOneInvite(): void {
+function scheduleFiveInvite(): void {
     runSafely((): void => {
-        new CalenderService().scheduleInvite(1);
+        new CalenderService().scheduleInvite(5);
     });
 }
