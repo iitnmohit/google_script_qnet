@@ -77,6 +77,8 @@ export class UiService {
     private getCalenderMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Calender")
+            .addItem('Invite 5', 'scheduleFiveInvite')
+            .addSeparator()
             .addItem('Sync today', 'sync_todays_events')
             .addItem('Sync current week', 'sync_currentWeek_events')
             .addItem('Sync current(+/-1) week', 'sync_current_prev_next_Week_events')
@@ -95,6 +97,8 @@ export class UiService {
         return SpreadsheetApp.getUi()
             .createMenu("Settings")
             .addItem('Set Up Sheet', 'setUpSheet')
+            .addItem('Reset Meeting Link', 'resetMeetingLinkProperty')
+            .addItem('Reset Invite Description', 'resetInviteMeetingDescription')
             .addItem('Delete All Tasks', 'taskDeleteAll');
     }
 }
