@@ -99,7 +99,7 @@ export class CalenderService extends BaseService {
                 businessCalender.createEvent(
                     Utilities.formatString(Constant.CALENDER_INVITE_EVENT_TITLE, prospectNAme),
                     planStartDateTime, planEndDateTime, {
-                    description: zoomMeetingLink + "\n" + inviteEventDescription,
+                    description: zoomMeetingLink + "\n\n" + inviteEventDescription,
                     location: zoomMeetingLink,
                     guests: emailIdValue,
                     sendInvites: true

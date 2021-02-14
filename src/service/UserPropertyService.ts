@@ -15,7 +15,12 @@ export class UserPropertyService {
      */
     public static get(key: string, msg: string, alwaysAsk: boolean = false): string {
         let propValue;
-        if (!alwaysAsk) {
+        if (alwaysAsk) {
+            let tempPropValue = UserPropertyService.property.getProperty(key);
+            if (Predicates.IS_NOT_BLANK.test(tempPropValue)) {
+                msg = msg + "\n\nExisting information : \n" + tempPropValue;
+            }
+        } else {
             propValue = UserPropertyService.property.getProperty(key);
         }
         if (Predicates.IS_BLANK.test(propValue)) {
