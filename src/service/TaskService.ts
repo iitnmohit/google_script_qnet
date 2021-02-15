@@ -127,6 +127,7 @@ export class TaskService extends BaseService {
             }
         }
         inputCell.clearContent();
+        sheet.getRange(row, schema.getColIndexByName(Sheets.COLUMN_NAME.LIST)).setValue("WORKING NOW");
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)
             .setNotes(Util.formatLog(nameCell.getNote()))
