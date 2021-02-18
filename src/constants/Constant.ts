@@ -3,7 +3,7 @@ import { DateUtil } from "../util/DateUtil";
 export class Constant {
     // TASK constants
     public static readonly TASK_LIST_NAME: string = "QNET";
-    public static readonly TASK_MAX_UPDATE_COUNT: number = 10;
+    public static readonly TASK_MAX_UPDATE_COUNT: number = 50;
     public static readonly TASK_MAX_CREATE_COUNT: number = 100;
 
     //UTIL constants

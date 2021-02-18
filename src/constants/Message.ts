@@ -7,7 +7,7 @@ export class Msg {
             COUNT: "Num of Task must be from 0 to 100."
         },
         UPDATE: {
-            COUNT: "Num of Task must be from 0 to 10."
+            COUNT: "Num of Task must be from 0 to 50."
         },
         READ: {
             SERVER_ERROR: "Server error reading task list, Try after sometime.",
