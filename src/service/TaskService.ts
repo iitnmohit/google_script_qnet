@@ -21,6 +21,32 @@ export class TaskService extends BaseService {
             .getValidNameListSchema();
     }
 
+    public updateCompletedTasks() {
+        let completedTasks: Array<GoogleAppsScript.Tasks.Schema.Task> = this.getCompletedTask();
+        if (Predicates.IS_LIST_EMPTY.test(completedTasks)) {
+            return;
+        }
+        let sheet = this.nameListSchema.SPREADSHEET;
+        let doColNoteValues = this.nameListSchema.getColumnRangeByName(Sheets.COLUMN_NAME.DO).getNotes();
+        for (let i = 0; i < doColNoteValues.length; i++) {
+            if (Predicates.IS_BLANK.test(doColNoteValues[i][0])) {
+                continue;
+            }
+            let taskId = doColNoteValues[i][0];
+            for (var taskEach of completedTasks) {
+                if (taskEach.id == taskId) {
+
+                }
+
+            }
+
+
+
+
+
+        }
+    }
+
     public updateSelectedLog(count: number = Constant.TASK_MAX_UPDATE_COUNT): void {
         Preconditions.checkPositive(count, Msg.TASK.UPDATE.COUNT);
         Preconditions.checkArgument(count <= Constant.TASK_MAX_UPDATE_COUNT, Msg.TASK.UPDATE.COUNT);
@@ -106,6 +132,37 @@ export class TaskService extends BaseService {
         } catch (error: unknown) {
         }
         return null;
+    }
+
+    private getCompletedTask(): Array<GoogleAppsScript.Tasks.Schema.Task> {
+        let taskList: Array<GoogleAppsScript.Tasks.Schema.Task> = [];
+        try {
+            let tasks: GoogleAppsScript.Tasks.Schema.Tasks = Tasks.Tasks.list(this.getTaskList().id, {
+                "completedMax": DateUtil.formatRFC(DateUtil.getEndDayDate(1)),
+                "maxResults": 100,
+                "showCompleted": true,
+                "showDeleted": false,
+                "showHidden": true,
+            });
+            for (let eachTask of tasks.items) {
+                taskList.push(eachTask);
+            }
+            while (Predicates.IS_NOT_NULL.test(tasks.nextPageToken)) {
+                tasks = Tasks.Tasks.list(this.getTaskList().id, {
+                    "completedMax": DateUtil.formatRFC(DateUtil.getEndDayDate(1)),
+                    "maxResults": 100,
+                    "pageToken": tasks.nextPageToken,
+                    "showCompleted": true,
+                    "showDeleted": false,
+                    "showHidden": true,
+                });
+                for (let eachTask of tasks.items) {
+                    taskList.push(eachTask);
+                }
+            }
+        } catch (error: unknown) {
+        }
+        return taskList;
     }
 
     private addNewTask(schema: NameListSheetSchema, row: number): GoogleAppsScript.Tasks.Schema.Task {
