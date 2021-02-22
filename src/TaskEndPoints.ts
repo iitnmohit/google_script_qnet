@@ -46,3 +46,9 @@ function taskUpdateSelectedFiftyLog(): void {
     new TaskService().updateSelectedLog(50);
   });
 }
+
+function taskUpdateCompletedTask(): void {
+  runSafely((): void => {
+    new TaskService().updateCompletedTasks();
+  });
+}

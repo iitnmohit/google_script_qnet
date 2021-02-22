@@ -88,6 +88,27 @@ export class DateUtil {
         }
     }
 
+    public static formatRFC(dateArg: GoogleAppsScript.Base.Date): string {
+        if (dateArg === null) {
+            dateArg = DateUtil.localDate();
+        }
+        let month = String(dateArg.getMonth() + 1);
+        let day = String(dateArg.getDate());
+        let year = dateArg.getFullYear();
+        let hour = dateArg.getHours();
+        let min = dateArg.getMinutes();
+
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+
+        return `${year}-${month}-${day}T${hour}:${min}:00.000Z`;
+    }
+
     /**
      * Convert date string in Date object
      * @param dateString [optional] date in string format

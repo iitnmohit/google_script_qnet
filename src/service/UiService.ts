@@ -59,25 +59,26 @@ export class UiService {
         return SpreadsheetApp.getUi()
             .createMenu("Create")
             .addItem('1 Task', 'taskAddOne')
-            .addItem('10 Tasks', 'taskAddTopTen')
-            .addItem('50 Tasks', 'taskAddTop50');
+            .addItem('Upto 10 Tasks', 'taskAddTopTen')
+            .addItem('Upto 50 Tasks', 'taskAddTop50');
     }
 
     private getUpdateMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Update")
-            .addItem('From 1 Tasks', 'taskUpdateOneLog')
-            .addItem('From 10 Tasks', 'taskUpdateSelectedLog')
-            .addItem('From 50 Tasks', 'taskUpdateSelectedFiftyLog')
+            .addItem('1 Tasks', 'taskUpdateOneLog')
+            .addItem('Upto 10 Tasks', 'taskUpdateSelectedLog')
+            .addItem('Upto 50 Tasks', 'taskUpdateSelectedFiftyLog')
+            .addItem('Completed Tasks', 'taskUpdateCompletedTask')
             .addSeparator()
             .addItem('1 Log', 'logUpdateOne')
-            .addItem('10 Logs', 'logUpdateTen');
+            .addItem('Upto 10 Logs', 'logUpdateTen');
     }
 
     private getCalenderMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Calender")
-            .addItem('Invite 5', 'scheduleFiveInvite')
+            .addItem('Invite Upto 5 People', 'scheduleFiveInvite')
             .addSeparator()
             .addItem('Sync today', 'sync_todays_events')
             .addItem('Sync current week', 'sync_currentWeek_events')
