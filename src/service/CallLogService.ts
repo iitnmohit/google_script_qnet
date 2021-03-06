@@ -44,7 +44,7 @@ export class CallLogService extends BaseService {
         //read old logs
         let oldLogs = nameCell.getNote().trim();
         if (Predicates.IS_NOT_BLANK.test(oldLogs)) {
-            oldLogs = oldLogs + "\n\n";
+            oldLogs = oldLogs + "\n";
         }
 
         //update LOG
