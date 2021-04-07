@@ -59,3 +59,9 @@ function scheduleFiveInvite(): void {
         new CalenderService().scheduleInvite(5);
     });
 }
+
+function scheduleOneInvite(): void {
+    runSafely((): void => {
+        new CalenderService().scheduleInvite(1);
+    });
+}

@@ -77,6 +77,7 @@ export class UiService {
     private getCalenderMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Calender")
+            .addItem('Invite 1', 'scheduleOneInvite')
             .addItem('Invite 5', 'scheduleFiveInvite')
             .addSeparator()
             .addItem('Sync today', 'sync_todays_events')
