@@ -11,6 +11,7 @@ export class UiService {
             .createMenu(MAIN_MENU_NAME)
             .addSubMenu(this.getCreateMenu())
             .addSubMenu(this.getUpdateMenu())
+            .addSubMenu(this.getInviteMenu())
             .addSeparator()
             .addSubMenu(this.getCalenderMenu())
             .addItem('Delete Events', 'deleteSelectedCalenderEvents')
@@ -20,6 +21,13 @@ export class UiService {
             .addItem('Clear Do CheckBoxes', 'commonClearAllCheckBox')
             .addSubMenu(this.getSettingsMenu())
             .addToUi();
+    }
+
+    private getInviteMenu(): GoogleAppsScript.Base.Menu {
+        return SpreadsheetApp.getUi()
+            .createMenu("Invite")
+            .addItem('Invite 1', 'scheduleOneInvite')
+            .addItem('Invite 5', 'scheduleFiveInvite');
     }
 
     public static showErrorMessage(message: string): void {
@@ -77,9 +85,6 @@ export class UiService {
     private getCalenderMenu(): GoogleAppsScript.Base.Menu {
         return SpreadsheetApp.getUi()
             .createMenu("Calender")
-            .addItem('Invite 1', 'scheduleOneInvite')
-            .addItem('Invite 5', 'scheduleFiveInvite')
-            .addSeparator()
             .addItem('Sync today', 'sync_todays_events')
             .addItem('Sync current week', 'sync_currentWeek_events')
             .addItem('Sync current(+/-1) week', 'sync_current_prev_next_Week_events')
