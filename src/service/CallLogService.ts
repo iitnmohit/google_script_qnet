@@ -49,7 +49,7 @@ export class CallLogService extends BaseService {
 
         //update LOG
         let updatedLog = oldLogs + DateUtil.format() + "\n" + newLogs;
-        nameCell.setNote(updatedLog);
+        nameCell.setNote(Util.formatLog(updatedLog));
 
         //clear log cell
         logCell.clearContent();
