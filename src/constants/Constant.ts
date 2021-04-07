@@ -43,7 +43,9 @@ export class Constant {
         ["cnp", " • call not picked"],
         ["ttyl", " • talk to you later"],
         ["ctc", " • cut the call"],
-        ["oon", " • out of network"]
+        ["oon", " • out of network"],
+        ["nrow", " • no reply on whats app"],
+        ["noc", " • no reply on chat"]
     ]);
 
     // MESSAGE
