@@ -19,6 +19,12 @@ export class DateUtil {
         if (Predicates.IS_NULL.test(date)) {
             return false;
         }
+        if(date.length < 10) {
+            return false
+        }
+        if(date.length > 17) {
+            return false
+        }
         let d = Date.parse(date);
         return !isNaN(d);
     }

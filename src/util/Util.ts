@@ -57,13 +57,11 @@ export class Util {
                 continue;
             }
             if (DateUtil.isValid(eachLine)) {
-                formatedLogLines.push("\n");
-                formatedLogLines.push(DateUtil.format(eachLine));
+                formatedLogLines.push("\n" + DateUtil.format(eachLine));
                 continue;
             }
             if (Constant.LOG_TEXT_TO_REPLACE_FUNCTION_MAP.has(eachLine.toLocaleLowerCase())) {
-                formatedLogLines.push("\n");
-                formatedLogLines.push(Constant.LOG_TEXT_TO_REPLACE_FUNCTION_MAP
+                formatedLogLines.push("\n" + Constant.LOG_TEXT_TO_REPLACE_FUNCTION_MAP
                     .get(eachLine.toLocaleLowerCase())(todayDate));
                 continue;
             }
