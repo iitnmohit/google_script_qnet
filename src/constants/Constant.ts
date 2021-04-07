@@ -40,7 +40,10 @@ export class Constant {
     ]);
     // this will simply replace line as below in log
     public static readonly LOG_TEXT_TO_REPLACE_MAP: Map<string, string> = new Map([
-        ["__test", "__test"]
+        ["cnp", " • call not picked"],
+        ["ttyl", " • talk to you later"],
+        ["ctc", " • cut the call"],
+        ["oon", " • out of network"]
     ]);
 
     // MESSAGE
