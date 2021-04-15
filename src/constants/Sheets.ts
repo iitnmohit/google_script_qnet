@@ -28,6 +28,7 @@ export class Sheets {
         PLAN_DATE: "PLAN DATE",
         CLOSING: "CLOSING",
         LINK: "LINK",
+        FOLLOW_UP: "FOLLOW UP",
         INPUT: "INPUT",
         EMAIL: "EMAIL ID",
     };
@@ -135,7 +136,7 @@ export class Sheets {
         INDEX: 2,
         NUM_OF: {
             ROWS: 5000,
-            COLUMNS: 18
+            COLUMNS: 19
         },
         FREEZE: {
             ROW: Sheets.DEFAULT_FREEZE_ROW,
@@ -220,6 +221,11 @@ export class Sheets {
             } as IColumn, {
                 NAME: Sheets.COLUMN_NAME.EMAIL,
                 MIN_WIDTH: 180,
+                MAX_WIDTH: null,
+                INDEX: -1
+            } as IColumn, {
+                NAME: Sheets.COLUMN_NAME.FOLLOW_UP,
+                MIN_WIDTH: 80,
                 MAX_WIDTH: null,
                 INDEX: -1
             } as IColumn, {

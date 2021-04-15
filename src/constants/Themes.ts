@@ -56,6 +56,7 @@ export class Themes {
 
         nameSheetSelectBgColor: "#d1c7eb",
         nameSheetSelectFontColor: "#2c1763",
+        nameSheetTodayDateHighlightColor: "#00ff00",
 
         DO_SELECT_BG_COLOR: "#e6a7a7",
         DO_SELECT_FONT_COLOR: "#6d4141",

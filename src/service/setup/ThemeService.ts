@@ -115,9 +115,13 @@ export class ThemeService {
         let selectColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.SELECT));
         let cfFormulaForSelectRow = `$${selectColChar}2=true`;
         let doColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.DO));
+        let followUpColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.FOLLOW_UP));
         let cfFormulaForTaskRow = `$${doColChar}2=true`;
+        let cfFormulaForFollowUpDateIsToday = `${followUpColChar}2=TODAY()`;
         let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
 
+        this.applyConditionalForatting(sheet, cfFormulaForFollowUpDateIsToday,
+            rangeNames, false, this.currentTheme.nameSheetTodayDateHighlightColor);
         this.applyConditionalForatting(sheet, `AND(${cfFormulaForTaskRow},${cfFormulaForStrikeThrough})`,
             rangeNames, true, this.currentTheme.DO_SELECT_BG_COLOR,
             this.currentTheme.DO_SELECT_FONT_COLOR);
