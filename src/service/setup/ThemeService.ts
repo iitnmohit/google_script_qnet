@@ -117,7 +117,7 @@ export class ThemeService {
         let doColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.DO));
         let followUpColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.FOLLOW_UP));
         let cfFormulaForTaskRow = `$${doColChar}2=true`;
-        let cfFormulaForFollowUpDateIsToday = `${followUpColChar}2=TODAY()`;
+        let cfFormulaForFollowUpDateIsToday = `AND(${followUpColChar}2<=TODAY(), ${followUpColChar}2<>"")`;
         let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
 
         this.applyConditionalForatting(sheet, cfFormulaForFollowUpDateIsToday,
