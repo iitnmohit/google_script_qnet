@@ -113,13 +113,19 @@ export class ThemeService {
         let rangeNames = sheet.getRange(2, this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.NAME), this.nameSchema.NUM_OF_ROWS - 1, 1);
 
         let selectColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.SELECT));
-        let cfFormulaForSelectRow = `$${selectColChar}2=true`;
         let doColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.DO));
         let followUpColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.FOLLOW_UP));
-        let cfFormulaForTaskRow = `$${doColChar}2=true`;
-        let cfFormulaForFollowUpDateIsToday = `AND(${followUpColChar}2<=TODAY(), ${followUpColChar}2<>"")`;
-        let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
+        let inputColChar = Util.getColumnLetter(this.nameSchema.getColIndexByName(Sheets.COLUMN_NAME.INPUT));
 
+        let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
+        let cfFormulaForSelectRow = `$${selectColChar}2=true`;
+        let cfFormulaForTaskRow = `$${doColChar}2=true`;
+        let cfFormulaForFollowUpDateIsToday = `AND(AND(${followUpColChar}2<=TODAY(), ${followUpColChar}2<>""), ${selectColChar}2=true)`;
+        let cfFormulaForInputNew = `AND(${inputColChar}2="new", ${selectColChar}2=true)`;
+
+        this.applyConditionalForatting(sheet, cfFormulaForInputNew,
+            rangeNames, false, this.currentTheme.nameSheetInputNewHighlightColor,
+            this.currentTheme.INPUT_NEW_FONT_COLOR, false, false, true);
         this.applyConditionalForatting(sheet, cfFormulaForFollowUpDateIsToday,
             rangeNames, false, this.currentTheme.nameSheetTodayDateHighlightColor);
         this.applyConditionalForatting(sheet, `AND(${cfFormulaForTaskRow},${cfFormulaForStrikeThrough})`,

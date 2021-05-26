@@ -24,8 +24,10 @@ export interface ITheme {
     nameSheetSelectBgColor: string,
     nameSheetSelectFontColor: string,
     nameSheetTodayDateHighlightColor: string,
+    nameSheetInputNewHighlightColor: string,
     DO_SELECT_BG_COLOR: string,
     DO_SELECT_FONT_COLOR: string,
+    INPUT_NEW_FONT_COLOR: string,
 }
 
 export interface ITableTheme {
