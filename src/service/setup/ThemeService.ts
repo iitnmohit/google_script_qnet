@@ -127,7 +127,8 @@ export class ThemeService {
             rangeNames, false, this.currentTheme.nameSheetInputNewHighlightColor,
             this.currentTheme.INPUT_NEW_FONT_COLOR, false, false, true);
         this.applyConditionalForatting(sheet, cfFormulaForFollowUpDateIsToday,
-            rangeNames, false, this.currentTheme.nameSheetTodayDateHighlightColor);
+            rangeNames, false, this.currentTheme.nameSheetTodayDateHighlightColor,
+            null, false, false, true);
         this.applyConditionalForatting(sheet, `AND(${cfFormulaForTaskRow},${cfFormulaForStrikeThrough})`,
             rangeNames, true, this.currentTheme.DO_SELECT_BG_COLOR,
             this.currentTheme.DO_SELECT_FONT_COLOR);
