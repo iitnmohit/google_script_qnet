@@ -17,3 +17,11 @@ function resetInviteMeetingDescription(): void {
             true);
     });
 }
+
+function resetLogUpdateDate(): void {
+    runSafely((): void => {
+        UserPropertyService.get(Constant.LOG_UPDATE_DATE_KEY,
+            Constant.LOG_UPDATE_DATA_MSG,
+            true);
+    });
+}

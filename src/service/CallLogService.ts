@@ -7,6 +7,7 @@ import { NameListSheetSchema } from "../schemas/NameListSheetSchema";
 import { DateUtil } from "../util/DateUtil";
 import { Util } from "../util/Util";
 import { BaseService } from "./BaseService";
+import { UserPropertyService } from "./UserPropertyService";
 
 export class CallLogService extends BaseService {
     private readonly nameListSchema: NameListSheetSchema;
@@ -48,7 +49,8 @@ export class CallLogService extends BaseService {
         }
 
         //update LOG
-        let updatedLog = oldLogs + DateUtil.format() + "\n" + newLogs;
+        let updatedLog = oldLogs + DateUtil.format(DateUtil.parse(UserPropertyService
+            .getIfExist(Constant.LOG_UPDATE_DATE_KEY))) + "\n" + newLogs;
         nameCell.setNote(Util.formatLog(updatedLog));
 
         //clear log cell

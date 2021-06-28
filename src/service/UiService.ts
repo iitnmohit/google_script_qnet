@@ -105,6 +105,7 @@ export class UiService {
             .addItem('Set Up Sheet', 'setUpSheet')
             .addItem('Reset Meeting Link', 'resetMeetingLinkProperty')
             .addItem('Reset Invite Description', 'resetInviteMeetingDescription')
+            .addItem('Reset log date', 'resetLogUpdateDate')
             .addItem('Delete All Tasks', 'taskDeleteAll');
     }
 }

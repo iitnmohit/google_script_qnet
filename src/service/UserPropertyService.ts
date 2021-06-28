@@ -56,4 +56,12 @@ export class UserPropertyService {
     public static getIfExist(key: string): string {
         return UserPropertyService.property.getProperty(key);
     }
+
+    /**
+     * @param key 
+     * @returns remove value if exist otherwise null
+     */
+    public static remove(key: string): void {
+        UserPropertyService.property.deleteProperty(key);
+    }
 }
