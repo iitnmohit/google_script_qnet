@@ -31,6 +31,18 @@ export class CallLogService extends BaseService {
                     .getRange(row, schema.getColIndexByName(Sheets.COLUMN_NAME.UPDATED_ON)).setValue(DateUtil.format());
             });
     }
+    
+     public copyLastLog(count: number = Constant.LOG_MAX_COPY_COUNT): void {
+        Preconditions.checkPositive(count, Msg.LOG.COPY.COUNT);
+        Preconditions.checkArgument(count <= Constant.LOG_MAX_COPY_COUNT, Msg.LOG.COPY.COUNT);
+
+        this.operateOnSelectedRows(count, this.nameListSchema,
+            (checkBoxCell: GoogleAppsScript.Spreadsheet.Range,
+                schema: NameListSheetSchema,
+                row: number) => {
+                this.copyLogToInputCell(schema, row);
+            });
+    }
 
     private appendLog(nameListSchema: NameListSheetSchema, rowIndex: number): void {
         let sheet = nameListSchema.SPREADSHEET;
@@ -55,5 +67,29 @@ export class CallLogService extends BaseService {
 
         //clear log cell
         logCell.clearContent();
+    }
+    
+    private copyLogToInputCell(nameListSchema: NameListSheetSchema, rowIndex: number): void {
+        let sheet = nameListSchema.SPREADSHEET;
+
+        let nameCell = sheet.getRange(rowIndex, nameListSchema.getColIndexByName(Sheets.COLUMN_NAME.NAME));
+
+        //read old logs
+        let oldLogs = nameCell.getNote().trim().split("\n\n");
+        if (oldLogs.length < 1) {
+            return;
+        }
+
+        let lastLog = oldLogs[oldLogs.length - 1];
+        if (Predicates.IS_BLANK.test(lastLog)) {
+            return;
+        }
+
+        let prospectName = nameCell.getDisplayValue();
+        Preconditions.checkNotBlank(prospectName, "No name present at Name Cell at row %s", rowIndex);
+
+        sheet
+            .getRange(rowIndex, nameListSchema.getColIndexByName(Sheets.COLUMN_NAME.INPUT))
+            .setValue(prospectName + "\n\n" + lastLog);
     }
 }

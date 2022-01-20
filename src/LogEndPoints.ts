@@ -18,3 +18,9 @@ function logUpdateTwenty(): void {
         new CallLogService().addSelectedLog(20);
     });
 }
+
+function copyLastLog(): void {
+    runSafely((): void => {
+        new CallLogService().copyLastLog(50);
+    });
+}
