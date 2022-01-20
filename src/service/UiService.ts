@@ -18,6 +18,7 @@ export class UiService {
             .addSeparator()
             .addSubMenu(this.getContactMenu())
             .addSeparator()
+            .addItem('Copy Last Log', 'copyLastLog')
             .addItem('Clear Do CheckBoxes', 'commonClearAllCheckBox')
             .addSubMenu(this.getSettingsMenu())
             .addToUi();
