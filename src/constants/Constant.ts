@@ -35,6 +35,7 @@ export class Constant {
     public static readonly LOG_UPDATE_DATA_MSG: string = "Date for update log in dd/MMM/yyyy format";
     
     public static readonly LOG_MAX_UPDATE_COUNT: number = 50;
+    public static readonly LOG_MAX_COPY_COUNT: number = 50;
     // this will add new line above replacement in log
     public static readonly LOG_TEXT_TO_REPLACE_FUNCTION_MAP: Map<string, (todayDate: Date) => string> = new Map([
         ["today", (todaysDate: Date): string => {
