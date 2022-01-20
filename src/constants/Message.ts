@@ -27,6 +27,9 @@ export class Msg {
         UPDATE: {
             COUNT: "Num of Log must be from 0 to 50."
         },
+        COPY: {
+            COUNT: "Num of Rows must be from 0 to 50."
+        },
     };
 
     public static readonly CALENDER = {
