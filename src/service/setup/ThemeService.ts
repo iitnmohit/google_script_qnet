@@ -120,7 +120,7 @@ export class ThemeService {
         let cfFormulaForStrikeThrough = this.getCfFormulaForStrikeThrough();
         let cfFormulaForSelectRow = `$${selectColChar}2=true`;
         let cfFormulaForTaskRow = `$${doColChar}2=true`;
-        let cfFormulaForFollowUpDateIsToday = `AND(AND(${followUpColChar}2<=TODAY(), ${followUpColChar}2<>""), ${selectColChar}2=true)`;
+        let cfFormulaForFollowUpDateIsToday = `AND(${followUpColChar}2<=TODAY(), ${followUpColChar}2<>"")`;
         let cfFormulaForInputNew = `AND(${inputColChar}2="new", ${selectColChar}2=true)`;
 
         this.applyConditionalForatting(sheet, cfFormulaForInputNew,
