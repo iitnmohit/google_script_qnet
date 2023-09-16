@@ -1,8 +1,8 @@
-import { runSafely } from "./Code";
+declare const exports: typeof import('./Code');
 import { ContactsService } from "./service/ContactsService";
 
 function getAllContacts(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new ContactsService().readAllContacts();
     });
 }
