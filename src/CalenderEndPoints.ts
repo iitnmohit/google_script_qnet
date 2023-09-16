@@ -1,4 +1,4 @@
-import { runSafely } from "./Code";
+declare const exports: typeof import('./Code');
 import { Constant } from "./constants/Constant";
 import { CalenderService } from "./service/CalenderService";
 import { UiService } from "./service/UiService";
@@ -8,33 +8,33 @@ function deleteSelectedCalenderEvents(): void {
     if (!UiService.doesUserReConfirmedAction(Constant.CALENDER_RECONFIRM_FOR_DELETE_MSG)) {
         return;
     }
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().deleteSelectedEvent(50);
     });
 }
 
 function sync_todays_events(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().syncEvent(0, 0);
     });
 }
 
 function sync_currentWeek_events(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().syncEvent(0 - DateUtil.getNumOfDaysBeforeWeekStarted(),
             DateUtil.getNumOfDaysAfterWeekEnds());
     });
 }
 
 function sync_current_prev_next_Week_events(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().syncEvent(0 - DateUtil.getNumOfDaysBeforeWeekStarted() - 7,
             DateUtil.getNumOfDaysAfterWeekEnds() + 7);
     });
 }
 
 function sync_current_month_events(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         let date = DateUtil.localDate();
         let dateOfMonth = date.getDate();
         let totaldaysInMOnth = DateUtil.getNumberOfDaysInMonth(date.getMonth());
@@ -43,25 +43,25 @@ function sync_current_month_events(): void {
 }
 
 function sync_before_30days_events(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().syncEvent(-30, 0);
     });
 }
 
 function sync_before_90days_events(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().syncEvent(-90, 0);
     });
 }
 
 function scheduleFiveInvite(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().scheduleInvite(5);
     });
 }
 
 function scheduleOneInvite(): void {
-    runSafely((): void => {
+    exports.runSafely((): void => {
         new CalenderService().scheduleInvite(1);
     });
 }

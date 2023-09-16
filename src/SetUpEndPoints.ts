@@ -1,4 +1,4 @@
-import { runSafely } from "./Code";
+declare const exports: typeof import('./Code');
 import { Msg } from "./constants/Message";
 import { FormulaService } from "./service/setup/FormulaService";
 import { SecurityService } from "./service/setup/SecurityService";
@@ -12,7 +12,7 @@ function setUpSheet(): void {
     if (!UiService.doesUserReConfirmedAction(Msg.SETUP_CONFIRMATION_MSG)) {
         return;
     }
-    runSafely((): void => {
+    exports.runSafely((): void => {
         let setUpService = new SetUpService();
         setUpService.createAllSheets();
         setUpService.deleteNonQnetSheets();
