@@ -16,17 +16,16 @@ export class Lov {
 
     public static readonly LIST: Array<string> = [
         "CLOSED",
+        "CLOSING",
         "WORKING NOW",
-        "KEEP IN TOUCH",
-        "PENDING CLOSING",
-        "ONCE IN A WHILE",
-        "ON HOLD",
-        "NO CONTACT",
-        "NOT PICKING CALL",
-        "NO REPLY",
-        "BLOCKED",
+        "FB REQUEST ACCEPTED",
+        "ALREADY SIGNED UP",
         "NEXT",
-        "ALREADY SIGNED UP"
+        "KEEP IN TOUCH",
+        "DISCUSS",
+        "PROSPECTING",
+        "MEET",
+        "NEW NUMBER"
     ];
 
     public static readonly CONNECT_UP: Array<string> = [
@@ -55,63 +54,28 @@ export class Lov {
         "WANT TO DO",
         "EXCITED",
         "GOOD",
-        "NOT NOW",
-        "NOT OPEN",
-        "QNET",
-        "ASKING DETAILS",
-        "NO MONEY",
-        "NO TIME",
-        "SEEN PLAN",
-        "CHAIN",
-        "ALREADY KNOW"
+        "NEUTRAL"
     ];
 
     public static readonly INVITE: Array<string> = [
         "YES",
-        "NO",
-        "ALREADY KNOW",
-        "HOT",
-        "WILL CONFIRM",
-        "NOT NOW",
-        "DEALING",
-        "NO MONEY",
-        "NO TIME"
+        "NO"
     ];
 
     public static readonly PLAN: Array<string> = [
-        "YES",
+        "ON TABLE",
         "TOKEN",
-        "NOT INTERESTED",
-        "NEGATIVE",
-        "CANCEL",
-        "NO MONEY",
-        "NEED TIME TO THINK",
-        "ALREADY SIGNED UP",
-        "ASK WITH FAMILY",
-        "NO SHOW",
-        "SCARED",
-        "NOT PICKING CALL",
+        "YES",
         "DQ",
-        "LATER",
-        "ONLY MINDSET",
-        "ARRANGING MONEY"
+        "NO SHOW",
+        "CANCEL"
     ];
 
     public static readonly CLOSING: Array<string> = [
-        "YES",
-        "HIGHER STUDY",
+        "PAYMENT RECEIVED",
         "PARTIAL AMOUNT",
-        "NOT PICKING CALL",
-        "NO MONEY",
-        "SCAM",
-        "DO ANOTHER BUSINESS",
-        "DONT WANT TO DO BUS",
-        "NEED TIME",
-        "OTHER WILL NOT JOIN",
-        "REFUND",
-        "NO TIME",
-        "ONLY TECHNICAL",
-        "ARRANGING MONEY"
+        "LOAN PROCESS",
+        "NO"
     ];
 
     public static readonly ZONE: Array<string> = [
