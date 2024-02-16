@@ -56,7 +56,7 @@ export class Util {
             if (Predicates.IS_BLANK.test(eachLine)) {
                 continue;
             }
-            if (DateUtil.isValid(eachLine)) {
+            if (DateUtil.isValidDateOnly(eachLine)) {
                 formatedLogLines.push("\n" + DateUtil.format(eachLine));
                 continue;
             }
