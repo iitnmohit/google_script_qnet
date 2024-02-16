@@ -19,35 +19,37 @@ export class DateUtil {
         if (Predicates.IS_NULL.test(date)) {
             return false;
         }
-        if(date.length < 10) {
-            return false
+        if (date.length < 10) {
+            return false;
         }
-        if(date.length > 17) {
-            return false
+        if (date.length > 17) {
+            return false;
         }
         let d = Date.parse(date);
         return !isNaN(d);
     }
 
-        /**
-     * Check is a string is date or not.
-     * @param date any date string
-     * @Return true if valid date string, otherwise false.
-     */
-        public static isValidDateOnly(date: string): boolean;
-        public static isValidDateOnly(date: string): boolean {
-            if (Predicates.IS_NULL.test(date)) {
-                return false;
-            }
-            if(date.length < 10) {
-                return false
-            }
-            if(date.length > 10) {
-                return false
-            }
+    /**
+ * Check is a string is date or not.
+ * @param date any date string
+ * @Return true if valid date string, otherwise false.
+ */
+    public static isValidDateOnly(date: string): boolean;
+    public static isValidDateOnly(date: string): boolean {
+        if (Predicates.IS_NULL.test(date)) {
+            return false;
+        }
+        if (date.length != 11) {
+            return false;
+        }
+
+        if (date.charAt(2) == '/' && date.charAt(6) == '/') {
             let d = Date.parse(date);
             return !isNaN(d);
+        } else {
+            return false;
         }
+    }
 
     /**
      * Format date or string types into date or datetime string.
