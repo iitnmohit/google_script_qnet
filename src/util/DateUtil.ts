@@ -39,11 +39,11 @@ export class DateUtil {
         if (Predicates.IS_NULL.test(date)) {
             return false;
         }
-        if (date.length != 11) {
+        if (date.length < 11 && date.length > 12) {
             return false;
         }
 
-        if (date.charAt(2) == '/' && date.charAt(6) == '/') {
+        if (date.charAt(2) == '/' && (date.charAt(6) == '/' || date.charAt(7) == '/')) {
             let d = Date.parse(date);
             return !isNaN(d);
         } else {
