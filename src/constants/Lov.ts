@@ -15,17 +15,24 @@ export class Lov {
     ];
 
     public static readonly LIST: Array<string> = [
+        "KIV",
         "CLOSED",
         "CLOSING",
-        "WORKING NOW",
+        "INVITE",
+        "INVITE CHECK",
+        "EDIFICATION",
+        "PROSPECTING",
+        "INFO",
+        "MEET",
+        "WHATSAPP",
+        "FACEBOOK",
+        "INSTAGRAM",
+        "CONNECT UP",
+        "NEW NUMBER",
+        "DISCUSS",
         "FB REQUEST ACCEPTED",
         "ALREADY SIGNED UP",
-        "NEXT",
-        "KEEP IN TOUCH",
-        "DISCUSS",
-        "PROSPECTING",
-        "MEET",
-        "NEW NUMBER"
+        "NEXT"
     ];
 
     public static readonly CONNECT_UP: Array<string> = [
@@ -39,9 +46,7 @@ export class Lov {
         "FACEBOOK",
         "NATIVE",
         "FRIENDS FRIEND",
-        "GYM",
-        "STRANGER",
-        "FLATMATE"
+        "STRANGER"
     ];
 
     public static readonly INFO: Array<string> = [
@@ -87,7 +92,7 @@ export class Lov {
     ];
 
     public static readonly CITIES: Array<string> = [
-        "Delhi",
-        "Mumbai"
+        "DELHI",
+        "MUMBAI"
     ];
 }
