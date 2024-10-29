@@ -119,15 +119,13 @@ export class TaskService extends BaseService {
             + " ("
             + sheet.getRange(row, this.nameListSchema.getColIndexByName(Sheets.COLUMN_NAME.SL_NO)).getDisplayValue()
             + ")";
-        let inputCell = sheet.getRange(row, schema.getColIndexByName(Sheets.COLUMN_NAME.INPUT));
-        if (!inputCell.isBlank()) {
-            let inputCellValue = inputCell.getDisplayValue();
-            if (Predicates.IS_NOT_BLANK.test(inputCellValue)) {
-                taskTitle = taskTitle + " [" + inputCellValue.trim() + "]";
+        let listCell = sheet.getRange(row, schema.getColIndexByName(Sheets.COLUMN_NAME.LIST));
+        if (!listCell.isBlank()) {
+            let listCellValue = listCell.getDisplayValue();
+            if (Predicates.IS_NOT_BLANK.test(listCellValue)) {
+                taskTitle = taskTitle + " [" + listCellValue.trim() + "]";
             }
         }
-        inputCell.clearContent();
-        sheet.getRange(row, schema.getColIndexByName(Sheets.COLUMN_NAME.LIST)).setValue("WORKING NOW");
         let newTask = TaskBuilder.builder()
             .setTitle(taskTitle)
             .setNotes(Util.formatLog(nameCell.getNote()))
